@@ -1,0 +1,1164 @@
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"LQ_PWM_BLDC.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	BLDC_duty
+  19              		.section	.data.BLDC_duty,"aw"
+  20              		.align	2
+  23              	BLDC_duty:
+  24 0000 F4010000 		.word	500
+  25              		.section	.text.BLDCInit,"ax",%progbits
+  26              		.align	1
+  27              		.p2align 4,,15
+  28              		.global	BLDCInit
+  29              		.syntax unified
+  30              		.thumb
+  31              		.thumb_func
+  33              	BLDCInit:
+  34              	.LFB482:
+  35              		.file 1 "user_code/LQ_PWM_BLDC.c"
+   1:user_code/LQ_PWM_BLDC.c **** 
+   2:user_code/LQ_PWM_BLDC.c **** #include "zf_libraries_headfile.h"
+   3:user_code/LQ_PWM_BLDC.c **** #define  MOTOR_FREQUENCY  1000
+   4:user_code/LQ_PWM_BLDC.c **** int BLDC_duty=500;
+   5:user_code/LQ_PWM_BLDC.c **** #define bldc_fre   20000
+   6:user_code/LQ_PWM_BLDC.c **** void BLDCInit(void)
+   7:user_code/LQ_PWM_BLDC.c **** {
+  36              		.loc 1 7 1
+  37              		.cfi_startproc
+  38              		@ args = 0, pretend = 0, frame = 0
+  39              		@ frame_needed = 0, uses_anonymous_args = 0
+  40 0000 08B5     		push	{r3, lr}
+  41              		.cfi_def_cfa_offset 8
+  42              		.cfi_offset 3, -8
+  43              		.cfi_offset 14, -4
+   8:user_code/LQ_PWM_BLDC.c **** 
+   9:user_code/LQ_PWM_BLDC.c **** 
+  10:user_code/LQ_PWM_BLDC.c ****     zf_pwm_module_init(PWM_TIM3, PWM_ALIGNMENT_EDGE, 17000);
+  44              		.loc 1 10 5
+  45 0002 44F26822 		movw	r2, #17000
+  46 0006 0021     		movs	r1, #0
+  47 0008 0420     		movs	r0, #4
+  48 000a FFF7FEFF 		bl	zf_pwm_module_init
+  11:user_code/LQ_PWM_BLDC.c ****     zf_pwm_channel_init(BLDC_AP, 0);
+  49              		.loc 1 11 5
+  50 000e 0021     		movs	r1, #0
+  51 0010 1548     		ldr	r0, .L2
+  52 0012 FFF7FEFF 		bl	zf_pwm_channel_init
+  12:user_code/LQ_PWM_BLDC.c ****     zf_pwm_channel_init(BLDC_BP , 0);
+  53              		.loc 1 12 5
+  54 0016 0021     		movs	r1, #0
+  55 0018 1448     		ldr	r0, .L2+4
+  56 001a FFF7FEFF 		bl	zf_pwm_channel_init
+  13:user_code/LQ_PWM_BLDC.c ****     zf_pwm_channel_init(BLDC_CP , 0);
+  57              		.loc 1 13 5
+  58 001e 0021     		movs	r1, #0
+  59 0020 1348     		ldr	r0, .L2+8
+  60 0022 FFF7FEFF 		bl	zf_pwm_channel_init
+  14:user_code/LQ_PWM_BLDC.c **** 
+  15:user_code/LQ_PWM_BLDC.c ****     zf_gpio_init(BLDC_AI,  GPO_PUSH_PULL,GPIO_LOW);
+  61              		.loc 1 15 5
+  62 0026 0022     		movs	r2, #0
+  63 0028 1021     		movs	r1, #16
+  64 002a 6E20     		movs	r0, #110
+  65 002c FFF7FEFF 		bl	zf_gpio_init
+  16:user_code/LQ_PWM_BLDC.c ****     zf_gpio_init(BLDC_BI,  GPO_PUSH_PULL,GPIO_LOW);
+  66              		.loc 1 16 5
+  67 0030 0022     		movs	r2, #0
+  68 0032 1021     		movs	r1, #16
+  69 0034 8320     		movs	r0, #131
+  70 0036 FFF7FEFF 		bl	zf_gpio_init
+  17:user_code/LQ_PWM_BLDC.c ****     zf_gpio_init(BLDC_CI,  GPO_PUSH_PULL,GPIO_LOW);
+  71              		.loc 1 17 5
+  72 003a 0022     		movs	r2, #0
+  73 003c 1021     		movs	r1, #16
+  74 003e 6D20     		movs	r0, #109
+  75 0040 FFF7FEFF 		bl	zf_gpio_init
+  18:user_code/LQ_PWM_BLDC.c **** 
+  19:user_code/LQ_PWM_BLDC.c ****     zf_gpio_init(HA, GPI_PULL_UP,GPIO_LOW);
+  76              		.loc 1 19 5
+  77 0044 0022     		movs	r2, #0
+  78 0046 0321     		movs	r1, #3
+  79 0048 2720     		movs	r0, #39
+  80 004a FFF7FEFF 		bl	zf_gpio_init
+  20:user_code/LQ_PWM_BLDC.c ****     zf_gpio_init(HB, GPI_PULL_UP,GPIO_LOW);
+  81              		.loc 1 20 5
+  82 004e 0022     		movs	r2, #0
+  83 0050 0321     		movs	r1, #3
+  84 0052 2D20     		movs	r0, #45
+  85 0054 FFF7FEFF 		bl	zf_gpio_init
+  21:user_code/LQ_PWM_BLDC.c ****     zf_gpio_init(HC, GPI_PULL_UP,GPIO_LOW);
+  86              		.loc 1 21 5
+  87 0058 0022     		movs	r2, #0
+  88 005a 0321     		movs	r1, #3
+  89 005c 2920     		movs	r0, #41
+  90 005e FFF7FEFF 		bl	zf_gpio_init
+  22:user_code/LQ_PWM_BLDC.c **** 
+  23:user_code/LQ_PWM_BLDC.c **** }
+  91              		.loc 1 23 1
+  92 0062 00BF     		nop
+  93 0064 08BD     		pop	{r3, pc}
+  94              	.L3:
+  95 0066 00BF     		.align	2
+  96              	.L2:
+  97 0068 84200400 		.word	270468
+  98 006c 04202400 		.word	2367492
+  99 0070 05203400 		.word	3416069
+ 100              		.cfi_endproc
+ 101              	.LFE482:
+ 103              		.section	.text.BLDC_PWM,"ax",%progbits
+ 104              		.align	1
+ 105              		.p2align 4,,15
+ 106              		.global	BLDC_PWM
+ 107              		.syntax unified
+ 108              		.thumb
+ 109              		.thumb_func
+ 111              	BLDC_PWM:
+ 112              	.LFB483:
+  24:user_code/LQ_PWM_BLDC.c **** 
+  25:user_code/LQ_PWM_BLDC.c **** 
+  26:user_code/LQ_PWM_BLDC.c **** 
+  27:user_code/LQ_PWM_BLDC.c **** void BLDC_PWM(int pwm)
+  28:user_code/LQ_PWM_BLDC.c **** {
+ 113              		.loc 1 28 1
+ 114              		.cfi_startproc
+ 115              		@ args = 0, pretend = 0, frame = 8
+ 116              		@ frame_needed = 0, uses_anonymous_args = 0
+ 117 0000 00B5     		push	{lr}
+ 118              		.cfi_def_cfa_offset 4
+ 119              		.cfi_offset 14, -4
+ 120 0002 83B0     		sub	sp, sp, #12
+ 121              		.cfi_def_cfa_offset 16
+ 122 0004 0190     		str	r0, [sp, #4]
+  29:user_code/LQ_PWM_BLDC.c **** 
+  30:user_code/LQ_PWM_BLDC.c ****     if(pwm>max_output) pwm=max_output;
+ 123              		.loc 1 30 7
+ 124 0006 019B     		ldr	r3, [sp, #4]
+ 125 0008 41F69022 		movw	r2, #6800
+ 126 000c 9342     		cmp	r3, r2
+ 127 000e 03DD     		ble	.L5
+ 128              		.loc 1 30 27 discriminator 1
+ 129 0010 41F69023 		movw	r3, #6800
+ 130 0014 0193     		str	r3, [sp, #4]
+ 131 0016 05E0     		b	.L6
+ 132              	.L5:
+  31:user_code/LQ_PWM_BLDC.c ****     else if(pwm<-max_output)   pwm=-max_output;
+ 133              		.loc 1 31 12
+ 134 0018 019B     		ldr	r3, [sp, #4]
+ 135 001a 124A     		ldr	r2, .L11
+ 136 001c 9342     		cmp	r3, r2
+ 137 001e 01DA     		bge	.L6
+ 138              		.loc 1 31 35 discriminator 1
+ 139 0020 104B     		ldr	r3, .L11
+ 140 0022 0193     		str	r3, [sp, #4]
+ 141              	.L6:
+  32:user_code/LQ_PWM_BLDC.c ****     if(pwm==0) LQ_BLDCStop();
+ 142              		.loc 1 32 7
+ 143 0024 019B     		ldr	r3, [sp, #4]
+ 144 0026 002B     		cmp	r3, #0
+ 145 0028 02D1     		bne	.L7
+ 146              		.loc 1 32 16 discriminator 1
+ 147 002a FFF7FEFF 		bl	LQ_BLDCStop
+  33:user_code/LQ_PWM_BLDC.c ****     else if(pwm>0) R_Corotation120(abs(pwm));
+  34:user_code/LQ_PWM_BLDC.c ****     else
+  35:user_code/LQ_PWM_BLDC.c ****     {
+  36:user_code/LQ_PWM_BLDC.c ****         pwm=-pwm;
+  37:user_code/LQ_PWM_BLDC.c ****         R_Reversal120(abs(pwm));
+  38:user_code/LQ_PWM_BLDC.c ****     }
+  39:user_code/LQ_PWM_BLDC.c **** 
+  40:user_code/LQ_PWM_BLDC.c **** }
+ 148              		.loc 1 40 1 discriminator 1
+ 149 002e 14E0     		b	.L10
+ 150              	.L7:
+  33:user_code/LQ_PWM_BLDC.c ****     else if(pwm>0) R_Corotation120(abs(pwm));
+ 151              		.loc 1 33 12
+ 152 0030 019B     		ldr	r3, [sp, #4]
+ 153 0032 002B     		cmp	r3, #0
+ 154 0034 07DD     		ble	.L9
+  33:user_code/LQ_PWM_BLDC.c ****     else if(pwm>0) R_Corotation120(abs(pwm));
+ 155              		.loc 1 33 20 discriminator 1
+ 156 0036 019B     		ldr	r3, [sp, #4]
+ 157 0038 002B     		cmp	r3, #0
+ 158 003a B8BF     		it	lt
+ 159 003c 5B42     		rsblt	r3, r3, #0
+ 160 003e 1846     		mov	r0, r3
+ 161 0040 FFF7FEFF 		bl	R_Corotation120
+ 162              		.loc 1 40 1 discriminator 1
+ 163 0044 09E0     		b	.L10
+ 164              	.L9:
+  36:user_code/LQ_PWM_BLDC.c ****         R_Reversal120(abs(pwm));
+ 165              		.loc 1 36 12
+ 166 0046 019B     		ldr	r3, [sp, #4]
+ 167 0048 5B42     		rsbs	r3, r3, #0
+ 168 004a 0193     		str	r3, [sp, #4]
+  37:user_code/LQ_PWM_BLDC.c ****     }
+ 169              		.loc 1 37 9
+ 170 004c 019B     		ldr	r3, [sp, #4]
+ 171 004e 002B     		cmp	r3, #0
+ 172 0050 B8BF     		it	lt
+ 173 0052 5B42     		rsblt	r3, r3, #0
+ 174 0054 1846     		mov	r0, r3
+ 175 0056 FFF7FEFF 		bl	R_Reversal120
+ 176              	.L10:
+ 177              		.loc 1 40 1
+ 178 005a 00BF     		nop
+ 179 005c 03B0     		add	sp, sp, #12
+ 180              		.cfi_def_cfa_offset 4
+ 181              		@ sp needed
+ 182 005e 5DF804FB 		ldr	pc, [sp], #4
+ 183              	.L12:
+ 184 0062 00BF     		.align	2
+ 185              	.L11:
+ 186 0064 70E5FFFF 		.word	-6800
+ 187              		.cfi_endproc
+ 188              	.LFE483:
+ 190              		.section	.text.Get_Hall_State,"ax",%progbits
+ 191              		.align	1
+ 192              		.p2align 4,,15
+ 193              		.global	Get_Hall_State
+ 194              		.syntax unified
+ 195              		.thumb
+ 196              		.thumb_func
+ 198              	Get_Hall_State:
+ 199              	.LFB484:
+  41:user_code/LQ_PWM_BLDC.c **** 
+  42:user_code/LQ_PWM_BLDC.c **** 
+  43:user_code/LQ_PWM_BLDC.c **** uint8_t Get_Hall_State(void)
+  44:user_code/LQ_PWM_BLDC.c **** {
+ 200              		.loc 1 44 1
+ 201              		.cfi_startproc
+ 202              		@ args = 0, pretend = 0, frame = 8
+ 203              		@ frame_needed = 0, uses_anonymous_args = 0
+ 204 0000 00B5     		push	{lr}
+ 205              		.cfi_def_cfa_offset 4
+ 206              		.cfi_offset 14, -4
+ 207 0002 83B0     		sub	sp, sp, #12
+ 208              		.cfi_def_cfa_offset 16
+  45:user_code/LQ_PWM_BLDC.c ****   uint8_t hall_state = 0;
+ 209              		.loc 1 45 11
+ 210 0004 0023     		movs	r3, #0
+ 211 0006 8DF80730 		strb	r3, [sp, #7]
+  46:user_code/LQ_PWM_BLDC.c **** 
+  47:user_code/LQ_PWM_BLDC.c ****   if(zf_gpio_get_level(HA))
+ 212              		.loc 1 47 6
+ 213 000a 2720     		movs	r0, #39
+ 214 000c FFF7FEFF 		bl	zf_gpio_get_level
+ 215 0010 0346     		mov	r3, r0
+ 216              		.loc 1 47 5
+ 217 0012 002B     		cmp	r3, #0
+ 218 0014 05D0     		beq	.L14
+  48:user_code/LQ_PWM_BLDC.c ****   {
+  49:user_code/LQ_PWM_BLDC.c ****     hall_state |= 0x01U << 0;
+ 219              		.loc 1 49 16
+ 220 0016 9DF80730 		ldrb	r3, [sp, #7]
+ 221 001a 43F00103 		orr	r3, r3, #1
+ 222 001e 8DF80730 		strb	r3, [sp, #7]
+ 223              	.L14:
+  50:user_code/LQ_PWM_BLDC.c ****   }
+  51:user_code/LQ_PWM_BLDC.c ****   if(zf_gpio_get_level(HB))
+ 224              		.loc 1 51 6
+ 225 0022 2D20     		movs	r0, #45
+ 226 0024 FFF7FEFF 		bl	zf_gpio_get_level
+ 227 0028 0346     		mov	r3, r0
+ 228              		.loc 1 51 5
+ 229 002a 002B     		cmp	r3, #0
+ 230 002c 05D0     		beq	.L15
+  52:user_code/LQ_PWM_BLDC.c ****   {
+  53:user_code/LQ_PWM_BLDC.c ****     hall_state |= 0x01U << 1;
+ 231              		.loc 1 53 16
+ 232 002e 9DF80730 		ldrb	r3, [sp, #7]
+ 233 0032 43F00203 		orr	r3, r3, #2
+ 234 0036 8DF80730 		strb	r3, [sp, #7]
+ 235              	.L15:
+  54:user_code/LQ_PWM_BLDC.c ****   }
+  55:user_code/LQ_PWM_BLDC.c ****   if(zf_gpio_get_level(HC))
+ 236              		.loc 1 55 6
+ 237 003a 2920     		movs	r0, #41
+ 238 003c FFF7FEFF 		bl	zf_gpio_get_level
+ 239 0040 0346     		mov	r3, r0
+ 240              		.loc 1 55 5
+ 241 0042 002B     		cmp	r3, #0
+ 242 0044 05D0     		beq	.L16
+  56:user_code/LQ_PWM_BLDC.c ****   {
+  57:user_code/LQ_PWM_BLDC.c ****     hall_state |= 0x01U << 2;
+ 243              		.loc 1 57 16
+ 244 0046 9DF80730 		ldrb	r3, [sp, #7]
+ 245 004a 43F00403 		orr	r3, r3, #4
+ 246 004e 8DF80730 		strb	r3, [sp, #7]
+ 247              	.L16:
+  58:user_code/LQ_PWM_BLDC.c ****   }
+  59:user_code/LQ_PWM_BLDC.c ****   return hall_state;
+ 248              		.loc 1 59 10
+ 249 0052 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+  60:user_code/LQ_PWM_BLDC.c **** }
+ 250              		.loc 1 60 1
+ 251 0056 1846     		mov	r0, r3
+ 252 0058 03B0     		add	sp, sp, #12
+ 253              		.cfi_def_cfa_offset 4
+ 254              		@ sp needed
+ 255 005a 5DF804FB 		ldr	pc, [sp], #4
+ 256              		.cfi_endproc
+ 257              	.LFE484:
+ 259 005e 00BF     		.section	.text.R_Corotation120,"ax",%progbits
+ 260              		.align	1
+ 261              		.p2align 4,,15
+ 262              		.global	R_Corotation120
+ 263              		.syntax unified
+ 264              		.thumb
+ 265              		.thumb_func
+ 267              	R_Corotation120:
+ 268              	.LFB485:
+  61:user_code/LQ_PWM_BLDC.c **** 
+  62:user_code/LQ_PWM_BLDC.c **** 
+  63:user_code/LQ_PWM_BLDC.c **** 
+  64:user_code/LQ_PWM_BLDC.c **** 
+  65:user_code/LQ_PWM_BLDC.c **** void R_Corotation120(int pwm)//623154
+  66:user_code/LQ_PWM_BLDC.c **** {
+ 269              		.loc 1 66 1
+ 270              		.cfi_startproc
+ 271              		@ args = 0, pretend = 0, frame = 8
+ 272              		@ frame_needed = 0, uses_anonymous_args = 0
+ 273 0000 00B5     		push	{lr}
+ 274              		.cfi_def_cfa_offset 4
+ 275              		.cfi_offset 14, -4
+ 276 0002 83B0     		sub	sp, sp, #12
+ 277              		.cfi_def_cfa_offset 16
+ 278 0004 0190     		str	r0, [sp, #4]
+  67:user_code/LQ_PWM_BLDC.c **** 
+  68:user_code/LQ_PWM_BLDC.c ****     switch(hall_now)
+ 279              		.loc 1 68 5
+ 280 0006 5C4B     		ldr	r3, .L28
+ 281 0008 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 282 000a 013B     		subs	r3, r3, #1
+ 283 000c 052B     		cmp	r3, #5
+ 284 000e 00F2AB80 		bhi	.L19
+ 285 0012 01A2     		adr	r2, .L21
+ 286 0014 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 287              		.p2align 2
+ 288              	.L21:
+ 289 0018 31000000 		.word	.L26+1
+ 290 001c 65000000 		.word	.L25+1
+ 291 0020 99000000 		.word	.L24+1
+ 292 0024 CD000000 		.word	.L23+1
+ 293 0028 01010000 		.word	.L22+1
+ 294 002c 35010000 		.word	.L20+1
+ 295              		.p2align 1
+ 296              	.L26:
+  69:user_code/LQ_PWM_BLDC.c ****     {
+  70:user_code/LQ_PWM_BLDC.c ****       case 1:
+  71:user_code/LQ_PWM_BLDC.c ****           //2  A->B
+  72:user_code/LQ_PWM_BLDC.c ****            zf_pwm_set_duty(BLDC_AP, pwm);
+ 297              		.loc 1 72 12
+ 298 0030 019B     		ldr	r3, [sp, #4]
+ 299 0032 1946     		mov	r1, r3
+ 300 0034 5148     		ldr	r0, .L28+4
+ 301 0036 FFF7FEFF 		bl	zf_pwm_set_duty
+  73:user_code/LQ_PWM_BLDC.c ****            zf_pwm_set_duty(BLDC_BP, 0);
+ 302              		.loc 1 73 12
+ 303 003a 0021     		movs	r1, #0
+ 304 003c 5048     		ldr	r0, .L28+8
+ 305 003e FFF7FEFF 		bl	zf_pwm_set_duty
+  74:user_code/LQ_PWM_BLDC.c ****            zf_pwm_set_duty(BLDC_CP, 0);
+ 306              		.loc 1 74 12
+ 307 0042 0021     		movs	r1, #0
+ 308 0044 4F48     		ldr	r0, .L28+12
+ 309 0046 FFF7FEFF 		bl	zf_pwm_set_duty
+  75:user_code/LQ_PWM_BLDC.c ****            zf_gpio_set_level(BLDC_AI,0);
+ 310              		.loc 1 75 12
+ 311 004a 0021     		movs	r1, #0
+ 312 004c 6E20     		movs	r0, #110
+ 313 004e FFF7FEFF 		bl	zf_gpio_set_level
+  76:user_code/LQ_PWM_BLDC.c ****            zf_gpio_set_level(BLDC_BI,1);
+ 314              		.loc 1 76 12
+ 315 0052 0121     		movs	r1, #1
+ 316 0054 8320     		movs	r0, #131
+ 317 0056 FFF7FEFF 		bl	zf_gpio_set_level
+  77:user_code/LQ_PWM_BLDC.c ****            zf_gpio_set_level(BLDC_CI,0);
+ 318              		.loc 1 77 12
+ 319 005a 0021     		movs	r1, #0
+ 320 005c 6D20     		movs	r0, #109
+ 321 005e FFF7FEFF 		bl	zf_gpio_set_level
+  78:user_code/LQ_PWM_BLDC.c ****            break;
+ 322              		.loc 1 78 12
+ 323 0062 84E0     		b	.L27
+ 324              	.L25:
+  79:user_code/LQ_PWM_BLDC.c ****       case 2:
+  80:user_code/LQ_PWM_BLDC.c ****           //4  B->C
+  81:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);
+ 325              		.loc 1 81 8
+ 326 0064 0021     		movs	r1, #0
+ 327 0066 4548     		ldr	r0, .L28+4
+ 328 0068 FFF7FEFF 		bl	zf_pwm_set_duty
+  82:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, pwm);
+ 329              		.loc 1 82 8
+ 330 006c 019B     		ldr	r3, [sp, #4]
+ 331 006e 1946     		mov	r1, r3
+ 332 0070 4348     		ldr	r0, .L28+8
+ 333 0072 FFF7FEFF 		bl	zf_pwm_set_duty
+  83:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, 0);
+ 334              		.loc 1 83 8
+ 335 0076 0021     		movs	r1, #0
+ 336 0078 4248     		ldr	r0, .L28+12
+ 337 007a FFF7FEFF 		bl	zf_pwm_set_duty
+  84:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,0);
+ 338              		.loc 1 84 8
+ 339 007e 0021     		movs	r1, #0
+ 340 0080 6E20     		movs	r0, #110
+ 341 0082 FFF7FEFF 		bl	zf_gpio_set_level
+  85:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_BI,0);
+ 342              		.loc 1 85 11
+ 343 0086 0021     		movs	r1, #0
+ 344 0088 8320     		movs	r0, #131
+ 345 008a FFF7FEFF 		bl	zf_gpio_set_level
+  86:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_CI,1);
+ 346              		.loc 1 86 11
+ 347 008e 0121     		movs	r1, #1
+ 348 0090 6D20     		movs	r0, #109
+ 349 0092 FFF7FEFF 		bl	zf_gpio_set_level
+  87:user_code/LQ_PWM_BLDC.c ****           break;
+ 350              		.loc 1 87 11
+ 351 0096 6AE0     		b	.L27
+ 352              	.L24:
+  88:user_code/LQ_PWM_BLDC.c ****       case 3:
+  89:user_code/LQ_PWM_BLDC.c ****           //6  A->C
+  90:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, pwm);
+ 353              		.loc 1 90 8
+ 354 0098 019B     		ldr	r3, [sp, #4]
+ 355 009a 1946     		mov	r1, r3
+ 356 009c 3748     		ldr	r0, .L28+4
+ 357 009e FFF7FEFF 		bl	zf_pwm_set_duty
+  91:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, 0);
+ 358              		.loc 1 91 8
+ 359 00a2 0021     		movs	r1, #0
+ 360 00a4 3648     		ldr	r0, .L28+8
+ 361 00a6 FFF7FEFF 		bl	zf_pwm_set_duty
+  92:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, 0);
+ 362              		.loc 1 92 8
+ 363 00aa 0021     		movs	r1, #0
+ 364 00ac 3548     		ldr	r0, .L28+12
+ 365 00ae FFF7FEFF 		bl	zf_pwm_set_duty
+  93:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,0);
+ 366              		.loc 1 93 8
+ 367 00b2 0021     		movs	r1, #0
+ 368 00b4 6E20     		movs	r0, #110
+ 369 00b6 FFF7FEFF 		bl	zf_gpio_set_level
+  94:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_BI,0);
+ 370              		.loc 1 94 11
+ 371 00ba 0021     		movs	r1, #0
+ 372 00bc 8320     		movs	r0, #131
+ 373 00be FFF7FEFF 		bl	zf_gpio_set_level
+  95:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_CI,1);
+ 374              		.loc 1 95 11
+ 375 00c2 0121     		movs	r1, #1
+ 376 00c4 6D20     		movs	r0, #109
+ 377 00c6 FFF7FEFF 		bl	zf_gpio_set_level
+  96:user_code/LQ_PWM_BLDC.c ****           break;
+ 378              		.loc 1 96 11
+ 379 00ca 50E0     		b	.L27
+ 380              	.L23:
+  97:user_code/LQ_PWM_BLDC.c ****       case 4:
+  98:user_code/LQ_PWM_BLDC.c **** 
+  99:user_code/LQ_PWM_BLDC.c ****           //1  C->A
+ 100:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);
+ 381              		.loc 1 100 8
+ 382 00cc 0021     		movs	r1, #0
+ 383 00ce 2B48     		ldr	r0, .L28+4
+ 384 00d0 FFF7FEFF 		bl	zf_pwm_set_duty
+ 101:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, 0);
+ 385              		.loc 1 101 8
+ 386 00d4 0021     		movs	r1, #0
+ 387 00d6 2A48     		ldr	r0, .L28+8
+ 388 00d8 FFF7FEFF 		bl	zf_pwm_set_duty
+ 102:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, pwm);
+ 389              		.loc 1 102 8
+ 390 00dc 019B     		ldr	r3, [sp, #4]
+ 391 00de 1946     		mov	r1, r3
+ 392 00e0 2848     		ldr	r0, .L28+12
+ 393 00e2 FFF7FEFF 		bl	zf_pwm_set_duty
+ 103:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,1);
+ 394              		.loc 1 103 8
+ 395 00e6 0121     		movs	r1, #1
+ 396 00e8 6E20     		movs	r0, #110
+ 397 00ea FFF7FEFF 		bl	zf_gpio_set_level
+ 104:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_BI,0);
+ 398              		.loc 1 104 11
+ 399 00ee 0021     		movs	r1, #0
+ 400 00f0 8320     		movs	r0, #131
+ 401 00f2 FFF7FEFF 		bl	zf_gpio_set_level
+ 105:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_CI,0);
+ 402              		.loc 1 105 11
+ 403 00f6 0021     		movs	r1, #0
+ 404 00f8 6D20     		movs	r0, #109
+ 405 00fa FFF7FEFF 		bl	zf_gpio_set_level
+ 106:user_code/LQ_PWM_BLDC.c ****           break;
+ 406              		.loc 1 106 11
+ 407 00fe 36E0     		b	.L27
+ 408              	.L22:
+ 107:user_code/LQ_PWM_BLDC.c **** 
+ 108:user_code/LQ_PWM_BLDC.c ****       case 5:
+ 109:user_code/LQ_PWM_BLDC.c ****           //3  C->B
+ 110:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);            // 0
+ 409              		.loc 1 110 8
+ 410 0100 0021     		movs	r1, #0
+ 411 0102 1E48     		ldr	r0, .L28+4
+ 412 0104 FFF7FEFF 		bl	zf_pwm_set_duty
+ 111:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, 0);            // 0
+ 413              		.loc 1 111 8
+ 414 0108 0021     		movs	r1, #0
+ 415 010a 1D48     		ldr	r0, .L28+8
+ 416 010c FFF7FEFF 		bl	zf_pwm_set_duty
+ 112:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, pwm);    // BLDC_duty
+ 417              		.loc 1 112 8
+ 418 0110 019B     		ldr	r3, [sp, #4]
+ 419 0112 1946     		mov	r1, r3
+ 420 0114 1B48     		ldr	r0, .L28+12
+ 421 0116 FFF7FEFF 		bl	zf_pwm_set_duty
+ 113:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI, 0);              //0
+ 422              		.loc 1 113 8
+ 423 011a 0021     		movs	r1, #0
+ 424 011c 6E20     		movs	r0, #110
+ 425 011e FFF7FEFF 		bl	zf_gpio_set_level
+ 114:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_BI, 1);              //0
+ 426              		.loc 1 114 11
+ 427 0122 0121     		movs	r1, #1
+ 428 0124 8320     		movs	r0, #131
+ 429 0126 FFF7FEFF 		bl	zf_gpio_set_level
+ 115:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_CI, 0);              //1
+ 430              		.loc 1 115 11
+ 431 012a 0021     		movs	r1, #0
+ 432 012c 6D20     		movs	r0, #109
+ 433 012e FFF7FEFF 		bl	zf_gpio_set_level
+ 116:user_code/LQ_PWM_BLDC.c ****           break;
+ 434              		.loc 1 116 11
+ 435 0132 1CE0     		b	.L27
+ 436              	.L20:
+ 117:user_code/LQ_PWM_BLDC.c **** 
+ 118:user_code/LQ_PWM_BLDC.c ****       case 6:
+ 119:user_code/LQ_PWM_BLDC.c ****           //5 B->A
+ 120:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);
+ 437              		.loc 1 120 8
+ 438 0134 0021     		movs	r1, #0
+ 439 0136 1148     		ldr	r0, .L28+4
+ 440 0138 FFF7FEFF 		bl	zf_pwm_set_duty
+ 121:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, pwm);
+ 441              		.loc 1 121 8
+ 442 013c 019B     		ldr	r3, [sp, #4]
+ 443 013e 1946     		mov	r1, r3
+ 444 0140 0F48     		ldr	r0, .L28+8
+ 445 0142 FFF7FEFF 		bl	zf_pwm_set_duty
+ 122:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, 0);
+ 446              		.loc 1 122 8
+ 447 0146 0021     		movs	r1, #0
+ 448 0148 0E48     		ldr	r0, .L28+12
+ 449 014a FFF7FEFF 		bl	zf_pwm_set_duty
+ 123:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,1);
+ 450              		.loc 1 123 8
+ 451 014e 0121     		movs	r1, #1
+ 452 0150 6E20     		movs	r0, #110
+ 453 0152 FFF7FEFF 		bl	zf_gpio_set_level
+ 124:user_code/LQ_PWM_BLDC.c ****             zf_gpio_set_level(BLDC_BI,0);
+ 454              		.loc 1 124 13
+ 455 0156 0021     		movs	r1, #0
+ 456 0158 8320     		movs	r0, #131
+ 457 015a FFF7FEFF 		bl	zf_gpio_set_level
+ 125:user_code/LQ_PWM_BLDC.c ****             zf_gpio_set_level(BLDC_CI,0);
+ 458              		.loc 1 125 13
+ 459 015e 0021     		movs	r1, #0
+ 460 0160 6D20     		movs	r0, #109
+ 461 0162 FFF7FEFF 		bl	zf_gpio_set_level
+ 126:user_code/LQ_PWM_BLDC.c ****             break;
+ 462              		.loc 1 126 13
+ 463 0166 02E0     		b	.L27
+ 464              	.L19:
+ 127:user_code/LQ_PWM_BLDC.c **** 
+ 128:user_code/LQ_PWM_BLDC.c ****       default:
+ 129:user_code/LQ_PWM_BLDC.c ****         LQ_BLDCStop();
+ 465              		.loc 1 129 9
+ 466 0168 FFF7FEFF 		bl	LQ_BLDCStop
+ 130:user_code/LQ_PWM_BLDC.c ****         break;
+ 467              		.loc 1 130 9
+ 468 016c 00BF     		nop
+ 469              	.L27:
+ 131:user_code/LQ_PWM_BLDC.c ****     }
+ 132:user_code/LQ_PWM_BLDC.c **** }
+ 470              		.loc 1 132 1
+ 471 016e 00BF     		nop
+ 472 0170 03B0     		add	sp, sp, #12
+ 473              		.cfi_def_cfa_offset 4
+ 474              		@ sp needed
+ 475 0172 5DF804FB 		ldr	pc, [sp], #4
+ 476              	.L29:
+ 477 0176 00BF     		.align	2
+ 478              	.L28:
+ 479 0178 00000000 		.word	hall_now
+ 480 017c 84200400 		.word	270468
+ 481 0180 04202400 		.word	2367492
+ 482 0184 05203400 		.word	3416069
+ 483              		.cfi_endproc
+ 484              	.LFE485:
+ 486              		.section	.text.R_Reversal120,"ax",%progbits
+ 487              		.align	1
+ 488              		.p2align 4,,15
+ 489              		.global	R_Reversal120
+ 490              		.syntax unified
+ 491              		.thumb
+ 492              		.thumb_func
+ 494              	R_Reversal120:
+ 495              	.LFB486:
+ 133:user_code/LQ_PWM_BLDC.c **** 
+ 134:user_code/LQ_PWM_BLDC.c **** 
+ 135:user_code/LQ_PWM_BLDC.c **** 
+ 136:user_code/LQ_PWM_BLDC.c **** 
+ 137:user_code/LQ_PWM_BLDC.c **** void R_Reversal120(int pwm)//623154
+ 138:user_code/LQ_PWM_BLDC.c **** {
+ 496              		.loc 1 138 1
+ 497              		.cfi_startproc
+ 498              		@ args = 0, pretend = 0, frame = 8
+ 499              		@ frame_needed = 0, uses_anonymous_args = 0
+ 500 0000 00B5     		push	{lr}
+ 501              		.cfi_def_cfa_offset 4
+ 502              		.cfi_offset 14, -4
+ 503 0002 83B0     		sub	sp, sp, #12
+ 504              		.cfi_def_cfa_offset 16
+ 505 0004 0190     		str	r0, [sp, #4]
+ 139:user_code/LQ_PWM_BLDC.c **** 
+ 140:user_code/LQ_PWM_BLDC.c ****     switch(hall_now)
+ 506              		.loc 1 140 5
+ 507 0006 5C4B     		ldr	r3, .L40
+ 508 0008 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 509 000a 013B     		subs	r3, r3, #1
+ 510 000c 052B     		cmp	r3, #5
+ 511 000e 00F2AB80 		bhi	.L31
+ 512 0012 01A2     		adr	r2, .L33
+ 513 0014 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 514              		.p2align 2
+ 515              	.L33:
+ 516 0018 31000000 		.word	.L38+1
+ 517 001c 65000000 		.word	.L37+1
+ 518 0020 99000000 		.word	.L36+1
+ 519 0024 CD000000 		.word	.L35+1
+ 520 0028 01010000 		.word	.L34+1
+ 521 002c 35010000 		.word	.L32+1
+ 522              		.p2align 1
+ 523              	.L38:
+ 141:user_code/LQ_PWM_BLDC.c ****     {
+ 142:user_code/LQ_PWM_BLDC.c ****       case 1:
+ 143:user_code/LQ_PWM_BLDC.c ****           //4  B->C
+ 144:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);
+ 524              		.loc 1 144 8
+ 525 0030 0021     		movs	r1, #0
+ 526 0032 5248     		ldr	r0, .L40+4
+ 527 0034 FFF7FEFF 		bl	zf_pwm_set_duty
+ 145:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, pwm);
+ 528              		.loc 1 145 8
+ 529 0038 019B     		ldr	r3, [sp, #4]
+ 530 003a 1946     		mov	r1, r3
+ 531 003c 5048     		ldr	r0, .L40+8
+ 532 003e FFF7FEFF 		bl	zf_pwm_set_duty
+ 146:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, 0);
+ 533              		.loc 1 146 8
+ 534 0042 0021     		movs	r1, #0
+ 535 0044 4F48     		ldr	r0, .L40+12
+ 536 0046 FFF7FEFF 		bl	zf_pwm_set_duty
+ 147:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,0);
+ 537              		.loc 1 147 8
+ 538 004a 0021     		movs	r1, #0
+ 539 004c 6E20     		movs	r0, #110
+ 540 004e FFF7FEFF 		bl	zf_gpio_set_level
+ 148:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_BI,0);
+ 541              		.loc 1 148 11
+ 542 0052 0021     		movs	r1, #0
+ 543 0054 8320     		movs	r0, #131
+ 544 0056 FFF7FEFF 		bl	zf_gpio_set_level
+ 149:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_CI,1);
+ 545              		.loc 1 149 11
+ 546 005a 0121     		movs	r1, #1
+ 547 005c 6D20     		movs	r0, #109
+ 548 005e FFF7FEFF 		bl	zf_gpio_set_level
+ 150:user_code/LQ_PWM_BLDC.c ****         break;
+ 549              		.loc 1 150 9
+ 550 0062 84E0     		b	.L39
+ 551              	.L37:
+ 151:user_code/LQ_PWM_BLDC.c ****       case 2:
+ 152:user_code/LQ_PWM_BLDC.c **** 
+ 153:user_code/LQ_PWM_BLDC.c ****           //1  C->A
+ 154:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);
+ 552              		.loc 1 154 8
+ 553 0064 0021     		movs	r1, #0
+ 554 0066 4548     		ldr	r0, .L40+4
+ 555 0068 FFF7FEFF 		bl	zf_pwm_set_duty
+ 155:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, 0);
+ 556              		.loc 1 155 8
+ 557 006c 0021     		movs	r1, #0
+ 558 006e 4448     		ldr	r0, .L40+8
+ 559 0070 FFF7FEFF 		bl	zf_pwm_set_duty
+ 156:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, pwm);
+ 560              		.loc 1 156 8
+ 561 0074 019B     		ldr	r3, [sp, #4]
+ 562 0076 1946     		mov	r1, r3
+ 563 0078 4248     		ldr	r0, .L40+12
+ 564 007a FFF7FEFF 		bl	zf_pwm_set_duty
+ 157:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,1);
+ 565              		.loc 1 157 8
+ 566 007e 0121     		movs	r1, #1
+ 567 0080 6E20     		movs	r0, #110
+ 568 0082 FFF7FEFF 		bl	zf_gpio_set_level
+ 158:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_BI,0);
+ 569              		.loc 1 158 11
+ 570 0086 0021     		movs	r1, #0
+ 571 0088 8320     		movs	r0, #131
+ 572 008a FFF7FEFF 		bl	zf_gpio_set_level
+ 159:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_CI,0);
+ 573              		.loc 1 159 11
+ 574 008e 0021     		movs	r1, #0
+ 575 0090 6D20     		movs	r0, #109
+ 576 0092 FFF7FEFF 		bl	zf_gpio_set_level
+ 160:user_code/LQ_PWM_BLDC.c ****           break;
+ 577              		.loc 1 160 11
+ 578 0096 6AE0     		b	.L39
+ 579              	.L36:
+ 161:user_code/LQ_PWM_BLDC.c ****       case 3:
+ 162:user_code/LQ_PWM_BLDC.c ****           //5 B->C
+ 163:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);
+ 580              		.loc 1 163 8
+ 581 0098 0021     		movs	r1, #0
+ 582 009a 3848     		ldr	r0, .L40+4
+ 583 009c FFF7FEFF 		bl	zf_pwm_set_duty
+ 164:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, pwm);
+ 584              		.loc 1 164 8
+ 585 00a0 019B     		ldr	r3, [sp, #4]
+ 586 00a2 1946     		mov	r1, r3
+ 587 00a4 3648     		ldr	r0, .L40+8
+ 588 00a6 FFF7FEFF 		bl	zf_pwm_set_duty
+ 165:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, 0);
+ 589              		.loc 1 165 8
+ 590 00aa 0021     		movs	r1, #0
+ 591 00ac 3548     		ldr	r0, .L40+12
+ 592 00ae FFF7FEFF 		bl	zf_pwm_set_duty
+ 166:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,1);
+ 593              		.loc 1 166 8
+ 594 00b2 0121     		movs	r1, #1
+ 595 00b4 6E20     		movs	r0, #110
+ 596 00b6 FFF7FEFF 		bl	zf_gpio_set_level
+ 167:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_BI,0);
+ 597              		.loc 1 167 8
+ 598 00ba 0021     		movs	r1, #0
+ 599 00bc 8320     		movs	r0, #131
+ 600 00be FFF7FEFF 		bl	zf_gpio_set_level
+ 168:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_CI,0);
+ 601              		.loc 1 168 8
+ 602 00c2 0021     		movs	r1, #0
+ 603 00c4 6D20     		movs	r0, #109
+ 604 00c6 FFF7FEFF 		bl	zf_gpio_set_level
+ 169:user_code/LQ_PWM_BLDC.c ****          break;
+ 605              		.loc 1 169 10
+ 606 00ca 50E0     		b	.L39
+ 607              	.L35:
+ 170:user_code/LQ_PWM_BLDC.c **** 
+ 171:user_code/LQ_PWM_BLDC.c ****       case 4:
+ 172:user_code/LQ_PWM_BLDC.c **** 
+ 173:user_code/LQ_PWM_BLDC.c ****           //2  A->B
+ 174:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, pwm);
+ 608              		.loc 1 174 8
+ 609 00cc 019B     		ldr	r3, [sp, #4]
+ 610 00ce 1946     		mov	r1, r3
+ 611 00d0 2A48     		ldr	r0, .L40+4
+ 612 00d2 FFF7FEFF 		bl	zf_pwm_set_duty
+ 175:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, 0);
+ 613              		.loc 1 175 8
+ 614 00d6 0021     		movs	r1, #0
+ 615 00d8 2948     		ldr	r0, .L40+8
+ 616 00da FFF7FEFF 		bl	zf_pwm_set_duty
+ 176:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, 0);
+ 617              		.loc 1 176 8
+ 618 00de 0021     		movs	r1, #0
+ 619 00e0 2848     		ldr	r0, .L40+12
+ 620 00e2 FFF7FEFF 		bl	zf_pwm_set_duty
+ 177:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,0);
+ 621              		.loc 1 177 8
+ 622 00e6 0021     		movs	r1, #0
+ 623 00e8 6E20     		movs	r0, #110
+ 624 00ea FFF7FEFF 		bl	zf_gpio_set_level
+ 178:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_BI,1);
+ 625              		.loc 1 178 11
+ 626 00ee 0121     		movs	r1, #1
+ 627 00f0 8320     		movs	r0, #131
+ 628 00f2 FFF7FEFF 		bl	zf_gpio_set_level
+ 179:user_code/LQ_PWM_BLDC.c ****           zf_gpio_set_level(BLDC_CI,0);
+ 629              		.loc 1 179 11
+ 630 00f6 0021     		movs	r1, #0
+ 631 00f8 6D20     		movs	r0, #109
+ 632 00fa FFF7FEFF 		bl	zf_gpio_set_level
+ 180:user_code/LQ_PWM_BLDC.c ****         break;
+ 633              		.loc 1 180 9
+ 634 00fe 36E0     		b	.L39
+ 635              	.L34:
+ 181:user_code/LQ_PWM_BLDC.c ****       case 5:
+ 182:user_code/LQ_PWM_BLDC.c ****           //6  A->C
+ 183:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, pwm);
+ 636              		.loc 1 183 8
+ 637 0100 019B     		ldr	r3, [sp, #4]
+ 638 0102 1946     		mov	r1, r3
+ 639 0104 1D48     		ldr	r0, .L40+4
+ 640 0106 FFF7FEFF 		bl	zf_pwm_set_duty
+ 184:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, 0);
+ 641              		.loc 1 184 8
+ 642 010a 0021     		movs	r1, #0
+ 643 010c 1C48     		ldr	r0, .L40+8
+ 644 010e FFF7FEFF 		bl	zf_pwm_set_duty
+ 185:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP, 0);
+ 645              		.loc 1 185 8
+ 646 0112 0021     		movs	r1, #0
+ 647 0114 1B48     		ldr	r0, .L40+12
+ 648 0116 FFF7FEFF 		bl	zf_pwm_set_duty
+ 186:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI,0);
+ 649              		.loc 1 186 8
+ 650 011a 0021     		movs	r1, #0
+ 651 011c 6E20     		movs	r0, #110
+ 652 011e FFF7FEFF 		bl	zf_gpio_set_level
+ 187:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_BI,0);
+ 653              		.loc 1 187 8
+ 654 0122 0021     		movs	r1, #0
+ 655 0124 8320     		movs	r0, #131
+ 656 0126 FFF7FEFF 		bl	zf_gpio_set_level
+ 188:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_CI,1);
+ 657              		.loc 1 188 8
+ 658 012a 0121     		movs	r1, #1
+ 659 012c 6D20     		movs	r0, #109
+ 660 012e FFF7FEFF 		bl	zf_gpio_set_level
+ 189:user_code/LQ_PWM_BLDC.c **** 
+ 190:user_code/LQ_PWM_BLDC.c ****         break;
+ 661              		.loc 1 190 9
+ 662 0132 1CE0     		b	.L39
+ 663              	.L32:
+ 191:user_code/LQ_PWM_BLDC.c **** 
+ 192:user_code/LQ_PWM_BLDC.c ****       case 6:
+ 193:user_code/LQ_PWM_BLDC.c ****           //3  C->B
+ 194:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_AP, 0);            // 0
+ 664              		.loc 1 194 8
+ 665 0134 0021     		movs	r1, #0
+ 666 0136 1148     		ldr	r0, .L40+4
+ 667 0138 FFF7FEFF 		bl	zf_pwm_set_duty
+ 195:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_BP, 0);            // 0
+ 668              		.loc 1 195 8
+ 669 013c 0021     		movs	r1, #0
+ 670 013e 1048     		ldr	r0, .L40+8
+ 671 0140 FFF7FEFF 		bl	zf_pwm_set_duty
+ 196:user_code/LQ_PWM_BLDC.c ****     	  zf_pwm_set_duty(BLDC_CP,pwm);    // BLDC_duty
+ 672              		.loc 1 196 8
+ 673 0144 019B     		ldr	r3, [sp, #4]
+ 674 0146 1946     		mov	r1, r3
+ 675 0148 0E48     		ldr	r0, .L40+12
+ 676 014a FFF7FEFF 		bl	zf_pwm_set_duty
+ 197:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_AI, 0);              //0
+ 677              		.loc 1 197 8
+ 678 014e 0021     		movs	r1, #0
+ 679 0150 6E20     		movs	r0, #110
+ 680 0152 FFF7FEFF 		bl	zf_gpio_set_level
+ 198:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_BI, 1);              //0
+ 681              		.loc 1 198 8
+ 682 0156 0121     		movs	r1, #1
+ 683 0158 8320     		movs	r0, #131
+ 684 015a FFF7FEFF 		bl	zf_gpio_set_level
+ 199:user_code/LQ_PWM_BLDC.c ****     	  zf_gpio_set_level(BLDC_CI, 0);              //1
+ 685              		.loc 1 199 8
+ 686 015e 0021     		movs	r1, #0
+ 687 0160 6D20     		movs	r0, #109
+ 688 0162 FFF7FEFF 		bl	zf_gpio_set_level
+ 200:user_code/LQ_PWM_BLDC.c **** 
+ 201:user_code/LQ_PWM_BLDC.c ****         break;
+ 689              		.loc 1 201 9
+ 690 0166 02E0     		b	.L39
+ 691              	.L31:
+ 202:user_code/LQ_PWM_BLDC.c ****       default:
+ 203:user_code/LQ_PWM_BLDC.c ****         LQ_BLDCStop();
+ 692              		.loc 1 203 9
+ 693 0168 FFF7FEFF 		bl	LQ_BLDCStop
+ 204:user_code/LQ_PWM_BLDC.c ****         break;
+ 694              		.loc 1 204 9
+ 695 016c 00BF     		nop
+ 696              	.L39:
+ 205:user_code/LQ_PWM_BLDC.c ****     }
+ 206:user_code/LQ_PWM_BLDC.c **** }
+ 697              		.loc 1 206 1
+ 698 016e 00BF     		nop
+ 699 0170 03B0     		add	sp, sp, #12
+ 700              		.cfi_def_cfa_offset 4
+ 701              		@ sp needed
+ 702 0172 5DF804FB 		ldr	pc, [sp], #4
+ 703              	.L41:
+ 704 0176 00BF     		.align	2
+ 705              	.L40:
+ 706 0178 00000000 		.word	hall_now
+ 707 017c 84200400 		.word	270468
+ 708 0180 04202400 		.word	2367492
+ 709 0184 05203400 		.word	3416069
+ 710              		.cfi_endproc
+ 711              	.LFE486:
+ 713              		.section	.text.LQ_BLDCStop,"ax",%progbits
+ 714              		.align	1
+ 715              		.p2align 4,,15
+ 716              		.global	LQ_BLDCStop
+ 717              		.syntax unified
+ 718              		.thumb
+ 719              		.thumb_func
+ 721              	LQ_BLDCStop:
+ 722              	.LFB487:
+ 207:user_code/LQ_PWM_BLDC.c **** 
+ 208:user_code/LQ_PWM_BLDC.c **** void LQ_BLDCStop(void)
+ 209:user_code/LQ_PWM_BLDC.c **** {
+ 723              		.loc 1 209 1
+ 724              		.cfi_startproc
+ 725              		@ args = 0, pretend = 0, frame = 0
+ 726              		@ frame_needed = 0, uses_anonymous_args = 0
+ 727 0000 08B5     		push	{r3, lr}
+ 728              		.cfi_def_cfa_offset 8
+ 729              		.cfi_offset 3, -8
+ 730              		.cfi_offset 14, -4
+ 210:user_code/LQ_PWM_BLDC.c ****     zf_gpio_set_level(BLDC_AI,1);
+ 731              		.loc 1 210 5
+ 732 0002 0121     		movs	r1, #1
+ 733 0004 6E20     		movs	r0, #110
+ 734 0006 FFF7FEFF 		bl	zf_gpio_set_level
+ 211:user_code/LQ_PWM_BLDC.c ****     zf_gpio_set_level(BLDC_BI,1);
+ 735              		.loc 1 211 5
+ 736 000a 0121     		movs	r1, #1
+ 737 000c 8320     		movs	r0, #131
+ 738 000e FFF7FEFF 		bl	zf_gpio_set_level
+ 212:user_code/LQ_PWM_BLDC.c ****     zf_gpio_set_level(BLDC_CI,1);
+ 739              		.loc 1 212 5
+ 740 0012 0121     		movs	r1, #1
+ 741 0014 6D20     		movs	r0, #109
+ 742 0016 FFF7FEFF 		bl	zf_gpio_set_level
+ 213:user_code/LQ_PWM_BLDC.c ****     zf_pwm_set_duty(BLDC_AP, 0);
+ 743              		.loc 1 213 5
+ 744 001a 0021     		movs	r1, #0
+ 745 001c 0648     		ldr	r0, .L43
+ 746 001e FFF7FEFF 		bl	zf_pwm_set_duty
+ 214:user_code/LQ_PWM_BLDC.c ****     zf_pwm_set_duty(BLDC_BP, 0);
+ 747              		.loc 1 214 5
+ 748 0022 0021     		movs	r1, #0
+ 749 0024 0548     		ldr	r0, .L43+4
+ 750 0026 FFF7FEFF 		bl	zf_pwm_set_duty
+ 215:user_code/LQ_PWM_BLDC.c ****     zf_pwm_set_duty(BLDC_CP, 0);
+ 751              		.loc 1 215 5
+ 752 002a 0021     		movs	r1, #0
+ 753 002c 0448     		ldr	r0, .L43+8
+ 754 002e FFF7FEFF 		bl	zf_pwm_set_duty
+ 216:user_code/LQ_PWM_BLDC.c **** 
+ 217:user_code/LQ_PWM_BLDC.c **** 
+ 218:user_code/LQ_PWM_BLDC.c **** }
+ 755              		.loc 1 218 1
+ 756 0032 00BF     		nop
+ 757 0034 08BD     		pop	{r3, pc}
+ 758              	.L44:
+ 759 0036 00BF     		.align	2
+ 760              	.L43:
+ 761 0038 84200400 		.word	270468
+ 762 003c 04202400 		.word	2367492
+ 763 0040 05203400 		.word	3416069
+ 764              		.cfi_endproc
+ 765              	.LFE487:
+ 767              		.text
+ 768              	.Letext0:
+ 769              		.file 2 "c:\\stellarstudio-7.0\\sdks\\tools-1.4.0\\toolchain\\arm\\mingw64_nt\\10.3-2021.10\\arm-n
+ 770              		.file 3 "c:\\stellarstudio-7.0\\sdks\\tools-1.4.0\\toolchain\\arm\\mingw64_nt\\10.3-2021.10\\arm-n
+ 771              		.file 4 "libraries/zf_common/zf_common_typedef.h"
+ 772              		.file 5 "C:/StellarStudio-7.0/SDKS/StellarESDK-1.7.0/Modules/Platform/MCU/include/sr5e1/sr5e1xx.h"
+ 773              		.file 6 "libraries/zf_driver/zf_driver_gpio.h"
+ 774              		.file 7 "libraries/zf_driver/zf_driver_adc.h"
+ 775              		.file 8 "libraries/zf_driver/zf_driver_can.h"
+ 776              		.file 9 "libraries/zf_driver/zf_driver_encoder.h"
+ 777              		.file 10 "libraries/zf_driver/zf_driver_exti.h"
+ 778              		.file 11 "libraries/zf_driver/zf_driver_hrtim.h"
+ 779              		.file 12 "libraries/zf_driver/zf_driver_pwm.h"
+ 780              		.file 13 "libraries/zf_driver/zf_driver_spi.h"
+ 781              		.file 14 "libraries/zf_driver/zf_driver_uart.h"
+ 782              		.file 15 "libraries/zf_device/zf_device_imu_interface.h"
+ 783              		.file 16 "libraries/zf_device/zf_device_wireless_interface.h"
+ 784              		.file 17 "libraries/zf_device/zf_device_display_interface.h"
+ 785              		.file 18 "user_code/isr.h"
+ 786              		.file 19 "user_code/LQ_PWM_BLDC.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 LQ_PWM_BLDC.c
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:23     .data.BLDC_duty:00000000 BLDC_duty
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:20     .data.BLDC_duty:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:26     .text.BLDCInit:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:33     .text.BLDCInit:00000000 BLDCInit
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:97     .text.BLDCInit:00000068 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:104    .text.BLDC_PWM:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:111    .text.BLDC_PWM:00000000 BLDC_PWM
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:721    .text.LQ_BLDCStop:00000000 LQ_BLDCStop
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:267    .text.R_Corotation120:00000000 R_Corotation120
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:494    .text.R_Reversal120:00000000 R_Reversal120
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:186    .text.BLDC_PWM:00000064 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:191    .text.Get_Hall_State:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:198    .text.Get_Hall_State:00000000 Get_Hall_State
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:260    .text.R_Corotation120:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:289    .text.R_Corotation120:00000018 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:295    .text.R_Corotation120:00000030 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:479    .text.R_Corotation120:00000178 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:487    .text.R_Reversal120:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:516    .text.R_Reversal120:00000018 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:522    .text.R_Reversal120:00000030 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:706    .text.R_Reversal120:00000178 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:714    .text.LQ_BLDCStop:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccbOoSXj.s:761    .text.LQ_BLDCStop:00000038 $d
+                           .group:00000000 wm4.0.1ea29c7543256e0887205fa7f8c557c8
+                           .group:00000000 wm4._newlib_version.h.4.bfdf54b0af045d4a71376ae00f63a22c
+                           .group:00000000 wm4.newlib.h.18.1c9fedb6b3cd797cff253cc0fd593ef2
+                           .group:00000000 wm4.ieeefp.h.77.2bc94c1d1ed8b02df437510a04ac1e45
+                           .group:00000000 wm4.features.h.22.026edb2397769f4ae13f35900dbdb560
+                           .group:00000000 wm4.config.h.224.c701144a7b0518c6ee9b9b5465b79f81
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.a54b2d5c07711bc7320a3fea9f12cb56
+                           .group:00000000 wm4.stddef.h.39.c161261b198ee3a963897077fd6fa59f
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4._types.h.20.dd0d04dca3800a0d2a6129b87f3adbb2
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.127.34941de1b2539d59d5cac00e0dd27a45
+                           .group:00000000 wm4.reent.h.17.e292bf8b0bec6c96e131a54347145a30
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4.reent.h.77.dcd6129ff07fe81bd5636db29abe53b2
+                           .group:00000000 wm4.types.h.40.8b6acba56cefbb11746718204edc8f5e
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.32.bec3221fa7a9bb0bdde696c9c57e47d2
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.40cd3f2bfc456b193b790c2754690ebf
+                           .group:00000000 wm4.types.h.51.5571ec98f267d17d3c670b7a3ba33afa
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4._intsup.h.10.48bafbb683905c4daa4565a85aeeb264
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.sr5e1xx.h.22.e5c808533cc52ed19fb0830cd7d98924
+                           .group:00000000 wm4.cmsis_version.h.32.0f826810625204eca22a19868bdc7586
+                           .group:00000000 wm4.core_cm7.h.66.8ab2de36917d6fcae18019067fda13e0
+                           .group:00000000 wm4.cmsis_gcc.h.26.498d0ad17a45fc9ef20fdc01caf02259
+                           .group:00000000 wm4.core_cm7.h.174.43edb295ecdaadad738f48ba6011ffad
+                           .group:00000000 wm4.mpu_armv7.h.32.83326921a797fa9d6f70449916b4b839
+                           .group:00000000 wm4.cachel1_armv7.h.32.abd77761a989e008b0c60891114a33c7
+                           .group:00000000 wm4.SR5E1_ADC.h.14.21608e6aff125ba995dd767d6d8dc311
+                           .group:00000000 wm4.SR5E1_CEM.h.14.01fe5742c8f1ae35b1f3af05932f702e
+                           .group:00000000 wm4.SR5E1_CMU.h.14.2617b38b159abe38028862394531e06d
+                           .group:00000000 wm4.SR5E1_COMP.h.14.4b6fdfe4f5f7fd9bedf3a99b98bdf4cd
+                           .group:00000000 wm4.SR5E1_CORDIC.h.14.354fbf7c9eaf6963d38eaa25cf28ffe8
+                           .group:00000000 wm4.SR5E1_CRC.h.14.c64d0f7767671ddb92e9ead0a1162100
+                           .group:00000000 wm4.SR5E1_DAC.h.14.8c26a0ff04b0cfeb55306cc3f22187b8
+                           .group:00000000 wm4.SR5E1_DBGMCU.h.14.427df893d53a8044654f017ba01c25ed
+                           .group:00000000 wm4.SR5E1_DMA.h.14.a7f9a92f844b40a86965798c2e64240b
+                           .group:00000000 wm4.SR5E1_DMAMUX.h.14.471b3b4dfd4d41515f1df49493698866
+                           .group:00000000 wm4.SR5E1_EXTI.h.14.a325ea3fe89cd84894660551c33241ea
+                           .group:00000000 wm4.SR5E1_FCCU.h.14.0ebf0f0f36e079d28613ad2c80e17e23
+                           .group:00000000 wm4.SR5E1_FDCAN.h.14.ac57101fad5dbc798bfb93f34c899de7
+                           .group:00000000 wm4.SR5E1_FLASH_REG_ITF.h.14.d23d1d44923f9b20b8c8fdb51d66aefd
+                           .group:00000000 wm4.SR5E1_GPIO.h.14.1c84071e130d7c64b62470ab0e18a1f1
+                           .group:00000000 wm4.SR5E1_HRTIM.h.24.03932387d2522e6bd5c772a4edaf2f5d
+                           .group:00000000 wm4.SR5E1_HSEM.h.14.cbe70eee519f01b16452c3f8c99d8df1
+                           .group:00000000 wm4.SR5E1_I2C.h.14.350ba3e0f4fd57828457efa80135c36c
+                           .group:00000000 wm4.SR5E1_IMA.h.14.62b7088985ab2b7ce9b030a02daa1f7d
+                           .group:00000000 wm4.SR5E1_IWDG.h.14.20b7c5f05cf7ae94464c360d7af3660d
+                           .group:00000000 wm4.SR5E1_MEMU.h.14.04bad7ae4c52ce334a4fc900aad2ae5b
+                           .group:00000000 wm4.SR5E1_NVM_CTRL.h.14.5f442617f0628d4f16258f211c614ef9
+                           .group:00000000 wm4.SR5E1_PLLDIG.h.14.bd87a8e6917eee17dae2f312c8e5fa53
+                           .group:00000000 wm4.SR5E1_PMC_DIG.h.14.54173b566c6656344766ec4ef46c9281
+                           .group:00000000 wm4.SR5E1_RCC.h.14.56734803c71534de286e793a53649740
+                           .group:00000000 wm4.SR5E1_RTC.h.14.47037cbc7d8175dbf2be1dc0bb955e3f
+                           .group:00000000 wm4.SR5E1_SD_ADC.h.14.552b97d0b8f3c1fd4df6d8964b2f1a80
+                           .group:00000000 wm4.SR5E1_SMPU.h.14.8ce5bb6d5d7c579cd725f492f46e9085
+                           .group:00000000 wm4.SR5E1_SPI.h.14.42d52112e540f85ade4d9135f8b87d72
+                           .group:00000000 wm4.SR5E1_SSCM.h.14.8e6a2ad0ce5fca422fc3d69939b6125b
+                           .group:00000000 wm4.SR5E1_SYSCFG.h.14.02b969490118ce4069914b5e94f7ca65
+                           .group:00000000 wm4.SR5E1_TDM.h.14.a40ed7928cad243a57fd233fccf01ad2
+                           .group:00000000 wm4.SR5E1_TIM.h.14.f17572f4c16f3f152b8164ad25c34f5b
+                           .group:00000000 wm4.SR5E1_UART.h.14.eec3ab82b02b3bdb3de500483675b83f
+                           .group:00000000 wm4.SR5E1_WWDG.h.14.59b45efc70e442cc6ef03702aad4ad88
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.typedefs.h.36.07fe3956b4e751037cfee70edcd0b397
+                           .group:00000000 wm4.irq_numbers.h.38.6294b95aed1bf7b3a2cda0eed8ce8f57
+                           .group:00000000 wm4.regs.h.23.2ac145b4f57126d16daed5fbd86d99c6
+                           .group:00000000 wm4.stdarg.h.31.3fa7b8f6daaa31edd1696c08c77f2a73
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.f4862cfbf4363a1db01842d5bdf72c18
+                           .group:00000000 wm4.zf_common_typedef.h.47.8c368673885c9d07221c267e15ab1069
+                           .group:00000000 wm4.zf_common_debug.h.33.727e0094f4d79012e3b7f7400deabb35
+                           .group:00000000 wm4.zf_common_fifo.h.33.e14e643902e26e4e65437b5b20e82793
+                           .group:00000000 wm4.zf_common_function.h.33.02bbfb055e8ee322bc4f8b14ea195da2
+                           .group:00000000 wm4.zf_common_memory.h.33.d43647290a4d62164ff2ec77cadb89d8
+                           .group:00000000 wm4.saradc.h.25.e5a70aef9ec4fddf35f2b7cc0c9cf1bc
+                           .group:00000000 wm4.gpio.h.25.d41a0c19fda8c2de42e666afb48ec15a
+                           .group:00000000 wm4.zf_driver_gpio.h.65.5a4d2084c62fed7c22fdca02e748c198
+                           .group:00000000 wm4.zf_driver_adc.h.64.349fb433626b42172b0e0fee038428ca
+                           .group:00000000 wm4.can.h.25.3cfccb6c630ada4f656cab597e231e58
+                           .group:00000000 wm4.dmamux.h.25.337aea179f6dbcc87c52aae26d38f76e
+                           .group:00000000 wm4.clock_cfg.h.24.0aed3cee9ecce947225a304181294191
+                           .group:00000000 wm4.clock.h.37.80236c5607fdd9eb9275e5111a4191c3
+                           .group:00000000 wm4.irq.h.37.78714f25754c8b09d1428599101f6cc7
+                           .group:00000000 wm4.dma.h.40.f77dd217a06ceba13a3cfdd4102a73c1
+                           .group:00000000 wm4.zf_driver_can.h.67.fd10d2fa867eb54a54d4b57027d73a60
+                           .group:00000000 wm4.tim.h.25.6e7ad96569e77a70a68b9b4cc59f54f2
+                           .group:00000000 wm4.zf_driver_timer.h.33.8df253b6990d9861816977209fb11e90
+                           .group:00000000 wm4.zf_driver_encoder.h.57.7e32999f25354fac086ca226b0c630d4
+                           .group:00000000 wm4.exti.h.25.21597c35d9630b0985ce88d2c41f4ea4
+                           .group:00000000 wm4.zf_driver_exti.h.59.1b02b8083e5295ef5baaf83905d59395
+                           .group:00000000 wm4.ssd_types.h.29.b861f4e6d39d333f931bfc05b964cb1c
+                           .group:00000000 wm4.ssd_C55.h.37.dad650468a97d71aff4dd65ca085590f
+                           .group:00000000 wm4.zf_driver_flash.h.59.db93fe574c35ea9e79030063fbb35a13
+                           .group:00000000 wm4.hrtim.h.25.1601aea9d4a0da1de8252dc444355251
+                           .group:00000000 wm4.zf_driver_hrtim.h.64.cd8d2bf3bf1c471ea59d9c61e4a721d7
+                           .group:00000000 wm4.zf_driver_interrupt.h.33.2c3660dcc36cb090bd75b8f180c14f27
+                           .group:00000000 wm4.zf_driver_pit.h.33.834ac720a62e09d5603a9557331e9049
+                           .group:00000000 wm4.zf_driver_pwm.h.33.7d80487064ca712231a453396685a551
+                           .group:00000000 wm4.zf_driver_rcc.h.33.4c228cf40a79e1b974b30d5a9a3a77a7
+                           .group:00000000 wm4.zf_driver_soft_iic.h.33.9067bd298084134f63c61c075f95fa2b
+                           .group:00000000 wm4.zf_driver_soft_spi.h.33.a938287c023905d97cafe56e4be63674
+                           .group:00000000 wm4.zf_driver_spi.h.62.950b1f52ed365034df2907601137b455
+                           .group:00000000 wm4.zf_driver_system.h.33.370922a9681b47d575d2c83d302a180b
+                           .group:00000000 wm4.zf_driver_uart.h.70.ffcf3694337ad0b4066179f1abd5d668
+                           .group:00000000 wm4.zf_device_imu_interface.h.40.344a2c93b973b58cee305ff406fc3e84
+                           .group:00000000 wm4.zf_device_imu660rb.h.37.b47c39afb47c89c2c82bd28e76457042
+                           .group:00000000 wm4.zf_device_imu963ra.h.37.e773f164af6f72dd1b0b6c1242bf99b4
+                           .group:00000000 wm4.zf_device_wireless_interface.h.40.da0a07f107014cb0888a26f281971a5b
+                           .group:00000000 wm4.zf_device_display_interface.h.79.d8df25e52245efbd97fd6415c8db0a72
+                           .group:00000000 wm4.zf_device_ips200.h.37.957fc5e8b291701a6f6b47207b045b77
+                           .group:00000000 wm4.math.h.13.b6595ad277a643a6127e1a4515a98f91
+                           .group:00000000 wm4.zf_device_gnss.h.66.39fe53860d2d190725612db126de8287
+                           .group:00000000 wm4.zf_device_key.h.45.b12f9096d8cc68f085b8fe9fe5b730db
+                           .group:00000000 wm4.zf_device_uart_receiver.h.43.9ac9496dcaa4780ef86d21fa439379b4
+                           .group:00000000 wm4.imu963.h.4.bc73874cd0ef2b90e474b11a99ae87d4
+                           .group:00000000 wm4.Defined.h.8.ba118efb82db5b67af1e2437e5b3cf85
+                           .group:00000000 wm4.gps.h.16.e415e513692cd3052ed0c0f0fe95f318
+                           .group:00000000 wm4.PID1.h.2.cf65b96e84eb4c5eb9a17fb28b65d83c
+                           .group:00000000 wm4.my_flash.h.9.82a1ad4360117b2f54268b11aa8680a3
+                           .group:00000000 wm4.LQ_PWM_BLDC.h.2.f80d320e2d92bd4c57767cf0850f6df2
+
+UNDEFINED SYMBOLS
+zf_pwm_module_init
+zf_pwm_channel_init
+zf_gpio_init
+zf_gpio_get_level
+zf_pwm_set_duty
+zf_gpio_set_level
+hall_now

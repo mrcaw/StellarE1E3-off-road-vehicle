@@ -1,0 +1,1085 @@
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"subject.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	rapm_flag
+  19              		.section	.bss.rapm_flag,"aw",%nobits
+  22              	rapm_flag:
+  23 0000 00       		.space	1
+  24              		.global	run_before
+  25              		.section	.data.run_before,"aw"
+  28              	run_before:
+  29 0000 01       		.byte	1
+  30              		.section	.text.subject1,"ax",%progbits
+  31              		.align	1
+  32              		.p2align 4,,15
+  33              		.global	subject1
+  34              		.syntax unified
+  35              		.thumb
+  36              		.thumb_func
+  38              	subject1:
+  39              	.LFB482:
+  40              		.file 1 "user_code/subject.c"
+   1:user_code/subject.c **** /*
+   2:user_code/subject.c ****  * pid.c
+   3:user_code/subject.c ****  *
+   4:user_code/subject.c ****  *  Created on: 2025Äê1ÔÂ9ÈÕ
+   5:user_code/subject.c ****  *      Author: ever.youthful
+   6:user_code/subject.c ****  */
+   7:user_code/subject.c **** #include "zf_libraries_headfile.h"
+   8:user_code/subject.c **** 
+   9:user_code/subject.c **** uint8 rapm_flag,run_before=1;
+  10:user_code/subject.c **** void subject1(void)///////Ö÷ÒªÔËÐÐ´¦Àíº¯Êý
+  11:user_code/subject.c **** {
+  41              		.loc 1 11 1
+  42              		.cfi_startproc
+  43              		@ args = 0, pretend = 0, frame = 0
+  44              		@ frame_needed = 0, uses_anonymous_args = 0
+  45 0000 08B5     		push	{r3, lr}
+  46              		.cfi_def_cfa_offset 8
+  47              		.cfi_offset 3, -8
+  48              		.cfi_offset 14, -4
+  12:user_code/subject.c **** 
+  13:user_code/subject.c ****     if(point1[(target_point1-0)*2]==0&&point1[(target_point1-0)*2+1]==0)  motor_go=0;//¼ì²âÊÇ·ñÔËÐÐ
+  49              		.loc 1 13 29
+  50 0002 9D4B     		ldr	r3, .L35+16
+  51 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  52              		.loc 1 13 32
+  53 0006 5B00     		lsls	r3, r3, #1
+  54              		.loc 1 13 14
+  55 0008 9C4A     		ldr	r2, .L35+20
+  56 000a DB00     		lsls	r3, r3, #3
+  57 000c 1344     		add	r3, r3, r2
+  58 000e 93ED007B 		vldr.64	d7, [r3]
+  59              		.loc 1 13 7
+  60 0012 B5EE407B 		vcmp.f64	d7, #0
+  61 0016 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  62 001a 10D1     		bne	.L2
+  63              		.loc 1 13 61 discriminator 1
+  64 001c 964B     		ldr	r3, .L35+16
+  65 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  66              		.loc 1 13 64 discriminator 1
+  67 0020 5B00     		lsls	r3, r3, #1
+  68              		.loc 1 13 66 discriminator 1
+  69 0022 0133     		adds	r3, r3, #1
+  70              		.loc 1 13 46 discriminator 1
+  71 0024 954A     		ldr	r2, .L35+20
+  72 0026 DB00     		lsls	r3, r3, #3
+  73 0028 1344     		add	r3, r3, r2
+  74 002a 93ED007B 		vldr.64	d7, [r3]
+  75              		.loc 1 13 38 discriminator 1
+  76 002e B5EE407B 		vcmp.f64	d7, #0
+  77 0032 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  78 0036 02D1     		bne	.L2
+  79              		.loc 1 13 83 discriminator 2
+  80 0038 914B     		ldr	r3, .L35+24
+  81 003a 0022     		movs	r2, #0
+  82 003c 1A70     		strb	r2, [r3]
+  83              	.L2:
+  14:user_code/subject.c ****              if(motor_go==0)//Í£³µ/////
+  84              		.loc 1 14 25
+  85 003e 904B     		ldr	r3, .L35+24
+  86 0040 93F90030 		ldrsb	r3, [r3]
+  87              		.loc 1 14 16
+  88 0044 002B     		cmp	r3, #0
+  89 0046 08D1     		bne	.L3
+  15:user_code/subject.c ****              {
+  16:user_code/subject.c ****             	 zf_pwm_set_duty(BLDC_AP, 0);
+  90              		.loc 1 16 15
+  91 0048 0021     		movs	r1, #0
+  92 004a 8E48     		ldr	r0, .L35+28
+  93 004c FFF7FEFF 		bl	zf_pwm_set_duty
+  17:user_code/subject.c ****             	 zf_gpio_set_level(BLDC_AI,1);
+  94              		.loc 1 17 15
+  95 0050 0121     		movs	r1, #1
+  96 0052 6E20     		movs	r0, #110
+  97 0054 FFF7FEFF 		bl	zf_gpio_set_level
+  18:user_code/subject.c ****              }
+  19:user_code/subject.c ****              else if(motor_go==1)/////
+  20:user_code/subject.c ****             {
+  21:user_code/subject.c ****             	  if(target_point1==1)//ÀûÓÃµÚÒ»¸öµãÄâºÏº½Ïò½Ç
+  22:user_code/subject.c **** 				 {
+  23:user_code/subject.c ****             		   if(distance<=stop_dis)//¼õËÙÌõ¼þ
+  24:user_code/subject.c **** 						{
+  25:user_code/subject.c **** 						   speed_target=min_speed;
+  26:user_code/subject.c **** 						}
+  27:user_code/subject.c **** 
+  28:user_code/subject.c ****             		        else if(distance>stop_dis)
+  29:user_code/subject.c ****             		        {
+  30:user_code/subject.c ****             		        	speed_target=max_speed;
+  31:user_code/subject.c ****                                 	//speed_up(max_speed);
+  32:user_code/subject.c ****             		        }
+  33:user_code/subject.c ****             		   PID_speed11( speed_target,encoder_rpm);
+  34:user_code/subject.c **** 					 servo_ctrl(yaw+imu_turns*360);
+  35:user_code/subject.c **** 					 if(distance<1.3)//´ï³É»»µãÌõ¼þ
+  36:user_code/subject.c **** 				   {
+  37:user_code/subject.c **** 						 if(target_point1==gps_index_save[2]||target_point1==gps_index_save[3]) rapm_flag=1;//·ÉÆÂ±êÖ
+  38:user_code/subject.c **** 
+  39:user_code/subject.c **** 						 target_point1++;//»»µã
+  40:user_code/subject.c **** 						yaw= gnss_info.direction;//ÍÓÂÝÒÇ¸³Öµº½Ïò½Ç
+  41:user_code/subject.c **** 					   imu_turns=0;
+  42:user_code/subject.c **** 						  // direct_run_dis=get_two_points_distance(point2[target_point2*2],point2[target_point2*2+1]
+  43:user_code/subject.c **** 				   }
+  44:user_code/subject.c **** 				 }
+  45:user_code/subject.c **** 
+  46:user_code/subject.c **** 				 else
+  47:user_code/subject.c **** 				 {
+  48:user_code/subject.c **** 
+  49:user_code/subject.c **** 					    if(fabs(error_gps_angle)>30) speed_target=min_speed; //³µÉíÆ«ÒÆ¼õËÙ
+  50:user_code/subject.c **** 					    else  if(distance<=stop_dis)
+  51:user_code/subject.c **** 						{
+  52:user_code/subject.c **** 						  speed_target=min_speed;
+  53:user_code/subject.c **** 						}
+  54:user_code/subject.c **** 						else if(distance>stop_dis)
+  55:user_code/subject.c **** 						{
+  56:user_code/subject.c **** 							 speed_up(max_speed);
+  57:user_code/subject.c **** 							 speed_target=max_speed;
+  58:user_code/subject.c **** 						}
+  59:user_code/subject.c **** 					    if(rapm_flag)  speed_target=45;//·ÉÆÂËÙ¶È
+  60:user_code/subject.c **** 					    PID_speed11( speed_target,encoder_rpm);
+  61:user_code/subject.c **** 			            servo_ctrl(error_gps_angle);
+  62:user_code/subject.c **** 						if(distance<=1.4)
+  63:user_code/subject.c **** 						{
+  64:user_code/subject.c **** 							if(target_point1==gps_index_save[2]||target_point1==gps_index_save[3]) rapm_flag=1;
+  65:user_code/subject.c **** 							else rapm_flag=0;
+  66:user_code/subject.c **** 							target_point1++;
+  67:user_code/subject.c **** 
+  68:user_code/subject.c **** 						}
+  69:user_code/subject.c **** 				 }
+  70:user_code/subject.c ****             }
+  71:user_code/subject.c **** }
+  98              		.loc 1 71 1
+  99 0058 02E1     		b	.L34
+ 100              	.L3:
+  19:user_code/subject.c ****             {
+ 101              		.loc 1 19 30
+ 102 005a 894B     		ldr	r3, .L35+24
+ 103 005c 93F90030 		ldrsb	r3, [r3]
+  19:user_code/subject.c ****             {
+ 104              		.loc 1 19 21
+ 105 0060 012B     		cmp	r3, #1
+ 106 0062 40F0FD80 		bne	.L34
+  21:user_code/subject.c **** 				 {
+ 107              		.loc 1 21 32
+ 108 0066 844B     		ldr	r3, .L35+16
+ 109 0068 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  21:user_code/subject.c **** 				 {
+ 110              		.loc 1 21 18
+ 111 006a 012B     		cmp	r3, #1
+ 112 006c 75D1     		bne	.L5
+  23:user_code/subject.c **** 						{
+ 113              		.loc 1 23 29
+ 114 006e 864B     		ldr	r3, .L35+32
+ 115 0070 D3ED007A 		vldr.32	s15, [r3]
+ 116 0074 B7EEE76A 		vcvt.f64.f32	d6, s15
+ 117 0078 844B     		ldr	r3, .L35+36
+ 118 007a 93ED007B 		vldr.64	d7, [r3]
+  23:user_code/subject.c **** 						{
+ 119              		.loc 1 23 20
+ 120 007e B4EEC76B 		vcmpe.f64	d6, d7
+ 121 0082 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 122 0086 04DB     		blt	.L31
+  25:user_code/subject.c **** 						}
+ 123              		.loc 1 25 22
+ 124 0088 814B     		ldr	r3, .L35+40
+ 125 008a 1B68     		ldr	r3, [r3]	@ float
+ 126 008c 814A     		ldr	r2, .L35+44
+ 127 008e 1360     		str	r3, [r2]	@ float
+ 128 0090 10E0     		b	.L8
+ 129              	.L31:
+  28:user_code/subject.c ****             		        {
+ 130              		.loc 1 28 39
+ 131 0092 7D4B     		ldr	r3, .L35+32
+ 132 0094 D3ED007A 		vldr.32	s15, [r3]
+ 133 0098 B7EEE76A 		vcvt.f64.f32	d6, s15
+ 134 009c 7B4B     		ldr	r3, .L35+36
+ 135 009e 93ED007B 		vldr.64	d7, [r3]
+  28:user_code/subject.c ****             		        {
+ 136              		.loc 1 28 30
+ 137 00a2 B4EEC76B 		vcmpe.f64	d6, d7
+ 138 00a6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 139 00aa 03D5     		bpl	.L8
+  30:user_code/subject.c ****                                 	//speed_up(max_speed);
+ 140              		.loc 1 30 36
+ 141 00ac 7A4B     		ldr	r3, .L35+48
+ 142 00ae 1B68     		ldr	r3, [r3]	@ float
+ 143 00b0 784A     		ldr	r2, .L35+44
+ 144 00b2 1360     		str	r3, [r2]	@ float
+ 145              	.L8:
+  33:user_code/subject.c **** 					 servo_ctrl(yaw+imu_turns*360);
+ 146              		.loc 1 33 18
+ 147 00b4 774B     		ldr	r3, .L35+44
+ 148 00b6 D3ED007A 		vldr.32	s15, [r3]
+ 149 00ba FDEEE77A 		vcvt.s32.f32	s15, s15
+ 150 00be 17EE903A 		vmov	r3, s15	@ int
+ 151 00c2 1BB2     		sxth	r3, r3
+ 152 00c4 754A     		ldr	r2, .L35+52
+ 153 00c6 D2ED007A 		vldr.32	s15, [r2]
+ 154 00ca FDEEE77A 		vcvt.s32.f32	s15, s15
+ 155 00ce 17EE902A 		vmov	r2, s15	@ int
+ 156 00d2 12B2     		sxth	r2, r2
+ 157 00d4 1146     		mov	r1, r2
+ 158 00d6 1846     		mov	r0, r3
+ 159 00d8 FFF7FEFF 		bl	PID_speed11
+  34:user_code/subject.c **** 					 if(distance<1.3)//´ï³É»»µãÌõ¼þ
+ 160              		.loc 1 34 31
+ 161 00dc 704B     		ldr	r3, .L35+56
+ 162 00de B3F90030 		ldrsh	r3, [r3]
+ 163 00e2 1A46     		mov	r2, r3
+ 164 00e4 4FF4B473 		mov	r3, #360
+ 165 00e8 02FB03F3 		mul	r3, r2, r3
+  34:user_code/subject.c **** 					 if(distance<1.3)//´ï³É»»µãÌõ¼þ
+ 166              		.loc 1 34 21
+ 167 00ec 07EE903A 		vmov	s15, r3	@ int
+ 168 00f0 B8EEE77A 		vcvt.f32.s32	s14, s15
+ 169 00f4 6B4B     		ldr	r3, .L35+60
+ 170 00f6 D3ED007A 		vldr.32	s15, [r3]
+ 171 00fa 77EE277A 		vadd.f32	s15, s14, s15
+  34:user_code/subject.c **** 					 if(distance<1.3)//´ï³É»»µãÌõ¼þ
+ 172              		.loc 1 34 7
+ 173 00fe B7EEE77A 		vcvt.f64.f32	d7, s15
+ 174 0102 B0EE470B 		vmov.f64	d0, d7
+ 175 0106 FFF7FEFF 		bl	servo_ctrl
+  35:user_code/subject.c **** 				   {
+ 176              		.loc 1 35 18
+ 177 010a 604B     		ldr	r3, .L35+36
+ 178 010c 93ED007B 		vldr.64	d7, [r3]
+  35:user_code/subject.c **** 				   {
+ 179              		.loc 1 35 9
+ 180 0110 9FED556B 		vldr.64	d6, .L35
+ 181 0114 B4EEC67B 		vcmpe.f64	d7, d6
+ 182 0118 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 183 011c 00D4     		bmi	.L26
+ 184              		.loc 1 71 1
+ 185 011e 9FE0     		b	.L34
+ 186              	.L26:
+  37:user_code/subject.c **** 
+ 187              		.loc 1 37 40
+ 188 0120 614B     		ldr	r3, .L35+64
+ 189 0122 9A78     		ldrb	r2, [r3, #2]	@ zero_extendqisi2
+  37:user_code/subject.c **** 
+ 190              		.loc 1 37 24
+ 191 0124 544B     		ldr	r3, .L35+16
+ 192 0126 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  37:user_code/subject.c **** 
+ 193              		.loc 1 37 10
+ 194 0128 9A42     		cmp	r2, r3
+ 195 012a 05D0     		beq	.L11
+  37:user_code/subject.c **** 
+ 196              		.loc 1 37 74 discriminator 2
+ 197 012c 5E4B     		ldr	r3, .L35+64
+ 198 012e DA78     		ldrb	r2, [r3, #3]	@ zero_extendqisi2
+  37:user_code/subject.c **** 
+ 199              		.loc 1 37 58 discriminator 2
+ 200 0130 514B     		ldr	r3, .L35+16
+ 201 0132 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  37:user_code/subject.c **** 
+ 202              		.loc 1 37 43 discriminator 2
+ 203 0134 9A42     		cmp	r2, r3
+ 204 0136 02D1     		bne	.L12
+ 205              	.L11:
+  37:user_code/subject.c **** 
+ 206              		.loc 1 37 88 discriminator 3
+ 207 0138 5C4B     		ldr	r3, .L35+68
+ 208 013a 0122     		movs	r2, #1
+ 209 013c 1A70     		strb	r2, [r3]
+ 210              	.L12:
+  39:user_code/subject.c **** 						yaw= gnss_info.direction;//ÍÓÂÝÒÇ¸³Öµº½Ïò½Ç
+ 211              		.loc 1 39 21
+ 212 013e 4E4B     		ldr	r3, .L35+16
+ 213 0140 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 214 0142 0133     		adds	r3, r3, #1
+ 215 0144 DAB2     		uxtb	r2, r3
+ 216 0146 4C4B     		ldr	r3, .L35+16
+ 217 0148 1A70     		strb	r2, [r3]
+  40:user_code/subject.c **** 					   imu_turns=0;
+ 218              		.loc 1 40 21
+ 219 014a 594B     		ldr	r3, .L35+72
+ 220 014c 1B6B     		ldr	r3, [r3, #48]	@ float
+  40:user_code/subject.c **** 					   imu_turns=0;
+ 221              		.loc 1 40 10
+ 222 014e 554A     		ldr	r2, .L35+60
+ 223 0150 1360     		str	r3, [r2]	@ float
+  41:user_code/subject.c **** 						  // direct_run_dis=get_two_points_distance(point2[target_point2*2],point2[target_point2*2+1]
+ 224              		.loc 1 41 18
+ 225 0152 534B     		ldr	r3, .L35+56
+ 226 0154 0022     		movs	r2, #0
+ 227 0156 1A80     		strh	r2, [r3]	@ movhi
+ 228              		.loc 1 71 1
+ 229 0158 82E0     		b	.L34
+ 230              	.L5:
+  49:user_code/subject.c **** 					    else  if(distance<=stop_dis)
+ 231              		.loc 1 49 13
+ 232 015a 564B     		ldr	r3, .L35+76
+ 233 015c 93ED007B 		vldr.64	d7, [r3]
+ 234 0160 B0EEC77B 		vabs.f64	d7, d7
+  49:user_code/subject.c **** 					    else  if(distance<=stop_dis)
+ 235              		.loc 1 49 12
+ 236 0164 B3EE0E6B 		vmov.f64	d6, #3.0e+1
+ 237 0168 B4EEC67B 		vcmpe.f64	d7, d6
+ 238 016c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 239 0170 04DD     		ble	.L32
+  49:user_code/subject.c **** 					    else  if(distance<=stop_dis)
+ 240              		.loc 1 49 51 discriminator 1
+ 241 0172 474B     		ldr	r3, .L35+40
+ 242 0174 1B68     		ldr	r3, [r3]	@ float
+ 243 0176 474A     		ldr	r2, .L35+44
+ 244 0178 1360     		str	r3, [r2]	@ float
+ 245 017a 2BE0     		b	.L15
+ 246              	.L32:
+  50:user_code/subject.c **** 						{
+ 247              		.loc 1 50 27
+ 248 017c 424B     		ldr	r3, .L35+32
+ 249 017e D3ED007A 		vldr.32	s15, [r3]
+ 250 0182 B7EEE76A 		vcvt.f64.f32	d6, s15
+ 251 0186 414B     		ldr	r3, .L35+36
+ 252 0188 93ED007B 		vldr.64	d7, [r3]
+  50:user_code/subject.c **** 						{
+ 253              		.loc 1 50 18
+ 254 018c B4EEC76B 		vcmpe.f64	d6, d7
+ 255 0190 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 256 0194 04DB     		blt	.L33
+  52:user_code/subject.c **** 						}
+ 257              		.loc 1 52 21
+ 258 0196 3E4B     		ldr	r3, .L35+40
+ 259 0198 1B68     		ldr	r3, [r3]	@ float
+ 260 019a 3E4A     		ldr	r2, .L35+44
+ 261 019c 1360     		str	r3, [r2]	@ float
+ 262 019e 19E0     		b	.L15
+ 263              	.L33:
+  54:user_code/subject.c **** 						{
+ 264              		.loc 1 54 23
+ 265 01a0 394B     		ldr	r3, .L35+32
+ 266 01a2 D3ED007A 		vldr.32	s15, [r3]
+ 267 01a6 B7EEE76A 		vcvt.f64.f32	d6, s15
+ 268 01aa 384B     		ldr	r3, .L35+36
+ 269 01ac 93ED007B 		vldr.64	d7, [r3]
+  54:user_code/subject.c **** 						{
+ 270              		.loc 1 54 14
+ 271 01b0 B4EEC76B 		vcmpe.f64	d6, d7
+ 272 01b4 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 273 01b8 0CD5     		bpl	.L15
+  56:user_code/subject.c **** 							 speed_target=max_speed;
+ 274              		.loc 1 56 9
+ 275 01ba 374B     		ldr	r3, .L35+48
+ 276 01bc D3ED007A 		vldr.32	s15, [r3]
+ 277 01c0 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 278 01c4 17EE900A 		vmov	r0, s15	@ int
+ 279 01c8 FFF7FEFF 		bl	speed_up
+  57:user_code/subject.c **** 						}
+ 280              		.loc 1 57 21
+ 281 01cc 324B     		ldr	r3, .L35+48
+ 282 01ce 1B68     		ldr	r3, [r3]	@ float
+ 283 01d0 304A     		ldr	r2, .L35+44
+ 284 01d2 1360     		str	r3, [r2]	@ float
+ 285              	.L15:
+  59:user_code/subject.c **** 					    PID_speed11( speed_target,encoder_rpm);
+ 286              		.loc 1 59 13
+ 287 01d4 354B     		ldr	r3, .L35+68
+ 288 01d6 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  59:user_code/subject.c **** 					    PID_speed11( speed_target,encoder_rpm);
+ 289              		.loc 1 59 12
+ 290 01d8 002B     		cmp	r3, #0
+ 291 01da 02D0     		beq	.L19
+  59:user_code/subject.c **** 					    PID_speed11( speed_target,encoder_rpm);
+ 292              		.loc 1 59 37 discriminator 1
+ 293 01dc 2D4B     		ldr	r3, .L35+44
+ 294 01de 364A     		ldr	r2, .L35+80
+ 295 01e0 1A60     		str	r2, [r3]	@ float
+ 296              	.L19:
+  60:user_code/subject.c **** 			            servo_ctrl(error_gps_angle);
+ 297              		.loc 1 60 10
+ 298 01e2 2C4B     		ldr	r3, .L35+44
+ 299 01e4 D3ED007A 		vldr.32	s15, [r3]
+ 300 01e8 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 301 01ec 17EE903A 		vmov	r3, s15	@ int
+ 302 01f0 1BB2     		sxth	r3, r3
+ 303 01f2 2A4A     		ldr	r2, .L35+52
+ 304 01f4 D2ED007A 		vldr.32	s15, [r2]
+ 305 01f8 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 306 01fc 17EE902A 		vmov	r2, s15	@ int
+ 307 0200 12B2     		sxth	r2, r2
+ 308 0202 1146     		mov	r1, r2
+ 309 0204 1846     		mov	r0, r3
+ 310 0206 FFF7FEFF 		bl	PID_speed11
+  61:user_code/subject.c **** 						if(distance<=1.4)
+ 311              		.loc 1 61 16
+ 312 020a 2A4B     		ldr	r3, .L35+76
+ 313 020c 93ED007B 		vldr.64	d7, [r3]
+ 314 0210 B0EE470B 		vmov.f64	d0, d7
+ 315 0214 FFF7FEFF 		bl	servo_ctrl
+  62:user_code/subject.c **** 						{
+ 316              		.loc 1 62 18
+ 317 0218 1C4B     		ldr	r3, .L35+36
+ 318 021a 93ED007B 		vldr.64	d7, [r3]
+  62:user_code/subject.c **** 						{
+ 319              		.loc 1 62 9
+ 320 021e 9FED146B 		vldr.64	d6, .L35+8
+ 321 0222 B4EEC67B 		vcmpe.f64	d7, d6
+ 322 0226 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 323 022a 00D9     		bls	.L30
+ 324              		.loc 1 71 1
+ 325 022c 18E0     		b	.L34
+ 326              	.L30:
+  64:user_code/subject.c **** 							else rapm_flag=0;
+ 327              		.loc 1 64 40
+ 328 022e 1E4B     		ldr	r3, .L35+64
+ 329 0230 9A78     		ldrb	r2, [r3, #2]	@ zero_extendqisi2
+  64:user_code/subject.c **** 							else rapm_flag=0;
+ 330              		.loc 1 64 24
+ 331 0232 114B     		ldr	r3, .L35+16
+ 332 0234 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  64:user_code/subject.c **** 							else rapm_flag=0;
+ 333              		.loc 1 64 10
+ 334 0236 9A42     		cmp	r2, r3
+ 335 0238 05D0     		beq	.L21
+  64:user_code/subject.c **** 							else rapm_flag=0;
+ 336              		.loc 1 64 74 discriminator 2
+ 337 023a 1B4B     		ldr	r3, .L35+64
+ 338 023c DA78     		ldrb	r2, [r3, #3]	@ zero_extendqisi2
+  64:user_code/subject.c **** 							else rapm_flag=0;
+ 339              		.loc 1 64 58 discriminator 2
+ 340 023e 0E4B     		ldr	r3, .L35+16
+ 341 0240 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  64:user_code/subject.c **** 							else rapm_flag=0;
+ 342              		.loc 1 64 43 discriminator 2
+ 343 0242 9A42     		cmp	r2, r3
+ 344 0244 03D1     		bne	.L22
+ 345              	.L21:
+  64:user_code/subject.c **** 							else rapm_flag=0;
+ 346              		.loc 1 64 88 discriminator 3
+ 347 0246 194B     		ldr	r3, .L35+68
+ 348 0248 0122     		movs	r2, #1
+ 349 024a 1A70     		strb	r2, [r3]
+ 350 024c 02E0     		b	.L23
+ 351              	.L22:
+  65:user_code/subject.c **** 							target_point1++;
+ 352              		.loc 1 65 22
+ 353 024e 174B     		ldr	r3, .L35+68
+ 354 0250 0022     		movs	r2, #0
+ 355 0252 1A70     		strb	r2, [r3]
+ 356              	.L23:
+  66:user_code/subject.c **** 
+ 357              		.loc 1 66 21
+ 358 0254 084B     		ldr	r3, .L35+16
+ 359 0256 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 360 0258 0133     		adds	r3, r3, #1
+ 361 025a DAB2     		uxtb	r2, r3
+ 362 025c 064B     		ldr	r3, .L35+16
+ 363 025e 1A70     		strb	r2, [r3]
+ 364              	.L34:
+ 365              		.loc 1 71 1
+ 366 0260 00BF     		nop
+ 367 0262 08BD     		pop	{r3, pc}
+ 368              	.L36:
+ 369 0264 AFF30080 		.align	3
+ 370              	.L35:
+ 371 0268 CDCCCCCC 		.word	-858993459
+ 372 026c CCCCF43F 		.word	1073007820
+ 373 0270 66666666 		.word	1717986918
+ 374 0274 6666F63F 		.word	1073112678
+ 375 0278 00000000 		.word	target_point1
+ 376 027c 00000000 		.word	point1
+ 377 0280 00000000 		.word	motor_go
+ 378 0284 84200400 		.word	270468
+ 379 0288 00000000 		.word	stop_dis
+ 380 028c 00000000 		.word	distance
+ 381 0290 00000000 		.word	min_speed
+ 382 0294 00000000 		.word	speed_target
+ 383 0298 00000000 		.word	max_speed
+ 384 029c 00000000 		.word	encoder_rpm
+ 385 02a0 00000000 		.word	imu_turns
+ 386 02a4 00000000 		.word	yaw
+ 387 02a8 00000000 		.word	gps_index_save
+ 388 02ac 00000000 		.word	rapm_flag
+ 389 02b0 00000000 		.word	gnss_info
+ 390 02b4 00000000 		.word	error_gps_angle
+ 391 02b8 00003442 		.word	1110704128
+ 392              		.cfi_endproc
+ 393              	.LFE482:
+ 395              		.section	.text.my_subs,"ax",%progbits
+ 396              		.align	1
+ 397              		.p2align 4,,15
+ 398              		.global	my_subs
+ 399              		.syntax unified
+ 400              		.thumb
+ 401              		.thumb_func
+ 403              	my_subs:
+ 404              	.LFB483:
+  72:user_code/subject.c **** void my_subs(void)
+  73:user_code/subject.c **** {
+ 405              		.loc 1 73 1
+ 406              		.cfi_startproc
+ 407              		@ args = 0, pretend = 0, frame = 0
+ 408              		@ frame_needed = 0, uses_anonymous_args = 0
+ 409 0000 08B5     		push	{r3, lr}
+ 410              		.cfi_def_cfa_offset 8
+ 411              		.cfi_offset 3, -8
+ 412              		.cfi_offset 14, -4
+  74:user_code/subject.c ****     if(subs_flag)//Ò£¿ØÆ÷¿ØÖÆº¯Êý
+ 413              		.loc 1 74 8
+ 414 0002 6E4B     		ldr	r3, .L49
+ 415 0004 93F90030 		ldrsb	r3, [r3]
+ 416              		.loc 1 74 7
+ 417 0008 002B     		cmp	r3, #0
+ 418 000a 00F0D480 		beq	.L48
+  75:user_code/subject.c ****     {
+  76:user_code/subject.c ****         subs_flag=0;
+ 419              		.loc 1 76 18
+ 420 000e 6B4B     		ldr	r3, .L49
+ 421 0010 0022     		movs	r2, #0
+ 422 0012 1A70     		strb	r2, [r3]
+  77:user_code/subject.c **** 
+  78:user_code/subject.c ****         if(esp_ctrl==1&&subs_ctrl==0)
+ 423              		.loc 1 78 20
+ 424 0014 6A4B     		ldr	r3, .L49+4
+ 425 0016 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 426              		.loc 1 78 11
+ 427 0018 012B     		cmp	r3, #1
+ 428 001a 27D1     		bne	.L39
+ 429              		.loc 1 78 34 discriminator 1
+ 430 001c 694B     		ldr	r3, .L49+8
+ 431 001e 93F90030 		ldrsb	r3, [r3]
+ 432              		.loc 1 78 23 discriminator 1
+ 433 0022 002B     		cmp	r3, #0
+ 434 0024 22D1     		bne	.L39
+  79:user_code/subject.c **** 		  {
+  80:user_code/subject.c **** 			   if(esp_stop)
+ 435              		.loc 1 80 10
+ 436 0026 684B     		ldr	r3, .L49+12
+ 437 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 438              		.loc 1 80 9
+ 439 002a 002B     		cmp	r3, #0
+ 440 002c 0ED0     		beq	.L40
+  81:user_code/subject.c **** 			   {
+  82:user_code/subject.c **** 				   pwm_out=0;
+ 441              		.loc 1 82 15
+ 442 002e 674B     		ldr	r3, .L49+16
+ 443 0030 0022     		movs	r2, #0
+ 444 0032 1A80     		strh	r2, [r3]	@ movhi
+  83:user_code/subject.c **** 				   zf_pwm_set_duty(SERVO_MOTOR_PWM , servo_mid+esp_servo);
+ 445              		.loc 1 83 51
+ 446 0034 664B     		ldr	r3, .L49+20
+ 447 0036 B3F90030 		ldrsh	r3, [r3]
+ 448 003a 1A46     		mov	r2, r3
+ 449 003c 41F23423 		movw	r3, #4660
+ 450 0040 1344     		add	r3, r3, r2
+ 451              		.loc 1 83 8
+ 452 0042 1946     		mov	r1, r3
+ 453 0044 6348     		ldr	r0, .L49+24
+ 454 0046 FFF7FEFF 		bl	zf_pwm_set_duty
+ 455 004a 0FE0     		b	.L39
+ 456              	.L40:
+  84:user_code/subject.c **** 
+  85:user_code/subject.c **** 			   }
+  86:user_code/subject.c **** 			   else
+  87:user_code/subject.c **** 			   {
+  88:user_code/subject.c **** 				   zf_pwm_set_duty(SERVO_MOTOR_PWM , servo_mid+esp_servo);
+ 457              		.loc 1 88 51
+ 458 004c 604B     		ldr	r3, .L49+20
+ 459 004e B3F90030 		ldrsh	r3, [r3]
+ 460 0052 1A46     		mov	r2, r3
+ 461 0054 41F23423 		movw	r3, #4660
+ 462 0058 1344     		add	r3, r3, r2
+ 463              		.loc 1 88 8
+ 464 005a 1946     		mov	r1, r3
+ 465 005c 5D48     		ldr	r0, .L49+24
+ 466 005e FFF7FEFF 		bl	zf_pwm_set_duty
+  89:user_code/subject.c **** 				   pwm_out=esp_speed;
+ 467              		.loc 1 89 15
+ 468 0062 5D4B     		ldr	r3, .L49+28
+ 469 0064 B3F90020 		ldrsh	r2, [r3]
+ 470 0068 584B     		ldr	r3, .L49+16
+ 471 006a 1A80     		strh	r2, [r3]	@ movhi
+ 472              	.L39:
+  90:user_code/subject.c **** 			   }
+  91:user_code/subject.c **** 		  }
+  92:user_code/subject.c ****         if(1 == uart_receiver.finsh_flag)                            // Ö¡Íê³É±êÖ¾ÅÐ¶Ï
+ 473              		.loc 1 92 30
+ 474 006c 5B4B     		ldr	r3, .L49+32
+ 475 006e 5B7B     		ldrb	r3, [r3, #13]	@ zero_extendqisi2
+ 476              		.loc 1 92 11
+ 477 0070 012B     		cmp	r3, #1
+ 478 0072 40F0A080 		bne	.L48
+  93:user_code/subject.c ****         {
+  94:user_code/subject.c ****             if(1 == uart_receiver.state)                             // Ò£¿ØÆ÷Ê§¿Ø×´Ì¬ÅÐ¶Ï
+ 479              		.loc 1 94 34
+ 480 0076 594B     		ldr	r3, .L49+32
+ 481 0078 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 482              		.loc 1 94 15
+ 483 007a 012B     		cmp	r3, #1
+ 484 007c 40F09B80 		bne	.L48
+  95:user_code/subject.c ****             {
+  96:user_code/subject.c **** 
+  97:user_code/subject.c **** 
+  98:user_code/subject.c ****                 if(subs_motor_ctrl==0) subs_motor_ctrl=uart_receiver.channel[2];
+ 485              		.loc 1 98 35
+ 486 0080 574B     		ldr	r3, .L49+36
+ 487 0082 1B88     		ldrh	r3, [r3]
+ 488              		.loc 1 98 19
+ 489 0084 002B     		cmp	r3, #0
+ 490 0086 03D1     		bne	.L41
+ 491              		.loc 1 98 77 discriminator 1
+ 492 0088 544B     		ldr	r3, .L49+32
+ 493 008a 9A88     		ldrh	r2, [r3, #4]
+ 494              		.loc 1 98 55 discriminator 1
+ 495 008c 544B     		ldr	r3, .L49+36
+ 496 008e 1A80     		strh	r2, [r3]	@ movhi
+ 497              	.L41:
+  99:user_code/subject.c ****                 if(subs_motor_ctrl!=uart_receiver.channel[2])
+ 498              		.loc 1 99 58
+ 499 0090 524B     		ldr	r3, .L49+32
+ 500 0092 9A88     		ldrh	r2, [r3, #4]
+ 501              		.loc 1 99 35
+ 502 0094 524B     		ldr	r3, .L49+36
+ 503 0096 1B88     		ldrh	r3, [r3]
+ 504              		.loc 1 99 19
+ 505 0098 9A42     		cmp	r2, r3
+ 506 009a 15D0     		beq	.L42
+ 100:user_code/subject.c ****                 {
+ 101:user_code/subject.c ****                     subs_motor_ctrl=uart_receiver.channel[2];
+ 507              		.loc 1 101 58
+ 508 009c 4F4B     		ldr	r3, .L49+32
+ 509 009e 9A88     		ldrh	r2, [r3, #4]
+ 510              		.loc 1 101 36
+ 511 00a0 4F4B     		ldr	r3, .L49+36
+ 512 00a2 1A80     		strh	r2, [r3]	@ movhi
+ 102:user_code/subject.c ****                     motor_go=!motor_go;
+ 513              		.loc 1 102 30
+ 514 00a4 4F4B     		ldr	r3, .L49+40
+ 515 00a6 93F90030 		ldrsb	r3, [r3]
+ 516 00aa 002B     		cmp	r3, #0
+ 517 00ac 0CBF     		ite	eq
+ 518 00ae 0123     		moveq	r3, #1
+ 519 00b0 0023     		movne	r3, #0
+ 520 00b2 DBB2     		uxtb	r3, r3
+ 521 00b4 5AB2     		sxtb	r2, r3
+ 522              		.loc 1 102 29
+ 523 00b6 4B4B     		ldr	r3, .L49+40
+ 524 00b8 1A70     		strb	r2, [r3]
+ 103:user_code/subject.c ****                     yaw=0;
+ 525              		.loc 1 103 24
+ 526 00ba 4B4B     		ldr	r3, .L49+44
+ 527 00bc 4FF00002 		mov	r2, #0
+ 528 00c0 1A60     		str	r2, [r3]	@ float
+ 104:user_code/subject.c ****                     imu_turns=0;
+ 529              		.loc 1 104 30
+ 530 00c2 4A4B     		ldr	r3, .L49+48
+ 531 00c4 0022     		movs	r2, #0
+ 532 00c6 1A80     		strh	r2, [r3]	@ movhi
+ 533              	.L42:
+ 105:user_code/subject.c ****                   //  point1[0]=gnss_info.latitude;
+ 106:user_code/subject.c ****                   //  point1[1]=gnss_info.longitude;
+ 107:user_code/subject.c ****                 }
+ 108:user_code/subject.c ****                 if(uart_receiver.channel[3]>1600)
+ 534              		.loc 1 108 41
+ 535 00c8 444B     		ldr	r3, .L49+32
+ 536 00ca DB88     		ldrh	r3, [r3, #6]
+ 537              		.loc 1 108 19
+ 538 00cc B3F5C86F 		cmp	r3, #1600
+ 539 00d0 06D9     		bls	.L43
+ 109:user_code/subject.c ****                 {
+ 110:user_code/subject.c ****                     subs_ctrl=1;
+ 540              		.loc 1 110 30
+ 541 00d2 3C4B     		ldr	r3, .L49+8
+ 542 00d4 0122     		movs	r2, #1
+ 543 00d6 1A70     		strb	r2, [r3]
+ 111:user_code/subject.c ****                     motor_go=0;
+ 544              		.loc 1 111 29
+ 545 00d8 424B     		ldr	r3, .L49+40
+ 546 00da 0022     		movs	r2, #0
+ 547 00dc 1A70     		strb	r2, [r3]
+ 548 00de 07E0     		b	.L44
+ 549              	.L43:
+ 112:user_code/subject.c ****                 }
+ 113:user_code/subject.c ****                 else if(uart_receiver.channel[3]<500)  subs_ctrl=0;
+ 550              		.loc 1 113 46
+ 551 00e0 3E4B     		ldr	r3, .L49+32
+ 552 00e2 DB88     		ldrh	r3, [r3, #6]
+ 553              		.loc 1 113 24
+ 554 00e4 B3F5FA7F 		cmp	r3, #500
+ 555 00e8 02D2     		bcs	.L44
+ 556              		.loc 1 113 65 discriminator 1
+ 557 00ea 364B     		ldr	r3, .L49+8
+ 558 00ec 0022     		movs	r2, #0
+ 559 00ee 1A70     		strb	r2, [r3]
+ 560              	.L44:
+ 114:user_code/subject.c **** 
+ 115:user_code/subject.c ****                 if(subs_ctrl)
+ 561              		.loc 1 115 20
+ 562 00f0 344B     		ldr	r3, .L49+8
+ 563 00f2 93F90030 		ldrsb	r3, [r3]
+ 564              		.loc 1 115 19
+ 565 00f6 002B     		cmp	r3, #0
+ 566 00f8 5DD0     		beq	.L48
+ 116:user_code/subject.c ****                 {
+ 117:user_code/subject.c ****                     dir=(uart_receiver.channel[0]-1000)*servo_max/800;
+ 567              		.loc 1 117 47
+ 568 00fa 384B     		ldr	r3, .L49+32
+ 569 00fc 1B88     		ldrh	r3, [r3]
+ 570              		.loc 1 117 50
+ 571 00fe A3F57A73 		sub	r3, r3, #1000
+ 572              		.loc 1 117 56
+ 573 0102 4FF43972 		mov	r2, #740
+ 574 0106 02FB03F3 		mul	r3, r2, r3
+ 575              		.loc 1 117 66
+ 576 010a 394A     		ldr	r2, .L49+52
+ 577 010c 82FB0312 		smull	r1, r2, r2, r3
+ 578 0110 1212     		asrs	r2, r2, #8
+ 579 0112 DB17     		asrs	r3, r3, #31
+ 580 0114 D31A     		subs	r3, r2, r3
+ 581              		.loc 1 117 24
+ 582 0116 1AB2     		sxth	r2, r3
+ 583 0118 364B     		ldr	r3, .L49+56
+ 584 011a 1A80     		strh	r2, [r3]	@ movhi
+ 118:user_code/subject.c ****                     if(dir>servo_max)  dir=servo_max;//ÏÞ·ù
+ 585              		.loc 1 118 27
+ 586 011c 354B     		ldr	r3, .L49+56
+ 587 011e B3F90030 		ldrsh	r3, [r3]
+ 588              		.loc 1 118 23
+ 589 0122 B3F5397F 		cmp	r3, #740
+ 590 0126 03DD     		ble	.L45
+ 591              		.loc 1 118 43 discriminator 1
+ 592 0128 324B     		ldr	r3, .L49+56
+ 593 012a 4FF43972 		mov	r2, #740
+ 594 012e 1A80     		strh	r2, [r3]	@ movhi
+ 595              	.L45:
+ 119:user_code/subject.c ****                     if(dir<-servo_max)  dir=-servo_max;
+ 596              		.loc 1 119 27
+ 597 0130 304B     		ldr	r3, .L49+56
+ 598 0132 B3F90030 		ldrsh	r3, [r3]
+ 599              		.loc 1 119 23
+ 600 0136 13F5397F 		cmn	r3, #740
+ 601 013a 03DA     		bge	.L46
+ 602              		.loc 1 119 44 discriminator 1
+ 603 013c 2D4B     		ldr	r3, .L49+56
+ 604 013e 4FF61C52 		movw	r2, #64796
+ 605 0142 1A80     		strh	r2, [r3]	@ movhi
+ 606              	.L46:
+ 120:user_code/subject.c ****                     zf_pwm_set_duty(SERVO_MOTOR_PWM , servo_mid+dir);
+ 607              		.loc 1 120 64
+ 608 0144 2B4B     		ldr	r3, .L49+56
+ 609 0146 B3F90030 		ldrsh	r3, [r3]
+ 610 014a 1A46     		mov	r2, r3
+ 611 014c 41F23423 		movw	r3, #4660
+ 612 0150 1344     		add	r3, r3, r2
+ 613              		.loc 1 120 21
+ 614 0152 1946     		mov	r1, r3
+ 615 0154 1F48     		ldr	r0, .L49+24
+ 616 0156 FFF7FEFF 		bl	zf_pwm_set_duty
+ 121:user_code/subject.c **** 
+ 122:user_code/subject.c **** //                    pwm_out=(-uart_receiver.channel[1]+992)*SPEED_MAX/800;
+ 123:user_code/subject.c **** //                               if(pwm_out>SPEED_MAX)  pwm_out=SPEED_MAX;//ÏÞ·ù
+ 124:user_code/subject.c **** //                               if(pwm_out<-SPEED_MAX)  pwm_out=-SPEED_MAX;
+ 125:user_code/subject.c **** //                                PID_speed11( pwm_out,encoder_rpm);
+ 126:user_code/subject.c ****                     pwm_out=(-uart_receiver.channel[1]+992)*PWM_MAX/800;
+ 617              		.loc 1 126 52
+ 618 015a 204B     		ldr	r3, .L49+32
+ 619 015c 5B88     		ldrh	r3, [r3, #2]
+ 620              		.loc 1 126 55
+ 621 015e C3F57873 		rsb	r3, r3, #992
+ 622              		.loc 1 126 60
+ 623 0162 40F6B832 		movw	r2, #3000
+ 624 0166 02FB03F3 		mul	r3, r2, r3
+ 625              		.loc 1 126 68
+ 626 016a 214A     		ldr	r2, .L49+52
+ 627 016c 82FB0312 		smull	r1, r2, r2, r3
+ 628 0170 1212     		asrs	r2, r2, #8
+ 629 0172 DB17     		asrs	r3, r3, #31
+ 630 0174 D31A     		subs	r3, r2, r3
+ 631              		.loc 1 126 28
+ 632 0176 1AB2     		sxth	r2, r3
+ 633 0178 144B     		ldr	r3, .L49+16
+ 634 017a 1A80     		strh	r2, [r3]	@ movhi
+ 127:user_code/subject.c ****                     if(pwm_out>=0)
+ 635              		.loc 1 127 31
+ 636 017c 134B     		ldr	r3, .L49+16
+ 637 017e B3F90030 		ldrsh	r3, [r3]
+ 638              		.loc 1 127 23
+ 639 0182 002B     		cmp	r3, #0
+ 640 0184 0BDB     		blt	.L47
+ 128:user_code/subject.c ****                      {
+ 129:user_code/subject.c ****                         zf_gpio_set_level(BLDC_AI,1);
+ 641              		.loc 1 129 25
+ 642 0186 0121     		movs	r1, #1
+ 643 0188 6E20     		movs	r0, #110
+ 644 018a FFF7FEFF 		bl	zf_gpio_set_level
+ 130:user_code/subject.c ****                         zf_pwm_set_duty(BLDC_AP, pwm_out);
+ 645              		.loc 1 130 25
+ 646 018e 0F4B     		ldr	r3, .L49+16
+ 647 0190 B3F90030 		ldrsh	r3, [r3]
+ 648 0194 1946     		mov	r1, r3
+ 649 0196 1848     		ldr	r0, .L49+60
+ 650 0198 FFF7FEFF 		bl	zf_pwm_set_duty
+ 131:user_code/subject.c ****                      }
+ 132:user_code/subject.c ****                      else
+ 133:user_code/subject.c ****                      {
+ 134:user_code/subject.c ****                          zf_pwm_set_duty(BLDC_AP, -pwm_out);
+ 135:user_code/subject.c ****                          zf_gpio_set_level(BLDC_AI, 0);
+ 136:user_code/subject.c ****                      }
+ 137:user_code/subject.c **** 
+ 138:user_code/subject.c ****                 }
+ 139:user_code/subject.c **** 
+ 140:user_code/subject.c **** 
+ 141:user_code/subject.c ****              }
+ 142:user_code/subject.c ****          }
+ 143:user_code/subject.c **** 
+ 144:user_code/subject.c **** 
+ 145:user_code/subject.c ****     }
+ 146:user_code/subject.c **** }
+ 651              		.loc 1 146 1
+ 652 019c 0BE0     		b	.L48
+ 653              	.L47:
+ 134:user_code/subject.c ****                          zf_gpio_set_level(BLDC_AI, 0);
+ 654              		.loc 1 134 51
+ 655 019e 0B4B     		ldr	r3, .L49+16
+ 656 01a0 B3F90030 		ldrsh	r3, [r3]
+ 657 01a4 5B42     		rsbs	r3, r3, #0
+ 134:user_code/subject.c ****                          zf_gpio_set_level(BLDC_AI, 0);
+ 658              		.loc 1 134 26
+ 659 01a6 1946     		mov	r1, r3
+ 660 01a8 1348     		ldr	r0, .L49+60
+ 661 01aa FFF7FEFF 		bl	zf_pwm_set_duty
+ 135:user_code/subject.c ****                      }
+ 662              		.loc 1 135 26
+ 663 01ae 0021     		movs	r1, #0
+ 664 01b0 6E20     		movs	r0, #110
+ 665 01b2 FFF7FEFF 		bl	zf_gpio_set_level
+ 666              	.L48:
+ 667              		.loc 1 146 1
+ 668 01b6 00BF     		nop
+ 669 01b8 08BD     		pop	{r3, pc}
+ 670              	.L50:
+ 671 01ba 00BF     		.align	2
+ 672              	.L49:
+ 673 01bc 00000000 		.word	subs_flag
+ 674 01c0 00000000 		.word	esp_ctrl
+ 675 01c4 00000000 		.word	subs_ctrl
+ 676 01c8 00000000 		.word	esp_stop
+ 677 01cc 00000000 		.word	pwm_out
+ 678 01d0 00000000 		.word	esp_servo
+ 679 01d4 00410100 		.word	82176
+ 680 01d8 00000000 		.word	esp_speed
+ 681 01dc 00000000 		.word	uart_receiver
+ 682 01e0 00000000 		.word	subs_motor_ctrl
+ 683 01e4 00000000 		.word	motor_go
+ 684 01e8 00000000 		.word	yaw
+ 685 01ec 00000000 		.word	imu_turns
+ 686 01f0 1F85EB51 		.word	1374389535
+ 687 01f4 00000000 		.word	dir
+ 688 01f8 84200400 		.word	270468
+ 689              		.cfi_endproc
+ 690              	.LFE483:
+ 692              		.text
+ 693              	.Letext0:
+ 694              		.file 2 "libraries/zf_common/zf_common_typedef.h"
+ 695              		.file 3 "C:/StellarStudio-7.0/SDKS/StellarESDK-1.7.0/Modules/Platform/MCU/include/sr5e1/sr5e1xx.h"
+ 696              		.file 4 "libraries/zf_driver/zf_driver_gpio.h"
+ 697              		.file 5 "libraries/zf_driver/zf_driver_adc.h"
+ 698              		.file 6 "libraries/zf_driver/zf_driver_can.h"
+ 699              		.file 7 "libraries/zf_driver/zf_driver_encoder.h"
+ 700              		.file 8 "libraries/zf_driver/zf_driver_exti.h"
+ 701              		.file 9 "libraries/zf_driver/zf_driver_hrtim.h"
+ 702              		.file 10 "libraries/zf_driver/zf_driver_pwm.h"
+ 703              		.file 11 "libraries/zf_driver/zf_driver_spi.h"
+ 704              		.file 12 "libraries/zf_driver/zf_driver_uart.h"
+ 705              		.file 13 "libraries/zf_device/zf_device_imu_interface.h"
+ 706              		.file 14 "libraries/zf_device/zf_device_wireless_interface.h"
+ 707              		.file 15 "libraries/zf_device/zf_device_display_interface.h"
+ 708              		.file 16 "libraries/zf_device/zf_device_gnss.h"
+ 709              		.file 17 "libraries/zf_device/zf_device_uart_receiver.h"
+ 710              		.file 18 "user_code/isr.h"
+ 711              		.file 19 "user_code/imu963.h"
+ 712              		.file 20 "user_code/key.h"
+ 713              		.file 21 "user_code/PID1.h"
+ 714              		.file 22 "user_code/my_flash.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 subject.c
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:22     .bss.rapm_flag:00000000 rapm_flag
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:23     .bss.rapm_flag:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:28     .data.run_before:00000000 run_before
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:31     .text.subject1:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:38     .text.subject1:00000000 subject1
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:371    .text.subject1:00000268 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:396    .text.my_subs:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:403    .text.my_subs:00000000 my_subs
+C:\Users\EVERYO~1\AppData\Local\Temp\ccMYhpRP.s:673    .text.my_subs:000001bc $d
+                           .group:00000000 wm4.0.1ea29c7543256e0887205fa7f8c557c8
+                           .group:00000000 wm4._newlib_version.h.4.bfdf54b0af045d4a71376ae00f63a22c
+                           .group:00000000 wm4.newlib.h.18.1c9fedb6b3cd797cff253cc0fd593ef2
+                           .group:00000000 wm4.ieeefp.h.77.2bc94c1d1ed8b02df437510a04ac1e45
+                           .group:00000000 wm4.features.h.22.026edb2397769f4ae13f35900dbdb560
+                           .group:00000000 wm4.config.h.224.c701144a7b0518c6ee9b9b5465b79f81
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.a54b2d5c07711bc7320a3fea9f12cb56
+                           .group:00000000 wm4.stddef.h.39.c161261b198ee3a963897077fd6fa59f
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4._types.h.20.dd0d04dca3800a0d2a6129b87f3adbb2
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.127.34941de1b2539d59d5cac00e0dd27a45
+                           .group:00000000 wm4.reent.h.17.e292bf8b0bec6c96e131a54347145a30
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4.reent.h.77.dcd6129ff07fe81bd5636db29abe53b2
+                           .group:00000000 wm4.types.h.40.8b6acba56cefbb11746718204edc8f5e
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.32.bec3221fa7a9bb0bdde696c9c57e47d2
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.40cd3f2bfc456b193b790c2754690ebf
+                           .group:00000000 wm4.types.h.51.5571ec98f267d17d3c670b7a3ba33afa
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4._intsup.h.10.48bafbb683905c4daa4565a85aeeb264
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.sr5e1xx.h.22.e5c808533cc52ed19fb0830cd7d98924
+                           .group:00000000 wm4.cmsis_version.h.32.0f826810625204eca22a19868bdc7586
+                           .group:00000000 wm4.core_cm7.h.66.8ab2de36917d6fcae18019067fda13e0
+                           .group:00000000 wm4.cmsis_gcc.h.26.498d0ad17a45fc9ef20fdc01caf02259
+                           .group:00000000 wm4.core_cm7.h.174.43edb295ecdaadad738f48ba6011ffad
+                           .group:00000000 wm4.mpu_armv7.h.32.83326921a797fa9d6f70449916b4b839
+                           .group:00000000 wm4.cachel1_armv7.h.32.abd77761a989e008b0c60891114a33c7
+                           .group:00000000 wm4.SR5E1_ADC.h.14.21608e6aff125ba995dd767d6d8dc311
+                           .group:00000000 wm4.SR5E1_CEM.h.14.01fe5742c8f1ae35b1f3af05932f702e
+                           .group:00000000 wm4.SR5E1_CMU.h.14.2617b38b159abe38028862394531e06d
+                           .group:00000000 wm4.SR5E1_COMP.h.14.4b6fdfe4f5f7fd9bedf3a99b98bdf4cd
+                           .group:00000000 wm4.SR5E1_CORDIC.h.14.354fbf7c9eaf6963d38eaa25cf28ffe8
+                           .group:00000000 wm4.SR5E1_CRC.h.14.c64d0f7767671ddb92e9ead0a1162100
+                           .group:00000000 wm4.SR5E1_DAC.h.14.8c26a0ff04b0cfeb55306cc3f22187b8
+                           .group:00000000 wm4.SR5E1_DBGMCU.h.14.427df893d53a8044654f017ba01c25ed
+                           .group:00000000 wm4.SR5E1_DMA.h.14.a7f9a92f844b40a86965798c2e64240b
+                           .group:00000000 wm4.SR5E1_DMAMUX.h.14.471b3b4dfd4d41515f1df49493698866
+                           .group:00000000 wm4.SR5E1_EXTI.h.14.a325ea3fe89cd84894660551c33241ea
+                           .group:00000000 wm4.SR5E1_FCCU.h.14.0ebf0f0f36e079d28613ad2c80e17e23
+                           .group:00000000 wm4.SR5E1_FDCAN.h.14.ac57101fad5dbc798bfb93f34c899de7
+                           .group:00000000 wm4.SR5E1_FLASH_REG_ITF.h.14.d23d1d44923f9b20b8c8fdb51d66aefd
+                           .group:00000000 wm4.SR5E1_GPIO.h.14.1c84071e130d7c64b62470ab0e18a1f1
+                           .group:00000000 wm4.SR5E1_HRTIM.h.24.03932387d2522e6bd5c772a4edaf2f5d
+                           .group:00000000 wm4.SR5E1_HSEM.h.14.cbe70eee519f01b16452c3f8c99d8df1
+                           .group:00000000 wm4.SR5E1_I2C.h.14.350ba3e0f4fd57828457efa80135c36c
+                           .group:00000000 wm4.SR5E1_IMA.h.14.62b7088985ab2b7ce9b030a02daa1f7d
+                           .group:00000000 wm4.SR5E1_IWDG.h.14.20b7c5f05cf7ae94464c360d7af3660d
+                           .group:00000000 wm4.SR5E1_MEMU.h.14.04bad7ae4c52ce334a4fc900aad2ae5b
+                           .group:00000000 wm4.SR5E1_NVM_CTRL.h.14.5f442617f0628d4f16258f211c614ef9
+                           .group:00000000 wm4.SR5E1_PLLDIG.h.14.bd87a8e6917eee17dae2f312c8e5fa53
+                           .group:00000000 wm4.SR5E1_PMC_DIG.h.14.54173b566c6656344766ec4ef46c9281
+                           .group:00000000 wm4.SR5E1_RCC.h.14.56734803c71534de286e793a53649740
+                           .group:00000000 wm4.SR5E1_RTC.h.14.47037cbc7d8175dbf2be1dc0bb955e3f
+                           .group:00000000 wm4.SR5E1_SD_ADC.h.14.552b97d0b8f3c1fd4df6d8964b2f1a80
+                           .group:00000000 wm4.SR5E1_SMPU.h.14.8ce5bb6d5d7c579cd725f492f46e9085
+                           .group:00000000 wm4.SR5E1_SPI.h.14.42d52112e540f85ade4d9135f8b87d72
+                           .group:00000000 wm4.SR5E1_SSCM.h.14.8e6a2ad0ce5fca422fc3d69939b6125b
+                           .group:00000000 wm4.SR5E1_SYSCFG.h.14.02b969490118ce4069914b5e94f7ca65
+                           .group:00000000 wm4.SR5E1_TDM.h.14.a40ed7928cad243a57fd233fccf01ad2
+                           .group:00000000 wm4.SR5E1_TIM.h.14.f17572f4c16f3f152b8164ad25c34f5b
+                           .group:00000000 wm4.SR5E1_UART.h.14.eec3ab82b02b3bdb3de500483675b83f
+                           .group:00000000 wm4.SR5E1_WWDG.h.14.59b45efc70e442cc6ef03702aad4ad88
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.typedefs.h.36.07fe3956b4e751037cfee70edcd0b397
+                           .group:00000000 wm4.irq_numbers.h.38.6294b95aed1bf7b3a2cda0eed8ce8f57
+                           .group:00000000 wm4.regs.h.23.2ac145b4f57126d16daed5fbd86d99c6
+                           .group:00000000 wm4.stdarg.h.31.3fa7b8f6daaa31edd1696c08c77f2a73
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.f4862cfbf4363a1db01842d5bdf72c18
+                           .group:00000000 wm4.zf_common_typedef.h.47.8c368673885c9d07221c267e15ab1069
+                           .group:00000000 wm4.zf_common_debug.h.33.727e0094f4d79012e3b7f7400deabb35
+                           .group:00000000 wm4.zf_common_fifo.h.33.e14e643902e26e4e65437b5b20e82793
+                           .group:00000000 wm4.zf_common_function.h.33.02bbfb055e8ee322bc4f8b14ea195da2
+                           .group:00000000 wm4.zf_common_memory.h.33.d43647290a4d62164ff2ec77cadb89d8
+                           .group:00000000 wm4.saradc.h.25.e5a70aef9ec4fddf35f2b7cc0c9cf1bc
+                           .group:00000000 wm4.gpio.h.25.d41a0c19fda8c2de42e666afb48ec15a
+                           .group:00000000 wm4.zf_driver_gpio.h.65.5a4d2084c62fed7c22fdca02e748c198
+                           .group:00000000 wm4.zf_driver_adc.h.64.349fb433626b42172b0e0fee038428ca
+                           .group:00000000 wm4.can.h.25.3cfccb6c630ada4f656cab597e231e58
+                           .group:00000000 wm4.dmamux.h.25.337aea179f6dbcc87c52aae26d38f76e
+                           .group:00000000 wm4.clock_cfg.h.24.0aed3cee9ecce947225a304181294191
+                           .group:00000000 wm4.clock.h.37.80236c5607fdd9eb9275e5111a4191c3
+                           .group:00000000 wm4.irq.h.37.78714f25754c8b09d1428599101f6cc7
+                           .group:00000000 wm4.dma.h.40.f77dd217a06ceba13a3cfdd4102a73c1
+                           .group:00000000 wm4.zf_driver_can.h.67.fd10d2fa867eb54a54d4b57027d73a60
+                           .group:00000000 wm4.tim.h.25.6e7ad96569e77a70a68b9b4cc59f54f2
+                           .group:00000000 wm4.zf_driver_timer.h.33.8df253b6990d9861816977209fb11e90
+                           .group:00000000 wm4.zf_driver_encoder.h.57.7e32999f25354fac086ca226b0c630d4
+                           .group:00000000 wm4.exti.h.25.21597c35d9630b0985ce88d2c41f4ea4
+                           .group:00000000 wm4.zf_driver_exti.h.59.1b02b8083e5295ef5baaf83905d59395
+                           .group:00000000 wm4.ssd_types.h.29.b861f4e6d39d333f931bfc05b964cb1c
+                           .group:00000000 wm4.ssd_C55.h.37.dad650468a97d71aff4dd65ca085590f
+                           .group:00000000 wm4.zf_driver_flash.h.59.db93fe574c35ea9e79030063fbb35a13
+                           .group:00000000 wm4.hrtim.h.25.1601aea9d4a0da1de8252dc444355251
+                           .group:00000000 wm4.zf_driver_hrtim.h.64.cd8d2bf3bf1c471ea59d9c61e4a721d7
+                           .group:00000000 wm4.zf_driver_interrupt.h.33.2c3660dcc36cb090bd75b8f180c14f27
+                           .group:00000000 wm4.zf_driver_pit.h.33.834ac720a62e09d5603a9557331e9049
+                           .group:00000000 wm4.zf_driver_pwm.h.33.7d80487064ca712231a453396685a551
+                           .group:00000000 wm4.zf_driver_rcc.h.33.4c228cf40a79e1b974b30d5a9a3a77a7
+                           .group:00000000 wm4.zf_driver_soft_iic.h.33.9067bd298084134f63c61c075f95fa2b
+                           .group:00000000 wm4.zf_driver_soft_spi.h.33.a938287c023905d97cafe56e4be63674
+                           .group:00000000 wm4.zf_driver_spi.h.62.950b1f52ed365034df2907601137b455
+                           .group:00000000 wm4.zf_driver_system.h.33.370922a9681b47d575d2c83d302a180b
+                           .group:00000000 wm4.zf_driver_uart.h.70.ffcf3694337ad0b4066179f1abd5d668
+                           .group:00000000 wm4.zf_device_imu_interface.h.40.344a2c93b973b58cee305ff406fc3e84
+                           .group:00000000 wm4.zf_device_imu660rb.h.37.b47c39afb47c89c2c82bd28e76457042
+                           .group:00000000 wm4.zf_device_imu963ra.h.37.e773f164af6f72dd1b0b6c1242bf99b4
+                           .group:00000000 wm4.zf_device_wireless_interface.h.40.da0a07f107014cb0888a26f281971a5b
+                           .group:00000000 wm4.zf_device_display_interface.h.79.d8df25e52245efbd97fd6415c8db0a72
+                           .group:00000000 wm4.zf_device_ips200.h.37.957fc5e8b291701a6f6b47207b045b77
+                           .group:00000000 wm4.math.h.13.b6595ad277a643a6127e1a4515a98f91
+                           .group:00000000 wm4.zf_device_gnss.h.66.39fe53860d2d190725612db126de8287
+                           .group:00000000 wm4.zf_device_key.h.45.b12f9096d8cc68f085b8fe9fe5b730db
+                           .group:00000000 wm4.zf_device_uart_receiver.h.43.9ac9496dcaa4780ef86d21fa439379b4
+                           .group:00000000 wm4.imu963.h.9.0357a407ee5eca150c2da77b8ad374e8
+                           .group:00000000 wm4.Defined.h.8.ba118efb82db5b67af1e2437e5b3cf85
+                           .group:00000000 wm4.gps.h.16.e415e513692cd3052ed0c0f0fe95f318
+                           .group:00000000 wm4.PID1.h.9.1cc3485a8cc0a8a64a4519addeb351e8
+                           .group:00000000 wm4.my_flash.h.9.82a1ad4360117b2f54268b11aa8680a3
+
+UNDEFINED SYMBOLS
+zf_pwm_set_duty
+zf_gpio_set_level
+PID_speed11
+servo_ctrl
+speed_up
+target_point1
+point1
+motor_go
+stop_dis
+distance
+min_speed
+speed_target
+max_speed
+encoder_rpm
+imu_turns
+yaw
+gps_index_save
+gnss_info
+error_gps_angle
+subs_flag
+esp_ctrl
+subs_ctrl
+esp_stop
+pwm_out
+esp_servo
+esp_speed
+uart_receiver
+subs_motor_ctrl
+dir

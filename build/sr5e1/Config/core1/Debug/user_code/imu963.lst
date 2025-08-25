@@ -1,0 +1,921 @@
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"imu963.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	att
+  19              		.section	.bss.att,"aw",%nobits
+  20              		.align	2
+  23              	att:
+  24 0000 00000000 		.space	36
+  24      00000000 
+  24      00000000 
+  24      00000000 
+  24      00000000 
+  25              		.global	att_2
+  26              		.section	.bss.att_2,"aw",%nobits
+  27              		.align	2
+  30              	att_2:
+  31 0000 00000000 		.space	36
+  31      00000000 
+  31      00000000 
+  31      00000000 
+  31      00000000 
+  32              		.global	g
+  33              		.section	.data.g,"aw"
+  34              		.align	2
+  37              	g:
+  38 0000 E9B71C41 		.word	1092401129
+  39              		.global	B
+  40              		.section	.data.B,"aw"
+  41              		.align	2
+  44              	B:
+  45 0000 58FF7F3F 		.word	1065353048
+  46 0004 62BEBC38 		.word	951893602
+  47 0008 83A5BA38 		.word	951756163
+  48 000c A4707D3F 		.word	1065185444
+  49 0010 17B7D1B8 		.word	-1194215657
+  50 0014 9604803F 		.word	1065354390
+  51              		.global	MagOffset
+  52              		.section	.data.MagOffset,"aw"
+  53              		.align	2
+  56              	MagOffset:
+  57 0000 82A8FBB8 		.word	-1191466878
+  58 0004 CDAFE638 		.word	954642381
+  59 0008 18B41039 		.word	957395992
+  60              		.global	yaw
+  61              		.section	.bss.yaw,"aw",%nobits
+  62              		.align	2
+  65              	yaw:
+  66 0000 00000000 		.space	4
+  67              		.global	roll
+  68              		.section	.bss.roll,"aw",%nobits
+  69              		.align	2
+  72              	roll:
+  73 0000 00000000 		.space	4
+  74              		.global	pitch
+  75              		.section	.bss.pitch,"aw",%nobits
+  76              		.align	2
+  79              	pitch:
+  80 0000 00000000 		.space	4
+  81              		.global	Dir
+  82              		.section	.bss.Dir,"aw",%nobits
+  83              		.align	2
+  86              	Dir:
+  87 0000 00000000 		.space	4
+  88              		.global	groy_roll
+  89              		.section	.bss.groy_roll,"aw",%nobits
+  90              		.align	2
+  93              	groy_roll:
+  94 0000 00000000 		.space	4
+  95              		.global	groy_pitch
+  96              		.section	.bss.groy_pitch,"aw",%nobits
+  97              		.align	2
+ 100              	groy_pitch:
+ 101 0000 00000000 		.space	4
+ 102              		.global	groy_yaw
+ 103              		.section	.bss.groy_yaw,"aw",%nobits
+ 104              		.align	2
+ 107              	groy_yaw:
+ 108 0000 00000000 		.space	4
+ 109              		.global	acc_roll
+ 110              		.section	.bss.acc_roll,"aw",%nobits
+ 111              		.align	2
+ 114              	acc_roll:
+ 115 0000 00000000 		.space	4
+ 116              		.global	acc_pitch
+ 117              		.section	.bss.acc_pitch,"aw",%nobits
+ 118              		.align	2
+ 121              	acc_pitch:
+ 122 0000 00000000 		.space	4
+ 123              		.global	gyro_P
+ 124              		.section	.data.gyro_P,"aw"
+ 125              		.align	2
+ 128              	gyro_P:
+ 129 0000 6666663F 		.word	1063675494
+ 130              		.global	acc_P
+ 131              		.section	.data.acc_P,"aw"
+ 132              		.align	2
+ 135              	acc_P:
+ 136 0000 CDCCCC3D 		.word	1036831949
+ 137              		.global	norm
+ 138              		.section	.bss.norm,"aw",%nobits
+ 139              		.align	2
+ 142              	norm:
+ 143 0000 00000000 		.space	4
+ 144              		.global	Eorr
+ 145              		.section	.data.Eorr,"aw"
+ 146              		.align	2
+ 149              	Eorr:
+ 150 0000 3333B33E 		.word	1051931443
+ 151              		.global	yaw_last
+ 152              		.section	.bss.yaw_last,"aw",%nobits
+ 153              		.align	2
+ 156              	yaw_last:
+ 157 0000 00000000 		.space	4
+ 158              		.global	yaw_u
+ 159              		.section	.bss.yaw_u,"aw",%nobits
+ 160              		.align	2
+ 163              	yaw_u:
+ 164 0000 00000000 		.space	4
+ 165              		.global	angle_speed
+ 166              		.section	.bss.angle_speed,"aw",%nobits
+ 167              		.align	2
+ 170              	angle_speed:
+ 171 0000 00000000 		.space	4
+ 172              		.global	yaw_speed
+ 173              		.section	.bss.yaw_speed,"aw",%nobits
+ 174              		.align	2
+ 177              	yaw_speed:
+ 178 0000 00000000 		.space	20
+ 178      00000000 
+ 178      00000000 
+ 178      00000000 
+ 178      00000000 
+ 179              		.global	mag_ratio
+ 180              		.section	.bss.mag_ratio,"aw",%nobits
+ 181              		.align	2
+ 184              	mag_ratio:
+ 185 0000 00000000 		.space	4
+ 186              		.global	gyro_ratio
+ 187              		.section	.data.gyro_ratio,"aw"
+ 188              		.align	2
+ 191              	gyro_ratio:
+ 192 0000 0000803F 		.word	1065353216
+ 193              		.global	last_angle
+ 194              		.section	.bss.last_angle,"aw",%nobits
+ 195              		.align	2
+ 198              	last_angle:
+ 199 0000 00000000 		.space	4
+ 200              		.global	pitch_out
+ 201              		.section	.bss.pitch_out,"aw",%nobits
+ 202              		.align	2
+ 205              	pitch_out:
+ 206 0000 00000000 		.space	4
+ 207              		.global	first
+ 208              		.section	.bss.first,"aw",%nobits
+ 211              	first:
+ 212 0000 00       		.space	1
+ 213              		.global	yaw_north
+ 214              		.section	.bss.yaw_north,"aw",%nobits
+ 215              		.align	2
+ 218              	yaw_north:
+ 219 0000 00000000 		.space	4
+ 220              		.global	roll_out
+ 221              		.section	.bss.roll_out,"aw",%nobits
+ 222              		.align	2
+ 225              	roll_out:
+ 226 0000 00000000 		.space	4
+ 227              		.global	imu_turns
+ 228              		.section	.bss.imu_turns,"aw",%nobits
+ 229              		.align	1
+ 232              	imu_turns:
+ 233 0000 0000     		.space	2
+ 234              		.global	imu_gyro_data
+ 235              		.section	.bss.imu_gyro_data,"aw",%nobits
+ 236              		.align	2
+ 239              	imu_gyro_data:
+ 240 0000 00000000 		.space	6
+ 240      0000
+ 241              		.section	.text.getimu_value,"ax",%progbits
+ 242              		.align	1
+ 243              		.p2align 4,,15
+ 244              		.global	getimu_value
+ 245              		.syntax unified
+ 246              		.thumb
+ 247              		.thumb_func
+ 249              	getimu_value:
+ 250              	.LFB482:
+ 251              		.file 1 "user_code/imu963.c"
+   1:user_code/imu963.c **** 
+   2:user_code/imu963.c **** #include "zf_libraries_headfile.h"
+   3:user_code/imu963.c **** 
+   4:user_code/imu963.c **** 
+   5:user_code/imu963.c **** struct icm att,att_2;  //½á¹¹ÌåÊýÖµ
+   6:user_code/imu963.c **** 
+   7:user_code/imu963.c **** float g =  9.7949;
+   8:user_code/imu963.c **** //*********************		´ÅÁ¦¼ÆÐ£×¼		*****************************
+   9:user_code/imu963.c **** float B[6] = {0.99999,0.00009,0.000089,0.99,-0.0001,1.00014};  //Ð£ÕýÖµ
+  10:user_code/imu963.c **** float MagOffset[3] = {-0.00012,0.00011,0.000138};
+  11:user_code/imu963.c **** 
+  12:user_code/imu963.c **** float yaw=0.0,roll=0.0,pitch=0.0,Dir = 0.0;
+  13:user_code/imu963.c **** 
+  14:user_code/imu963.c **** float groy_roll = 0.0,groy_pitch= 0.0,groy_yaw = 0.0,acc_roll = 0.0,acc_pitch = 0.0;  //½ÇËÙ¶È»ý·ÖÓ
+  15:user_code/imu963.c **** float gyro_P = 0.9,acc_P = 0.1;  //ÍÓÂÝÒÇ±ÈÀý,¼ÓËÙ¼Æ±ÈÀý
+  16:user_code/imu963.c **** 
+  17:user_code/imu963.c **** float norm = 0.0; //Ê¸Á¿µÄÄ£»òËÄÔªÊýµÄ·¶Êý
+  18:user_code/imu963.c **** float Eorr = 0.35,yaw_last =0.0,yaw_u =0.0 ;
+  19:user_code/imu963.c **** 
+  20:user_code/imu963.c **** float angle_speed, yaw_speed[5] = {0.0,0.0,0.0,0.0,0.0};
+  21:user_code/imu963.c **** 
+  22:user_code/imu963.c **** //************************	Ò»½×»¥²¹Öµ		*******************************
+  23:user_code/imu963.c **** float mag_ratio = 0.0;		//µØ´Å¼Æ±ÈÀý
+  24:user_code/imu963.c **** float gyro_ratio = 1.0;		//ÍÓÂÝÒÇ±ÈÀý
+  25:user_code/imu963.c **** 
+  26:user_code/imu963.c **** float last_angle = 0.0,pitch_out;
+  27:user_code/imu963.c **** uint8 first = 0;
+  28:user_code/imu963.c **** float yaw_north,roll_out;
+  29:user_code/imu963.c **** int16 imu_turns=0;
+  30:user_code/imu963.c **** 
+  31:user_code/imu963.c **** 
+  32:user_code/imu963.c **** imu963ra_measurement_data_struct imu_gyro_data;
+  33:user_code/imu963.c **** void getimu_value(void)
+  34:user_code/imu963.c **** {
+ 252              		.loc 1 34 1
+ 253              		.cfi_startproc
+ 254              		@ args = 0, pretend = 0, frame = 8
+ 255              		@ frame_needed = 0, uses_anonymous_args = 0
+ 256 0000 00B5     		push	{lr}
+ 257              		.cfi_def_cfa_offset 4
+ 258              		.cfi_offset 14, -4
+ 259 0002 83B0     		sub	sp, sp, #12
+ 260              		.cfi_def_cfa_offset 16
+  35:user_code/imu963.c **** 
+  36:user_code/imu963.c ****         float gyro_now;
+  37:user_code/imu963.c **** 
+  38:user_code/imu963.c ****             // »ñÈ¡¼ÓËÙ¶È¼ÆÊý¾Ý
+  39:user_code/imu963.c **** 
+  40:user_code/imu963.c ****         // »ñÈ¡ÍÓÂÝÒÇÊý¾Ý
+  41:user_code/imu963.c ****       imu963ra_get_gyro(&imu_gyro_data);
+ 261              		.loc 1 41 7
+ 262 0004 4448     		ldr	r0, .L9+8
+ 263 0006 FFF7FEFF 		bl	imu963ra_get_gyro
+  42:user_code/imu963.c **** 
+  43:user_code/imu963.c ****         att.icm_gz = -(((float)imu_gyro_data.z)- att_2.icm_gz ) /14.3;
+ 264              		.loc 1 43 45
+ 265 000a 434B     		ldr	r3, .L9+8
+ 266 000c B3F90430 		ldrsh	r3, [r3, #4]
+ 267              		.loc 1 43 25
+ 268 0010 07EE903A 		vmov	s15, r3	@ int
+ 269 0014 B8EEE77A 		vcvt.f32.s32	s14, s15
+ 270              		.loc 1 43 55
+ 271 0018 404B     		ldr	r3, .L9+12
+ 272 001a D3ED057A 		vldr.32	s15, [r3, #20]
+ 273              		.loc 1 43 48
+ 274 001e 77EE677A 		vsub.f32	s15, s14, s15
+ 275              		.loc 1 43 22
+ 276 0022 F1EE677A 		vneg.f32	s15, s15
+ 277 0026 B7EEE76A 		vcvt.f64.f32	d6, s15
+ 278              		.loc 1 43 65
+ 279 002a 9FED395B 		vldr.64	d5, .L9
+ 280 002e 86EE057B 		vdiv.f64	d7, d6, d5
+ 281 0032 F7EEC77B 		vcvt.f32.f64	s15, d7
+ 282              		.loc 1 43 20
+ 283 0036 3A4B     		ldr	r3, .L9+16
+ 284 0038 C3ED057A 		vstr.32	s15, [r3, #20]
+  44:user_code/imu963.c **** 
+  45:user_code/imu963.c **** 
+  46:user_code/imu963.c ****     gyro_now = att.icm_gz * gyro_ratio;
+ 285              		.loc 1 46 19
+ 286 003c 384B     		ldr	r3, .L9+16
+ 287 003e 93ED057A 		vldr.32	s14, [r3, #20]
+ 288              		.loc 1 46 27
+ 289 0042 384B     		ldr	r3, .L9+20
+ 290 0044 D3ED007A 		vldr.32	s15, [r3]
+ 291              		.loc 1 46 14
+ 292 0048 67EE277A 		vmul.f32	s15, s14, s15
+ 293 004c CDED017A 		vstr.32	s15, [sp, #4]
+  47:user_code/imu963.c **** 
+  48:user_code/imu963.c **** 
+  49:user_code/imu963.c **** 		angle_speed =  gyro_now ;  //¼ÆËã¼ÓËÙ¶È
+ 294              		.loc 1 49 15
+ 295 0050 354A     		ldr	r2, .L9+24
+ 296 0052 019B     		ldr	r3, [sp, #4]	@ float
+ 297 0054 1360     		str	r3, [r2]	@ float
+  50:user_code/imu963.c **** 
+  51:user_code/imu963.c **** 		yaw  -= angle_speed* 0.005f;   //¼ÆËã½Ç¶È
+ 298              		.loc 1 51 8
+ 299 0056 354B     		ldr	r3, .L9+28
+ 300 0058 93ED007A 		vldr.32	s14, [r3]
+ 301              		.loc 1 51 22
+ 302 005c 324B     		ldr	r3, .L9+24
+ 303 005e D3ED007A 		vldr.32	s15, [r3]
+ 304 0062 DFED336A 		vldr.32	s13, .L9+32
+ 305 0066 67EEA67A 		vmul.f32	s15, s15, s13
+ 306              		.loc 1 51 8
+ 307 006a 77EE677A 		vsub.f32	s15, s14, s15
+ 308 006e 2F4B     		ldr	r3, .L9+28
+ 309 0070 C3ED007A 		vstr.32	s15, [r3]
+  52:user_code/imu963.c **** 
+  53:user_code/imu963.c **** 		if(yaw >360 )
+ 310              		.loc 1 53 10
+ 311 0074 2D4B     		ldr	r3, .L9+28
+ 312 0076 D3ED007A 		vldr.32	s15, [r3]
+ 313              		.loc 1 53 5
+ 314 007a 9FED2E7A 		vldr.32	s14, .L9+36
+ 315 007e F4EEC77A 		vcmpe.f32	s15, s14
+ 316 0082 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 317 0086 13DD     		ble	.L8
+  54:user_code/imu963.c ****         {
+  55:user_code/imu963.c ****         yaw = yaw- 360;
+ 318              		.loc 1 55 18
+ 319 0088 284B     		ldr	r3, .L9+28
+ 320 008a D3ED007A 		vldr.32	s15, [r3]
+ 321 008e 9FED297A 		vldr.32	s14, .L9+36
+ 322 0092 77EEC77A 		vsub.f32	s15, s15, s14
+ 323              		.loc 1 55 13
+ 324 0096 254B     		ldr	r3, .L9+28
+ 325 0098 C3ED007A 		vstr.32	s15, [r3]
+  56:user_code/imu963.c ****         imu_turns++;
+ 326              		.loc 1 56 18
+ 327 009c 264B     		ldr	r3, .L9+40
+ 328 009e B3F90030 		ldrsh	r3, [r3]
+ 329 00a2 9BB2     		uxth	r3, r3
+ 330 00a4 0133     		adds	r3, r3, #1
+ 331 00a6 9BB2     		uxth	r3, r3
+ 332 00a8 1AB2     		sxth	r2, r3
+ 333 00aa 234B     		ldr	r3, .L9+40
+ 334 00ac 1A80     		strh	r2, [r3]	@ movhi
+ 335 00ae 1AE0     		b	.L4
+ 336              	.L8:
+  57:user_code/imu963.c ****         }
+  58:user_code/imu963.c **** 		else if(yaw<0)
+ 337              		.loc 1 58 14
+ 338 00b0 1E4B     		ldr	r3, .L9+28
+ 339 00b2 D3ED007A 		vldr.32	s15, [r3]
+ 340              		.loc 1 58 10
+ 341 00b6 F5EEC07A 		vcmpe.f32	s15, #0
+ 342 00ba F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 343 00be 12D5     		bpl	.L4
+  59:user_code/imu963.c **** 		{
+  60:user_code/imu963.c **** 			yaw = yaw + 360;
+ 344              		.loc 1 60 14
+ 345 00c0 1A4B     		ldr	r3, .L9+28
+ 346 00c2 D3ED007A 		vldr.32	s15, [r3]
+ 347 00c6 9FED1B7A 		vldr.32	s14, .L9+36
+ 348 00ca 77EE877A 		vadd.f32	s15, s15, s14
+ 349              		.loc 1 60 8
+ 350 00ce 174B     		ldr	r3, .L9+28
+ 351 00d0 C3ED007A 		vstr.32	s15, [r3]
+  61:user_code/imu963.c **** 			imu_turns--;
+ 352              		.loc 1 61 13
+ 353 00d4 184B     		ldr	r3, .L9+40
+ 354 00d6 B3F90030 		ldrsh	r3, [r3]
+ 355 00da 9BB2     		uxth	r3, r3
+ 356 00dc 013B     		subs	r3, r3, #1
+ 357 00de 9BB2     		uxth	r3, r3
+ 358 00e0 1AB2     		sxth	r2, r3
+ 359 00e2 154B     		ldr	r3, .L9+40
+ 360 00e4 1A80     		strh	r2, [r3]	@ movhi
+ 361              	.L4:
+  62:user_code/imu963.c **** 		}
+  63:user_code/imu963.c **** 		last_angle = Dir;
+ 362              		.loc 1 63 14
+ 363 00e6 154B     		ldr	r3, .L9+44
+ 364 00e8 1B68     		ldr	r3, [r3]	@ float
+ 365 00ea 154A     		ldr	r2, .L9+48
+ 366 00ec 1360     		str	r3, [r2]	@ float
+  64:user_code/imu963.c **** 		pitch_out=pitch*63;
+ 367              		.loc 1 64 18
+ 368 00ee 154B     		ldr	r3, .L9+52
+ 369 00f0 D3ED007A 		vldr.32	s15, [r3]
+ 370 00f4 9FED147A 		vldr.32	s14, .L9+56
+ 371 00f8 67EE877A 		vmul.f32	s15, s15, s14
+ 372              		.loc 1 64 12
+ 373 00fc 134B     		ldr	r3, .L9+60
+ 374 00fe C3ED007A 		vstr.32	s15, [r3]
+  65:user_code/imu963.c **** 
+  66:user_code/imu963.c **** }
+ 375              		.loc 1 66 1
+ 376 0102 00BF     		nop
+ 377 0104 03B0     		add	sp, sp, #12
+ 378              		.cfi_def_cfa_offset 4
+ 379              		@ sp needed
+ 380 0106 5DF804FB 		ldr	pc, [sp], #4
+ 381              	.L10:
+ 382 010a 00BFAFF3 		.align	3
+ 382      0080
+ 383              	.L9:
+ 384 0110 9A999999 		.word	-1717986918
+ 385 0114 99992C40 		.word	1076664729
+ 386 0118 00000000 		.word	imu_gyro_data
+ 387 011c 00000000 		.word	att_2
+ 388 0120 00000000 		.word	att
+ 389 0124 00000000 		.word	gyro_ratio
+ 390 0128 00000000 		.word	angle_speed
+ 391 012c 00000000 		.word	yaw
+ 392 0130 0AD7A33B 		.word	1000593162
+ 393 0134 0000B443 		.word	1135869952
+ 394 0138 00000000 		.word	imu_turns
+ 395 013c 00000000 		.word	Dir
+ 396 0140 00000000 		.word	last_angle
+ 397 0144 00000000 		.word	pitch
+ 398 0148 00007C42 		.word	1115422720
+ 399 014c 00000000 		.word	pitch_out
+ 400              		.cfi_endproc
+ 401              	.LFE482:
+ 403              		.section	.text.zero,"ax",%progbits
+ 404              		.align	1
+ 405              		.p2align 4,,15
+ 406              		.global	zero
+ 407              		.syntax unified
+ 408              		.thumb
+ 409              		.thumb_func
+ 411              	zero:
+ 412              	.LFB483:
+  67:user_code/imu963.c **** 
+  68:user_code/imu963.c **** void zero(void)
+  69:user_code/imu963.c **** {
+ 413              		.loc 1 69 1
+ 414              		.cfi_startproc
+ 415              		@ args = 0, pretend = 0, frame = 8
+ 416              		@ frame_needed = 0, uses_anonymous_args = 0
+ 417 0000 00B5     		push	{lr}
+ 418              		.cfi_def_cfa_offset 4
+ 419              		.cfi_offset 14, -4
+ 420 0002 83B0     		sub	sp, sp, #12
+ 421              		.cfi_def_cfa_offset 16
+  70:user_code/imu963.c **** 	int i = 0;
+ 422              		.loc 1 70 6
+ 423 0004 0023     		movs	r3, #0
+ 424 0006 0193     		str	r3, [sp, #4]
+  71:user_code/imu963.c **** 
+  72:user_code/imu963.c **** 	att.icm_ax = 0;
+ 425              		.loc 1 72 13
+ 426 0008 6D4B     		ldr	r3, .L14+8
+ 427 000a 4FF00002 		mov	r2, #0
+ 428 000e 1A60     		str	r2, [r3]	@ float
+  73:user_code/imu963.c **** 	att.icm_ay = 0;
+ 429              		.loc 1 73 13
+ 430 0010 6B4B     		ldr	r3, .L14+8
+ 431 0012 4FF00002 		mov	r2, #0
+ 432 0016 5A60     		str	r2, [r3, #4]	@ float
+  74:user_code/imu963.c **** 	att.icm_az = 0;
+ 433              		.loc 1 74 13
+ 434 0018 694B     		ldr	r3, .L14+8
+ 435 001a 4FF00002 		mov	r2, #0
+ 436 001e 9A60     		str	r2, [r3, #8]	@ float
+  75:user_code/imu963.c **** 
+  76:user_code/imu963.c **** 	att.icm_gx = 0;
+ 437              		.loc 1 76 13
+ 438 0020 674B     		ldr	r3, .L14+8
+ 439 0022 4FF00002 		mov	r2, #0
+ 440 0026 DA60     		str	r2, [r3, #12]	@ float
+  77:user_code/imu963.c **** 	att.icm_gy = 0;
+ 441              		.loc 1 77 13
+ 442 0028 654B     		ldr	r3, .L14+8
+ 443 002a 4FF00002 		mov	r2, #0
+ 444 002e 1A61     		str	r2, [r3, #16]	@ float
+  78:user_code/imu963.c **** 	att.icm_gz = 0;
+ 445              		.loc 1 78 13
+ 446 0030 634B     		ldr	r3, .L14+8
+ 447 0032 4FF00002 		mov	r2, #0
+ 448 0036 5A61     		str	r2, [r3, #20]	@ float
+  79:user_code/imu963.c **** 
+  80:user_code/imu963.c **** 	for(i=0;i<500;i++)
+ 449              		.loc 1 80 7
+ 450 0038 0023     		movs	r3, #0
+ 451 003a 0193     		str	r3, [sp, #4]
+ 452              		.loc 1 80 2
+ 453 003c 47E0     		b	.L12
+ 454              	.L13:
+  81:user_code/imu963.c **** 	{
+  82:user_code/imu963.c ****       imu963ra_get_gyro(&imu_gyro_data);
+ 455              		.loc 1 82 7 discriminator 3
+ 456 003e 6148     		ldr	r0, .L14+12
+ 457 0040 FFF7FEFF 		bl	imu963ra_get_gyro
+  83:user_code/imu963.c **** 
+  84:user_code/imu963.c **** 
+  85:user_code/imu963.c **** 
+  86:user_code/imu963.c **** 
+  87:user_code/imu963.c **** 		att.icm_gx = ((float)imu_gyro_data.x);
+ 458              		.loc 1 87 37 discriminator 3
+ 459 0044 5F4B     		ldr	r3, .L14+12
+ 460 0046 B3F90030 		ldrsh	r3, [r3]
+ 461              		.loc 1 87 17 discriminator 3
+ 462 004a 07EE903A 		vmov	s15, r3	@ int
+ 463 004e F8EEE77A 		vcvt.f32.s32	s15, s15
+ 464              		.loc 1 87 14 discriminator 3
+ 465 0052 5B4B     		ldr	r3, .L14+8
+ 466 0054 C3ED037A 		vstr.32	s15, [r3, #12]
+  88:user_code/imu963.c **** 		att.icm_gy = ((float)imu_gyro_data.y);
+ 467              		.loc 1 88 37 discriminator 3
+ 468 0058 5A4B     		ldr	r3, .L14+12
+ 469 005a B3F90230 		ldrsh	r3, [r3, #2]
+ 470              		.loc 1 88 17 discriminator 3
+ 471 005e 07EE903A 		vmov	s15, r3	@ int
+ 472 0062 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 473              		.loc 1 88 14 discriminator 3
+ 474 0066 564B     		ldr	r3, .L14+8
+ 475 0068 C3ED047A 		vstr.32	s15, [r3, #16]
+  89:user_code/imu963.c **** 		att.icm_gz = ((float)imu_gyro_data.z);
+ 476              		.loc 1 89 37 discriminator 3
+ 477 006c 554B     		ldr	r3, .L14+12
+ 478 006e B3F90430 		ldrsh	r3, [r3, #4]
+ 479              		.loc 1 89 17 discriminator 3
+ 480 0072 07EE903A 		vmov	s15, r3	@ int
+ 481 0076 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 482              		.loc 1 89 14 discriminator 3
+ 483 007a 514B     		ldr	r3, .L14+8
+ 484 007c C3ED057A 		vstr.32	s15, [r3, #20]
+  90:user_code/imu963.c **** 
+  91:user_code/imu963.c **** 		att_2.icm_gx +=  att.icm_gx;
+ 485              		.loc 1 91 16 discriminator 3
+ 486 0080 514B     		ldr	r3, .L14+16
+ 487 0082 93ED037A 		vldr.32	s14, [r3, #12]
+ 488              		.loc 1 91 23 discriminator 3
+ 489 0086 4E4B     		ldr	r3, .L14+8
+ 490 0088 D3ED037A 		vldr.32	s15, [r3, #12]
+ 491              		.loc 1 91 16 discriminator 3
+ 492 008c 77EE277A 		vadd.f32	s15, s14, s15
+ 493 0090 4D4B     		ldr	r3, .L14+16
+ 494 0092 C3ED037A 		vstr.32	s15, [r3, #12]
+  92:user_code/imu963.c **** 		att_2.icm_gy +=  att.icm_gy;
+ 495              		.loc 1 92 16 discriminator 3
+ 496 0096 4C4B     		ldr	r3, .L14+16
+ 497 0098 93ED047A 		vldr.32	s14, [r3, #16]
+ 498              		.loc 1 92 23 discriminator 3
+ 499 009c 484B     		ldr	r3, .L14+8
+ 500 009e D3ED047A 		vldr.32	s15, [r3, #16]
+ 501              		.loc 1 92 16 discriminator 3
+ 502 00a2 77EE277A 		vadd.f32	s15, s14, s15
+ 503 00a6 484B     		ldr	r3, .L14+16
+ 504 00a8 C3ED047A 		vstr.32	s15, [r3, #16]
+  93:user_code/imu963.c **** 		att_2.icm_gz +=  att.icm_gz;
+ 505              		.loc 1 93 16 discriminator 3
+ 506 00ac 464B     		ldr	r3, .L14+16
+ 507 00ae 93ED057A 		vldr.32	s14, [r3, #20]
+ 508              		.loc 1 93 23 discriminator 3
+ 509 00b2 434B     		ldr	r3, .L14+8
+ 510 00b4 D3ED057A 		vldr.32	s15, [r3, #20]
+ 511              		.loc 1 93 16 discriminator 3
+ 512 00b8 77EE277A 		vadd.f32	s15, s14, s15
+ 513 00bc 424B     		ldr	r3, .L14+16
+ 514 00be C3ED057A 		vstr.32	s15, [r3, #20]
+  94:user_code/imu963.c **** 
+  95:user_code/imu963.c **** 		zf_delay_ms(5);
+ 515              		.loc 1 95 3 discriminator 3
+ 516 00c2 0520     		movs	r0, #5
+ 517 00c4 FFF7FEFF 		bl	zf_delay_ms
+  80:user_code/imu963.c **** 	{
+ 518              		.loc 1 80 17 discriminator 3
+ 519 00c8 019B     		ldr	r3, [sp, #4]
+ 520 00ca 0133     		adds	r3, r3, #1
+ 521 00cc 0193     		str	r3, [sp, #4]
+ 522              	.L12:
+  80:user_code/imu963.c **** 	{
+ 523              		.loc 1 80 2 discriminator 1
+ 524 00ce 019B     		ldr	r3, [sp, #4]
+ 525 00d0 B3F5FA7F 		cmp	r3, #500
+ 526 00d4 B3DB     		blt	.L13
+  96:user_code/imu963.c **** 	}
+  97:user_code/imu963.c ****   att_2.icm_ax = att_2.icm_ax * 0.002;
+ 527              		.loc 1 97 23
+ 528 00d6 3C4B     		ldr	r3, .L14+16
+ 529 00d8 D3ED007A 		vldr.32	s15, [r3]
+ 530 00dc B7EEE77A 		vcvt.f64.f32	d7, s15
+ 531              		.loc 1 97 31
+ 532 00e0 9FED356B 		vldr.64	d6, .L14
+ 533 00e4 27EE067B 		vmul.f64	d7, d7, d6
+ 534 00e8 F7EEC77B 		vcvt.f32.f64	s15, d7
+ 535              		.loc 1 97 16
+ 536 00ec 364B     		ldr	r3, .L14+16
+ 537 00ee C3ED007A 		vstr.32	s15, [r3]
+  98:user_code/imu963.c ****   att_2.icm_ay = att_2.icm_ay * 0.002;
+ 538              		.loc 1 98 23
+ 539 00f2 354B     		ldr	r3, .L14+16
+ 540 00f4 D3ED017A 		vldr.32	s15, [r3, #4]
+ 541 00f8 B7EEE77A 		vcvt.f64.f32	d7, s15
+ 542              		.loc 1 98 31
+ 543 00fc 9FED2E6B 		vldr.64	d6, .L14
+ 544 0100 27EE067B 		vmul.f64	d7, d7, d6
+ 545 0104 F7EEC77B 		vcvt.f32.f64	s15, d7
+ 546              		.loc 1 98 16
+ 547 0108 2F4B     		ldr	r3, .L14+16
+ 548 010a C3ED017A 		vstr.32	s15, [r3, #4]
+  99:user_code/imu963.c ****   att_2.icm_az = att_2.icm_az * 0.002;
+ 549              		.loc 1 99 23
+ 550 010e 2E4B     		ldr	r3, .L14+16
+ 551 0110 D3ED027A 		vldr.32	s15, [r3, #8]
+ 552 0114 B7EEE77A 		vcvt.f64.f32	d7, s15
+ 553              		.loc 1 99 31
+ 554 0118 9FED276B 		vldr.64	d6, .L14
+ 555 011c 27EE067B 		vmul.f64	d7, d7, d6
+ 556 0120 F7EEC77B 		vcvt.f32.f64	s15, d7
+ 557              		.loc 1 99 16
+ 558 0124 284B     		ldr	r3, .L14+16
+ 559 0126 C3ED027A 		vstr.32	s15, [r3, #8]
+ 100:user_code/imu963.c **** 
+ 101:user_code/imu963.c **** 	att_2.icm_gx = att_2.icm_gx * 0.002;
+ 560              		.loc 1 101 22
+ 561 012a 274B     		ldr	r3, .L14+16
+ 562 012c D3ED037A 		vldr.32	s15, [r3, #12]
+ 563 0130 B7EEE77A 		vcvt.f64.f32	d7, s15
+ 564              		.loc 1 101 30
+ 565 0134 9FED206B 		vldr.64	d6, .L14
+ 566 0138 27EE067B 		vmul.f64	d7, d7, d6
+ 567 013c F7EEC77B 		vcvt.f32.f64	s15, d7
+ 568              		.loc 1 101 15
+ 569 0140 214B     		ldr	r3, .L14+16
+ 570 0142 C3ED037A 		vstr.32	s15, [r3, #12]
+ 102:user_code/imu963.c ****   att_2.icm_gy = att_2.icm_gy * 0.002;
+ 571              		.loc 1 102 23
+ 572 0146 204B     		ldr	r3, .L14+16
+ 573 0148 D3ED047A 		vldr.32	s15, [r3, #16]
+ 574 014c B7EEE77A 		vcvt.f64.f32	d7, s15
+ 575              		.loc 1 102 31
+ 576 0150 9FED196B 		vldr.64	d6, .L14
+ 577 0154 27EE067B 		vmul.f64	d7, d7, d6
+ 578 0158 F7EEC77B 		vcvt.f32.f64	s15, d7
+ 579              		.loc 1 102 16
+ 580 015c 1A4B     		ldr	r3, .L14+16
+ 581 015e C3ED047A 		vstr.32	s15, [r3, #16]
+ 103:user_code/imu963.c ****   att_2.icm_gz = att_2.icm_gz * 0.002;
+ 582              		.loc 1 103 23
+ 583 0162 194B     		ldr	r3, .L14+16
+ 584 0164 D3ED057A 		vldr.32	s15, [r3, #20]
+ 585 0168 B7EEE77A 		vcvt.f64.f32	d7, s15
+ 586              		.loc 1 103 31
+ 587 016c 9FED126B 		vldr.64	d6, .L14
+ 588 0170 27EE067B 		vmul.f64	d7, d7, d6
+ 589 0174 F7EEC77B 		vcvt.f32.f64	s15, d7
+ 590              		.loc 1 103 16
+ 591 0178 134B     		ldr	r3, .L14+16
+ 592 017a C3ED057A 		vstr.32	s15, [r3, #20]
+ 104:user_code/imu963.c **** 
+ 105:user_code/imu963.c **** 	att.icm_ax = 0;
+ 593              		.loc 1 105 13
+ 594 017e 104B     		ldr	r3, .L14+8
+ 595 0180 4FF00002 		mov	r2, #0
+ 596 0184 1A60     		str	r2, [r3]	@ float
+ 106:user_code/imu963.c **** 	att.icm_ay = 0;
+ 597              		.loc 1 106 13
+ 598 0186 0E4B     		ldr	r3, .L14+8
+ 599 0188 4FF00002 		mov	r2, #0
+ 600 018c 5A60     		str	r2, [r3, #4]	@ float
+ 107:user_code/imu963.c **** 	att.icm_az = 0;
+ 601              		.loc 1 107 13
+ 602 018e 0C4B     		ldr	r3, .L14+8
+ 603 0190 4FF00002 		mov	r2, #0
+ 604 0194 9A60     		str	r2, [r3, #8]	@ float
+ 108:user_code/imu963.c **** 	att.icm_gx = 0;
+ 605              		.loc 1 108 13
+ 606 0196 0A4B     		ldr	r3, .L14+8
+ 607 0198 4FF00002 		mov	r2, #0
+ 608 019c DA60     		str	r2, [r3, #12]	@ float
+ 109:user_code/imu963.c **** 	att.icm_gy = 0;
+ 609              		.loc 1 109 13
+ 610 019e 084B     		ldr	r3, .L14+8
+ 611 01a0 4FF00002 		mov	r2, #0
+ 612 01a4 1A61     		str	r2, [r3, #16]	@ float
+ 110:user_code/imu963.c **** 	att.icm_gz = 0;
+ 613              		.loc 1 110 13
+ 614 01a6 064B     		ldr	r3, .L14+8
+ 615 01a8 4FF00002 		mov	r2, #0
+ 616 01ac 5A61     		str	r2, [r3, #20]	@ float
+ 111:user_code/imu963.c **** }
+ 617              		.loc 1 111 1
+ 618 01ae 00BF     		nop
+ 619 01b0 03B0     		add	sp, sp, #12
+ 620              		.cfi_def_cfa_offset 4
+ 621              		@ sp needed
+ 622 01b2 5DF804FB 		ldr	pc, [sp], #4
+ 623              	.L15:
+ 624 01b6 00BF     		.align	3
+ 625              	.L14:
+ 626 01b8 FCA9F1D2 		.word	-755914244
+ 627 01bc 4D62603F 		.word	1063281229
+ 628 01c0 00000000 		.word	att
+ 629 01c4 00000000 		.word	imu_gyro_data
+ 630 01c8 00000000 		.word	att_2
+ 631              		.cfi_endproc
+ 632              	.LFE483:
+ 634              		.text
+ 635              	.Letext0:
+ 636              		.file 2 "libraries/zf_common/zf_common_typedef.h"
+ 637              		.file 3 "C:/StellarStudio-7.0/SDKS/StellarESDK-1.7.0/Modules/Platform/MCU/include/sr5e1/sr5e1xx.h"
+ 638              		.file 4 "libraries/zf_driver/zf_driver_gpio.h"
+ 639              		.file 5 "libraries/zf_driver/zf_driver_adc.h"
+ 640              		.file 6 "libraries/zf_driver/zf_driver_can.h"
+ 641              		.file 7 "libraries/zf_driver/zf_driver_encoder.h"
+ 642              		.file 8 "libraries/zf_driver/zf_driver_exti.h"
+ 643              		.file 9 "libraries/zf_driver/zf_driver_hrtim.h"
+ 644              		.file 10 "libraries/zf_driver/zf_driver_pwm.h"
+ 645              		.file 11 "libraries/zf_driver/zf_driver_spi.h"
+ 646              		.file 12 "libraries/zf_driver/zf_driver_uart.h"
+ 647              		.file 13 "libraries/zf_device/zf_device_imu_interface.h"
+ 648              		.file 14 "libraries/zf_device/zf_device_imu963ra.h"
+ 649              		.file 15 "libraries/zf_device/zf_device_wireless_interface.h"
+ 650              		.file 16 "libraries/zf_device/zf_device_display_interface.h"
+ 651              		.file 17 "user_code/imu963.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 imu963.c
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:23     .bss.att:00000000 att
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:20     .bss.att:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:30     .bss.att_2:00000000 att_2
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:27     .bss.att_2:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:37     .data.g:00000000 g
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:34     .data.g:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:44     .data.B:00000000 B
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:41     .data.B:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:56     .data.MagOffset:00000000 MagOffset
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:53     .data.MagOffset:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:65     .bss.yaw:00000000 yaw
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:62     .bss.yaw:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:72     .bss.roll:00000000 roll
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:69     .bss.roll:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:79     .bss.pitch:00000000 pitch
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:76     .bss.pitch:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:86     .bss.Dir:00000000 Dir
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:83     .bss.Dir:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:93     .bss.groy_roll:00000000 groy_roll
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:90     .bss.groy_roll:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:100    .bss.groy_pitch:00000000 groy_pitch
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:97     .bss.groy_pitch:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:107    .bss.groy_yaw:00000000 groy_yaw
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:104    .bss.groy_yaw:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:114    .bss.acc_roll:00000000 acc_roll
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:111    .bss.acc_roll:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:121    .bss.acc_pitch:00000000 acc_pitch
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:118    .bss.acc_pitch:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:128    .data.gyro_P:00000000 gyro_P
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:125    .data.gyro_P:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:135    .data.acc_P:00000000 acc_P
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:132    .data.acc_P:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:142    .bss.norm:00000000 norm
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:139    .bss.norm:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:149    .data.Eorr:00000000 Eorr
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:146    .data.Eorr:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:156    .bss.yaw_last:00000000 yaw_last
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:153    .bss.yaw_last:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:163    .bss.yaw_u:00000000 yaw_u
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:160    .bss.yaw_u:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:170    .bss.angle_speed:00000000 angle_speed
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:167    .bss.angle_speed:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:177    .bss.yaw_speed:00000000 yaw_speed
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:174    .bss.yaw_speed:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:184    .bss.mag_ratio:00000000 mag_ratio
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:181    .bss.mag_ratio:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:191    .data.gyro_ratio:00000000 gyro_ratio
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:188    .data.gyro_ratio:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:198    .bss.last_angle:00000000 last_angle
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:195    .bss.last_angle:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:205    .bss.pitch_out:00000000 pitch_out
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:202    .bss.pitch_out:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:211    .bss.first:00000000 first
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:212    .bss.first:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:218    .bss.yaw_north:00000000 yaw_north
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:215    .bss.yaw_north:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:225    .bss.roll_out:00000000 roll_out
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:222    .bss.roll_out:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:232    .bss.imu_turns:00000000 imu_turns
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:229    .bss.imu_turns:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:239    .bss.imu_gyro_data:00000000 imu_gyro_data
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:236    .bss.imu_gyro_data:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:242    .text.getimu_value:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:249    .text.getimu_value:00000000 getimu_value
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:384    .text.getimu_value:00000110 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:404    .text.zero:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:411    .text.zero:00000000 zero
+C:\Users\EVERYO~1\AppData\Local\Temp\cc1IpcB5.s:626    .text.zero:000001b8 $d
+                           .group:00000000 wm4.0.1ea29c7543256e0887205fa7f8c557c8
+                           .group:00000000 wm4._newlib_version.h.4.bfdf54b0af045d4a71376ae00f63a22c
+                           .group:00000000 wm4.newlib.h.18.1c9fedb6b3cd797cff253cc0fd593ef2
+                           .group:00000000 wm4.ieeefp.h.77.2bc94c1d1ed8b02df437510a04ac1e45
+                           .group:00000000 wm4.features.h.22.026edb2397769f4ae13f35900dbdb560
+                           .group:00000000 wm4.config.h.224.c701144a7b0518c6ee9b9b5465b79f81
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.a54b2d5c07711bc7320a3fea9f12cb56
+                           .group:00000000 wm4.stddef.h.39.c161261b198ee3a963897077fd6fa59f
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4._types.h.20.dd0d04dca3800a0d2a6129b87f3adbb2
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.127.34941de1b2539d59d5cac00e0dd27a45
+                           .group:00000000 wm4.reent.h.17.e292bf8b0bec6c96e131a54347145a30
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4.reent.h.77.dcd6129ff07fe81bd5636db29abe53b2
+                           .group:00000000 wm4.types.h.40.8b6acba56cefbb11746718204edc8f5e
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.32.bec3221fa7a9bb0bdde696c9c57e47d2
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.40cd3f2bfc456b193b790c2754690ebf
+                           .group:00000000 wm4.types.h.51.5571ec98f267d17d3c670b7a3ba33afa
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4._intsup.h.10.48bafbb683905c4daa4565a85aeeb264
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.sr5e1xx.h.22.e5c808533cc52ed19fb0830cd7d98924
+                           .group:00000000 wm4.cmsis_version.h.32.0f826810625204eca22a19868bdc7586
+                           .group:00000000 wm4.core_cm7.h.66.8ab2de36917d6fcae18019067fda13e0
+                           .group:00000000 wm4.cmsis_gcc.h.26.498d0ad17a45fc9ef20fdc01caf02259
+                           .group:00000000 wm4.core_cm7.h.174.43edb295ecdaadad738f48ba6011ffad
+                           .group:00000000 wm4.mpu_armv7.h.32.83326921a797fa9d6f70449916b4b839
+                           .group:00000000 wm4.cachel1_armv7.h.32.abd77761a989e008b0c60891114a33c7
+                           .group:00000000 wm4.SR5E1_ADC.h.14.21608e6aff125ba995dd767d6d8dc311
+                           .group:00000000 wm4.SR5E1_CEM.h.14.01fe5742c8f1ae35b1f3af05932f702e
+                           .group:00000000 wm4.SR5E1_CMU.h.14.2617b38b159abe38028862394531e06d
+                           .group:00000000 wm4.SR5E1_COMP.h.14.4b6fdfe4f5f7fd9bedf3a99b98bdf4cd
+                           .group:00000000 wm4.SR5E1_CORDIC.h.14.354fbf7c9eaf6963d38eaa25cf28ffe8
+                           .group:00000000 wm4.SR5E1_CRC.h.14.c64d0f7767671ddb92e9ead0a1162100
+                           .group:00000000 wm4.SR5E1_DAC.h.14.8c26a0ff04b0cfeb55306cc3f22187b8
+                           .group:00000000 wm4.SR5E1_DBGMCU.h.14.427df893d53a8044654f017ba01c25ed
+                           .group:00000000 wm4.SR5E1_DMA.h.14.a7f9a92f844b40a86965798c2e64240b
+                           .group:00000000 wm4.SR5E1_DMAMUX.h.14.471b3b4dfd4d41515f1df49493698866
+                           .group:00000000 wm4.SR5E1_EXTI.h.14.a325ea3fe89cd84894660551c33241ea
+                           .group:00000000 wm4.SR5E1_FCCU.h.14.0ebf0f0f36e079d28613ad2c80e17e23
+                           .group:00000000 wm4.SR5E1_FDCAN.h.14.ac57101fad5dbc798bfb93f34c899de7
+                           .group:00000000 wm4.SR5E1_FLASH_REG_ITF.h.14.d23d1d44923f9b20b8c8fdb51d66aefd
+                           .group:00000000 wm4.SR5E1_GPIO.h.14.1c84071e130d7c64b62470ab0e18a1f1
+                           .group:00000000 wm4.SR5E1_HRTIM.h.24.03932387d2522e6bd5c772a4edaf2f5d
+                           .group:00000000 wm4.SR5E1_HSEM.h.14.cbe70eee519f01b16452c3f8c99d8df1
+                           .group:00000000 wm4.SR5E1_I2C.h.14.350ba3e0f4fd57828457efa80135c36c
+                           .group:00000000 wm4.SR5E1_IMA.h.14.62b7088985ab2b7ce9b030a02daa1f7d
+                           .group:00000000 wm4.SR5E1_IWDG.h.14.20b7c5f05cf7ae94464c360d7af3660d
+                           .group:00000000 wm4.SR5E1_MEMU.h.14.04bad7ae4c52ce334a4fc900aad2ae5b
+                           .group:00000000 wm4.SR5E1_NVM_CTRL.h.14.5f442617f0628d4f16258f211c614ef9
+                           .group:00000000 wm4.SR5E1_PLLDIG.h.14.bd87a8e6917eee17dae2f312c8e5fa53
+                           .group:00000000 wm4.SR5E1_PMC_DIG.h.14.54173b566c6656344766ec4ef46c9281
+                           .group:00000000 wm4.SR5E1_RCC.h.14.56734803c71534de286e793a53649740
+                           .group:00000000 wm4.SR5E1_RTC.h.14.47037cbc7d8175dbf2be1dc0bb955e3f
+                           .group:00000000 wm4.SR5E1_SD_ADC.h.14.552b97d0b8f3c1fd4df6d8964b2f1a80
+                           .group:00000000 wm4.SR5E1_SMPU.h.14.8ce5bb6d5d7c579cd725f492f46e9085
+                           .group:00000000 wm4.SR5E1_SPI.h.14.42d52112e540f85ade4d9135f8b87d72
+                           .group:00000000 wm4.SR5E1_SSCM.h.14.8e6a2ad0ce5fca422fc3d69939b6125b
+                           .group:00000000 wm4.SR5E1_SYSCFG.h.14.02b969490118ce4069914b5e94f7ca65
+                           .group:00000000 wm4.SR5E1_TDM.h.14.a40ed7928cad243a57fd233fccf01ad2
+                           .group:00000000 wm4.SR5E1_TIM.h.14.f17572f4c16f3f152b8164ad25c34f5b
+                           .group:00000000 wm4.SR5E1_UART.h.14.eec3ab82b02b3bdb3de500483675b83f
+                           .group:00000000 wm4.SR5E1_WWDG.h.14.59b45efc70e442cc6ef03702aad4ad88
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.typedefs.h.36.07fe3956b4e751037cfee70edcd0b397
+                           .group:00000000 wm4.irq_numbers.h.38.6294b95aed1bf7b3a2cda0eed8ce8f57
+                           .group:00000000 wm4.regs.h.23.2ac145b4f57126d16daed5fbd86d99c6
+                           .group:00000000 wm4.stdarg.h.31.3fa7b8f6daaa31edd1696c08c77f2a73
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.f4862cfbf4363a1db01842d5bdf72c18
+                           .group:00000000 wm4.zf_common_typedef.h.47.8c368673885c9d07221c267e15ab1069
+                           .group:00000000 wm4.zf_common_debug.h.33.727e0094f4d79012e3b7f7400deabb35
+                           .group:00000000 wm4.zf_common_fifo.h.33.e14e643902e26e4e65437b5b20e82793
+                           .group:00000000 wm4.zf_common_function.h.33.02bbfb055e8ee322bc4f8b14ea195da2
+                           .group:00000000 wm4.zf_common_memory.h.33.d43647290a4d62164ff2ec77cadb89d8
+                           .group:00000000 wm4.saradc.h.25.e5a70aef9ec4fddf35f2b7cc0c9cf1bc
+                           .group:00000000 wm4.gpio.h.25.d41a0c19fda8c2de42e666afb48ec15a
+                           .group:00000000 wm4.zf_driver_gpio.h.65.5a4d2084c62fed7c22fdca02e748c198
+                           .group:00000000 wm4.zf_driver_adc.h.64.349fb433626b42172b0e0fee038428ca
+                           .group:00000000 wm4.can.h.25.3cfccb6c630ada4f656cab597e231e58
+                           .group:00000000 wm4.dmamux.h.25.337aea179f6dbcc87c52aae26d38f76e
+                           .group:00000000 wm4.clock_cfg.h.24.0aed3cee9ecce947225a304181294191
+                           .group:00000000 wm4.clock.h.37.80236c5607fdd9eb9275e5111a4191c3
+                           .group:00000000 wm4.irq.h.37.78714f25754c8b09d1428599101f6cc7
+                           .group:00000000 wm4.dma.h.40.f77dd217a06ceba13a3cfdd4102a73c1
+                           .group:00000000 wm4.zf_driver_can.h.67.fd10d2fa867eb54a54d4b57027d73a60
+                           .group:00000000 wm4.tim.h.25.6e7ad96569e77a70a68b9b4cc59f54f2
+                           .group:00000000 wm4.zf_driver_timer.h.33.8df253b6990d9861816977209fb11e90
+                           .group:00000000 wm4.zf_driver_encoder.h.57.7e32999f25354fac086ca226b0c630d4
+                           .group:00000000 wm4.exti.h.25.21597c35d9630b0985ce88d2c41f4ea4
+                           .group:00000000 wm4.zf_driver_exti.h.59.1b02b8083e5295ef5baaf83905d59395
+                           .group:00000000 wm4.ssd_types.h.29.b861f4e6d39d333f931bfc05b964cb1c
+                           .group:00000000 wm4.ssd_C55.h.37.dad650468a97d71aff4dd65ca085590f
+                           .group:00000000 wm4.zf_driver_flash.h.59.db93fe574c35ea9e79030063fbb35a13
+                           .group:00000000 wm4.hrtim.h.25.1601aea9d4a0da1de8252dc444355251
+                           .group:00000000 wm4.zf_driver_hrtim.h.64.cd8d2bf3bf1c471ea59d9c61e4a721d7
+                           .group:00000000 wm4.zf_driver_interrupt.h.33.2c3660dcc36cb090bd75b8f180c14f27
+                           .group:00000000 wm4.zf_driver_pit.h.33.834ac720a62e09d5603a9557331e9049
+                           .group:00000000 wm4.zf_driver_pwm.h.33.7d80487064ca712231a453396685a551
+                           .group:00000000 wm4.zf_driver_rcc.h.33.4c228cf40a79e1b974b30d5a9a3a77a7
+                           .group:00000000 wm4.zf_driver_soft_iic.h.33.9067bd298084134f63c61c075f95fa2b
+                           .group:00000000 wm4.zf_driver_soft_spi.h.33.a938287c023905d97cafe56e4be63674
+                           .group:00000000 wm4.zf_driver_spi.h.62.950b1f52ed365034df2907601137b455
+                           .group:00000000 wm4.zf_driver_system.h.33.370922a9681b47d575d2c83d302a180b
+                           .group:00000000 wm4.zf_driver_uart.h.70.ffcf3694337ad0b4066179f1abd5d668
+                           .group:00000000 wm4.zf_device_imu_interface.h.40.344a2c93b973b58cee305ff406fc3e84
+                           .group:00000000 wm4.zf_device_imu660rb.h.37.b47c39afb47c89c2c82bd28e76457042
+                           .group:00000000 wm4.zf_device_imu963ra.h.37.e773f164af6f72dd1b0b6c1242bf99b4
+                           .group:00000000 wm4.zf_device_wireless_interface.h.40.da0a07f107014cb0888a26f281971a5b
+                           .group:00000000 wm4.zf_device_display_interface.h.79.d8df25e52245efbd97fd6415c8db0a72
+                           .group:00000000 wm4.zf_device_ips200.h.37.957fc5e8b291701a6f6b47207b045b77
+                           .group:00000000 wm4.math.h.13.b6595ad277a643a6127e1a4515a98f91
+                           .group:00000000 wm4.zf_device_gnss.h.66.39fe53860d2d190725612db126de8287
+                           .group:00000000 wm4.zf_device_key.h.45.b12f9096d8cc68f085b8fe9fe5b730db
+                           .group:00000000 wm4.zf_device_uart_receiver.h.43.9ac9496dcaa4780ef86d21fa439379b4
+                           .group:00000000 wm4.imu963.h.9.0357a407ee5eca150c2da77b8ad374e8
+                           .group:00000000 wm4.Defined.h.8.ba118efb82db5b67af1e2437e5b3cf85
+                           .group:00000000 wm4.gps.h.16.e415e513692cd3052ed0c0f0fe95f318
+                           .group:00000000 wm4.PID1.h.9.1cc3485a8cc0a8a64a4519addeb351e8
+                           .group:00000000 wm4.my_flash.h.9.82a1ad4360117b2f54268b11aa8680a3
+
+UNDEFINED SYMBOLS
+imu963ra_get_gyro
+zf_delay_ms

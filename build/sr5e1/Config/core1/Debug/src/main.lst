@@ -1,0 +1,714 @@
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"main.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	hall_now
+  19              		.section	.bss.hall_now,"aw",%nobits
+  22              	hall_now:
+  23 0000 00       		.space	1
+  24              		.global	pit_flag
+  25              		.section	.bss.pit_flag,"aw",%nobits
+  28              	pit_flag:
+  29 0000 00       		.space	1
+  30              		.global	hall_last
+  31              		.section	.bss.hall_last,"aw",%nobits
+  34              	hall_last:
+  35 0000 00       		.space	1
+  36              		.global	switch_stateb
+  37              		.section	.bss.switch_stateb,"aw",%nobits
+  40              	switch_stateb:
+  41 0000 00       		.space	1
+  42              		.global	VL53_dis_buff
+  43              		.section	.bss.VL53_dis_buff,"aw",%nobits
+  44              		.align	2
+  47              	VL53_dis_buff:
+  48 0000 0000     		.space	2
+  49              		.global	subs_motor_ctrl
+  50              		.section	.bss.subs_motor_ctrl,"aw",%nobits
+  51              		.align	1
+  54              	subs_motor_ctrl:
+  55 0000 0000     		.space	2
+  56              		.global	VL53_dis
+  57              		.section	.bss.VL53_dis,"aw",%nobits
+  58              		.align	1
+  61              	VL53_dis:
+  62 0000 0000     		.space	2
+  63              		.global	text
+  64              		.section	.bss.text,"aw",%nobits
+  65              		.align	2
+  68              	text:
+  69 0000 00000000 		.space	50
+  69      00000000 
+  69      00000000 
+  69      00000000 
+  69      00000000 
+  70              		.global	gx_offset
+  71              		.section	.bss.gx_offset,"aw",%nobits
+  72              		.align	2
+  75              	gx_offset:
+  76 0000 00000000 		.space	4
+  77              		.global	gy_offset
+  78              		.section	.bss.gy_offset,"aw",%nobits
+  79              		.align	2
+  82              	gy_offset:
+  83 0000 00000000 		.space	4
+  84              		.global	gz_offset
+  85              		.section	.bss.gz_offset,"aw",%nobits
+  86              		.align	2
+  89              	gz_offset:
+  90 0000 00000000 		.space	4
+  91              		.global	error_sy_angle
+  92              		.section	.bss.error_sy_angle,"aw",%nobits
+  93              		.align	2
+  96              	error_sy_angle:
+  97 0000 00000000 		.space	4
+  98              		.global	dir
+  99              		.section	.bss.dir,"aw",%nobits
+ 100              		.align	1
+ 103              	dir:
+ 104 0000 0000     		.space	2
+ 105              		.global	pwm_out
+ 106              		.section	.bss.pwm_out,"aw",%nobits
+ 107              		.align	1
+ 110              	pwm_out:
+ 111 0000 0000     		.space	2
+ 112              		.global	subs_ctrl
+ 113              		.section	.bss.subs_ctrl,"aw",%nobits
+ 116              	subs_ctrl:
+ 117 0000 00       		.space	1
+ 118              		.global	encoder2
+ 119              		.section	.bss.encoder2,"aw",%nobits
+ 120              		.align	2
+ 123              	encoder2:
+ 124 0000 00000000 		.space	4
+ 125              		.global	encoder_dis
+ 126              		.section	.bss.encoder_dis,"aw",%nobits
+ 127              		.align	2
+ 130              	encoder_dis:
+ 131 0000 00000000 		.space	4
+ 132              		.global	meter_out
+ 133              		.section	.bss.meter_out,"aw",%nobits
+ 134              		.align	2
+ 137              	meter_out:
+ 138 0000 00000000 		.space	4
+ 139              		.global	sub_speed
+ 140              		.section	.bss.sub_speed,"aw",%nobits
+ 141              		.align	2
+ 144              	sub_speed:
+ 145 0000 00000000 		.space	4
+ 146              		.global	fifo_buffer
+ 147              		.section	.bss.fifo_buffer,"aw",%nobits
+ 148              		.align	2
+ 151              	fifo_buffer:
+ 152 0000 00000000 		.space	16
+ 152      00000000 
+ 152      00000000 
+ 152      00000000 
+ 153              		.global	esp_ctrl
+ 154              		.section	.bss.esp_ctrl,"aw",%nobits
+ 157              	esp_ctrl:
+ 158 0000 00       		.space	1
+ 159              		.global	esp_stop
+ 160              		.section	.bss.esp_stop,"aw",%nobits
+ 163              	esp_stop:
+ 164 0000 00       		.space	1
+ 165              		.global	uart_fifo
+ 166              		.section	.bss.uart_fifo,"aw",%nobits
+ 167              		.align	2
+ 170              	uart_fifo:
+ 171 0000 00000000 		.space	20
+ 171      00000000 
+ 171      00000000 
+ 171      00000000 
+ 171      00000000 
+ 172              		.section	.text.main,"ax",%progbits
+ 173              		.align	1
+ 174              		.p2align 4,,15
+ 175              		.global	main
+ 176              		.syntax unified
+ 177              		.thumb
+ 178              		.thumb_func
+ 180              	main:
+ 181              	.LFB482:
+ 182              		.file 1 "src/main.c"
+   1:src/main.c    **** /**************************************************************************************************
+   2:src/main.c    **** * Stellar-SR5E1E3 Opensource Library 即（Stellar-SR5E1E3 开源库）是一个基于官方 SDK �
+   3:src/main.c    **** * Copyright (c) 2022 SEEKFREE 逐飞科技
+   4:src/main.c    **** *
+   5:src/main.c    **** * 本文件是 Stellar-SR5E1E3 开源库的一部分
+   6:src/main.c    **** *
+   7:src/main.c    **** * Stellar-SR5E1E3 开源库 是免费软件
+   8:src/main.c    **** * 您可以根据自由软件基金会发布的 GPL（GNU General Public License，即 GNU通用公
+   9:src/main.c    **** * 即 GPL 的第3版（即 GPL3.0）或（您选择的）任何后来的版本，重新发布和/�
+  10:src/main.c    **** *
+  11:src/main.c    **** * 本开源库的发布是希望它能发挥作用，但并未对其作任何的保证
+  12:src/main.c    **** * 甚至没有隐含的适销性或适合特定用途的保证
+  13:src/main.c    **** * 更多细节请参见 GPL
+  14:src/main.c    **** *
+  15:src/main.c    **** * 您应该在收到本开源库的同时收到一份 GPL 的副本
+  16:src/main.c    **** * 如果没有，请参阅<https://www.gnu.org/licenses/>
+  17:src/main.c    **** *
+  18:src/main.c    **** * 额外注明：
+  19:src/main.c    **** * 本开源库使用 GPL3.0 开源许可证协议 以上许可申明为译文版本
+  20:src/main.c    **** * 许可申明英文版在 libraries/doc 文件夹下的 GPL3_permission_statement.txt 文件中
+  21:src/main.c    **** * 许可证副本在 libraries 文件夹下 即该文件夹下的 LICENSE 文件
+  22:src/main.c    **** * 欢迎各位使用并传播本程序 但修改内容时必须保留逐飞科技的版权声明（
+  23:src/main.c    **** *
+  24:src/main.c    **** * 文件名称          main
+  25:src/main.c    **** * 公司名称          成都逐飞科技有限公司
+  26:src/main.c    **** * 版本信息          查看 libraries/doc 文件夹内 version 文件 版本说明
+  27:src/main.c    **** * 开发环境          StellarStudio 7.0.0
+  28:src/main.c    **** * 适用平台          Stellar-SR5E1E3
+  29:src/main.c    **** * 店铺链接          https://www.seekfree.cn/
+  30:src/main.c    **** ***************************************************************************************************
+  31:src/main.c    **** 
+  32:src/main.c    **** #include "zf_libraries_headfile.h"
+  33:src/main.c    **** 
+  34:src/main.c    **** // 打开新的工程或者工程移动了位置务必执行以下操作
+  35:src/main.c    **** // 第一步 关闭所有打开的文件
+  36:src/main.c    **** // 第二步 project->clean  等待下方进度条走完
+  37:src/main.c    **** 
+  38:src/main.c    **** 
+  39:src/main.c    **** // *************************** 例程硬件连接说明 ***************************
+  40:src/main.c    **** // 使用 Type-C 连接开发板供电 再使用 StellarLINK 连接调试接口即可
+  41:src/main.c    **** // 使用 Type-C 连接开发板供电 再使用 StellarLINK 连接调试接口即可
+  42:src/main.c    **** // 使用 Type-C 连接开发板供电 再使用 StellarLINK 连接调试接口即可
+  43:src/main.c    **** 
+  44:src/main.c    **** 
+  45:src/main.c    **** // *************************** 例程测试说明 ***************************
+  46:src/main.c    **** // 1.正常连接供电后 编译本示例程序 然后按照调试说明手册步骤进行烧录�
+  47:src/main.c    **** //
+  48:src/main.c    **** // 2.同时使用逐飞助手或其他串口助手打开 StellarLINK 的 COM 虚拟串口 波特率
+  49:src/main.c    **** //
+  50:src/main.c    **** // 3.运行本示例程序 可以在逐飞助手或其他串口助手看到串口传输的消息：
+  51:src/main.c    **** //      gnss demo.
+  52:src/main.c    **** //
+  53:src/main.c    **** // 4.同时可以看到 RGB 的蓝色 LED 呈呼吸灯闪烁
+  54:src/main.c    **** //
+  55:src/main.c    **** // 5.可以在串口助手上看到如下串口信息：
+  56:src/main.c    **** //      now time:......
+  57:src/main.c    **** //
+  58:src/main.c    **** // 如果发现现象与说明严重不符 请参照本文件最下方 例程常见问题说明 进
+  59:src/main.c    **** 
+  60:src/main.c    **** uint8 hall_now,pit_flag,hall_last;
+  61:src/main.c    **** unsigned char switch_stateb=0,VL53_dis_buff[2];
+  62:src/main.c    **** uint16 subs_motor_ctrl,VL53_dis;
+  63:src/main.c    **** char text[50];
+  64:src/main.c    **** float gx_offset = 0, gy_offset = 0, gz_offset = 0;  //x,y轴的角速度偏移量
+  65:src/main.c    **** float error_sy_angle=0;
+  66:src/main.c    **** int16 dir,pwm_out;
+  67:src/main.c    **** int8 subs_ctrl;
+  68:src/main.c    **** float encoder2,encoder_dis,meter_out,sub_speed;
+  69:src/main.c    **** 
+  70:src/main.c    **** uint8   fifo_buffer[16],esp_ctrl,esp_stop;
+  71:src/main.c    **** zf_fifo_obj_struct uart_fifo;
+  72:src/main.c    **** 
+  73:src/main.c    **** 
+  74:src/main.c    **** 
+  75:src/main.c    **** int main (void)
+  76:src/main.c    **** {
+ 183              		.loc 1 76 1
+ 184              		.cfi_startproc
+ 185              		@ args = 0, pretend = 0, frame = 0
+ 186              		@ frame_needed = 0, uses_anonymous_args = 0
+ 187 0000 08B5     		push	{r3, lr}
+ 188              		.cfi_def_cfa_offset 8
+ 189              		.cfi_offset 3, -8
+ 190              		.cfi_offset 14, -4
+  77:src/main.c    ****      zf_system_clock_init(SYSTEM_CLOCK_300M);                                    // 初始化芯片
+ 191              		.loc 1 77 6
+ 192 0002 4E48     		ldr	r0, .L6
+ 193 0004 FFF7FEFF 		bl	zf_system_clock_init
+  78:src/main.c    ****     //debug_init();                                                               // 初始化默�
+  79:src/main.c    ****     //zf_soft_iic_init(SOFT_IIC_1, 5, VL53_IIC_SCL_PIN, VL53_IIC_SDA_PIN);
+  80:src/main.c    ****     zf_fifo_init(&uart_fifo, FIFO_DATA_8BIT, fifo_buffer, sizeof(fifo_buffer));
+ 194              		.loc 1 80 5
+ 195 0008 1023     		movs	r3, #16
+ 196 000a 4D4A     		ldr	r2, .L6+4
+ 197 000c 0121     		movs	r1, #1
+ 198 000e 4D48     		ldr	r0, .L6+8
+ 199 0010 FFF7FEFF 		bl	zf_fifo_init
+  81:src/main.c    ****     zf_uart_init(UART_3, 115200, UART3_TX_G15, UART3_RX_G14);
+ 200              		.loc 1 81 5
+ 201 0014 4C4B     		ldr	r3, .L6+12
+ 202 0016 4D4A     		ldr	r2, .L6+16
+ 203 0018 4FF4E131 		mov	r1, #115200
+ 204 001c 0220     		movs	r0, #2
+ 205 001e FFF7FEFF 		bl	zf_uart_init
+  82:src/main.c    ****     zf_uart_set_interrupt_callback(UART_3, uart_handler, &uart_fifo);
+ 206              		.loc 1 82 5
+ 207 0022 484A     		ldr	r2, .L6+8
+ 208 0024 4A49     		ldr	r1, .L6+20
+ 209 0026 0220     		movs	r0, #2
+ 210 0028 FFF7FEFF 		bl	zf_uart_set_interrupt_callback
+  83:src/main.c    ****     zf_uart_set_interrupt_config(UART_3, UART_INTERRUPT_CONFIG_RX_ENABLE);
+ 211              		.loc 1 83 5
+ 212 002c 0421     		movs	r1, #4
+ 213 002e 0220     		movs	r0, #2
+ 214 0030 FFF7FEFF 		bl	zf_uart_set_interrupt_config
+  84:src/main.c    **** 
+  85:src/main.c    ****     imu660rb_init();
+ 215              		.loc 1 85 5
+ 216 0034 FFF7FEFF 		bl	imu660rb_init
+  86:src/main.c    ****     zf_delay_ms(500);
+ 217              		.loc 1 86 5
+ 218 0038 4FF4FA70 		mov	r0, #500
+ 219 003c FFF7FEFF 		bl	zf_delay_ms
+  87:src/main.c    ****     zf_gpio_init(KEY1,  GPI_PULL_UP,GPIO_HIGH);
+ 220              		.loc 1 87 5
+ 221 0040 0122     		movs	r2, #1
+ 222 0042 0321     		movs	r1, #3
+ 223 0044 4720     		movs	r0, #71
+ 224 0046 FFF7FEFF 		bl	zf_gpio_init
+  88:src/main.c    ****     zf_gpio_init(KEY2,  GPI_PULL_UP,GPIO_HIGH);
+ 225              		.loc 1 88 5
+ 226 004a 0122     		movs	r2, #1
+ 227 004c 0321     		movs	r1, #3
+ 228 004e 4820     		movs	r0, #72
+ 229 0050 FFF7FEFF 		bl	zf_gpio_init
+  89:src/main.c    ****     zf_gpio_init(KEY3,  GPI_PULL_UP,GPIO_HIGH);
+ 230              		.loc 1 89 5
+ 231 0054 0122     		movs	r2, #1
+ 232 0056 0321     		movs	r1, #3
+ 233 0058 4920     		movs	r0, #73
+ 234 005a FFF7FEFF 		bl	zf_gpio_init
+  90:src/main.c    ****     zf_gpio_init(KEY4,  GPI_PULL_UP,GPIO_HIGH);
+ 235              		.loc 1 90 5
+ 236 005e 0122     		movs	r2, #1
+ 237 0060 0321     		movs	r1, #3
+ 238 0062 4A20     		movs	r0, #74
+ 239 0064 FFF7FEFF 		bl	zf_gpio_init
+  91:src/main.c    ****     zf_gpio_init(SWITCH1,  GPI_PULL_UP,GPIO_HIGH);
+ 240              		.loc 1 91 5
+ 241 0068 0122     		movs	r2, #1
+ 242 006a 0321     		movs	r1, #3
+ 243 006c 4220     		movs	r0, #66
+ 244 006e FFF7FEFF 		bl	zf_gpio_init
+  92:src/main.c    ****     zf_gpio_init(SWITCH2,  GPI_PULL_UP,GPIO_HIGH);
+ 245              		.loc 1 92 5
+ 246 0072 0122     		movs	r2, #1
+ 247 0074 0321     		movs	r1, #3
+ 248 0076 4120     		movs	r0, #65
+ 249 0078 FFF7FEFF 		bl	zf_gpio_init
+  93:src/main.c    **** 	ips200_init(IPS200_TYPE_SPI);
+ 250              		.loc 1 93 2
+ 251 007c 0020     		movs	r0, #0
+ 252 007e FFF7FEFF 		bl	ips200_init
+  94:src/main.c    **** 
+  95:src/main.c    **** 	zf_pwm_module_init(PWM_TIM3, PWM_ALIGNMENT_EDGE, 17000);//有刷初始化
+ 253              		.loc 1 95 2
+ 254 0082 44F26822 		movw	r2, #17000
+ 255 0086 0021     		movs	r1, #0
+ 256 0088 0420     		movs	r0, #4
+ 257 008a FFF7FEFF 		bl	zf_pwm_module_init
+  96:src/main.c    **** 	zf_pwm_channel_init(BLDC_AP, 0);
+ 258              		.loc 1 96 2
+ 259 008e 0021     		movs	r1, #0
+ 260 0090 3048     		ldr	r0, .L6+24
+ 261 0092 FFF7FEFF 		bl	zf_pwm_channel_init
+  97:src/main.c    **** 	zf_gpio_init(BLDC_AI,  GPO_PUSH_PULL,GPIO_LOW);
+ 262              		.loc 1 97 2
+ 263 0096 0022     		movs	r2, #0
+ 264 0098 1021     		movs	r1, #16
+ 265 009a 6E20     		movs	r0, #110
+ 266 009c FFF7FEFF 		bl	zf_gpio_init
+  98:src/main.c    **** 
+  99:src/main.c    **** 
+ 100:src/main.c    **** 	zf_pwm_module_init(servo_tim, PWM_ALIGNMENT_EDGE, SERVO_FREQ);//舵机初始化
+ 267              		.loc 1 100 2
+ 268 00a0 4FF49672 		mov	r2, #300
+ 269 00a4 0021     		movs	r1, #0
+ 270 00a6 0120     		movs	r0, #1
+ 271 00a8 FFF7FEFF 		bl	zf_pwm_module_init
+ 101:src/main.c    **** 	zf_pwm_channel_init(SERVO_MOTOR_PWM , servo_mid);
+ 272              		.loc 1 101 2
+ 273 00ac 41F23421 		movw	r1, #4660
+ 274 00b0 2948     		ldr	r0, .L6+28
+ 275 00b2 FFF7FEFF 		bl	zf_pwm_channel_init
+ 102:src/main.c    **** 	zf_encoder_init(ENCODER_TIM5, ENCODER_MODE_DIR, ENCODER_TIM5_A_PLUS_I1 , ENCODER_TIM5_B_DIR_I3 );/
+ 276              		.loc 1 102 2
+ 277 00b6 294B     		ldr	r3, .L6+32
+ 278 00b8 294A     		ldr	r2, .L6+36
+ 279 00ba 0221     		movs	r1, #2
+ 280 00bc 0320     		movs	r0, #3
+ 281 00be FFF7FEFF 		bl	zf_encoder_init
+ 103:src/main.c    **** 	uart_receiver_init();
+ 282              		.loc 1 103 2
+ 283 00c2 FFF7FEFF 		bl	uart_receiver_init
+ 104:src/main.c    **** 	gnss_init(GNSS_TYPE_GN43RFA);
+ 284              		.loc 1 104 2
+ 285 00c6 0220     		movs	r0, #2
+ 286 00c8 FFF7FEFF 		bl	gnss_init
+ 105:src/main.c    **** 	//gps_zero();
+ 106:src/main.c    **** 	zero();//陀螺仪采样
+ 287              		.loc 1 106 2
+ 288 00cc FFF7FEFF 		bl	zero
+ 107:src/main.c    **** 	//isp_manu1();
+ 108:src/main.c    **** 	//VL53_Write_Byte(VL53ADDR, VL53L0X_REG_SYSRANGE_START, VL53_STAR);
+ 109:src/main.c    **** 	zf_pit_ms_init(PIT_TIM1, 5 , pit_handler1, &pit_flag);
+ 289              		.loc 1 109 2
+ 290 00d0 244B     		ldr	r3, .L6+40
+ 291 00d2 254A     		ldr	r2, .L6+44
+ 292 00d4 0521     		movs	r1, #5
+ 293 00d6 0020     		movs	r0, #0
+ 294 00d8 FFF7FEFF 		bl	zf_pit_ms_init
+ 110:src/main.c    **** 	zf_pit_ms_init(PIT_TIM2, 10, pit_handler2, &pit_flag);
+ 295              		.loc 1 110 2
+ 296 00dc 214B     		ldr	r3, .L6+40
+ 297 00de 234A     		ldr	r2, .L6+48
+ 298 00e0 0A21     		movs	r1, #10
+ 299 00e2 0220     		movs	r0, #2
+ 300 00e4 FFF7FEFF 		bl	zf_pit_ms_init
+ 111:src/main.c    **** 	zf_pit_ms_init(PIT_TIM16, 10, pit_handler3, &pit_flag);
+ 301              		.loc 1 111 2
+ 302 00e8 1E4B     		ldr	r3, .L6+40
+ 303 00ea 214A     		ldr	r2, .L6+52
+ 304 00ec 0A21     		movs	r1, #10
+ 305 00ee 0720     		movs	r0, #7
+ 306 00f0 FFF7FEFF 		bl	zf_pit_ms_init
+ 307              	.L5:
+ 112:src/main.c    **** 	//zf_pit_us_init(PIT_TIM4, 100, pit_handler4, &pit_flag);
+ 113:src/main.c    **** 
+ 114:src/main.c    ****     for( ; ; )
+ 115:src/main.c    ****     {
+ 116:src/main.c    **** 
+ 117:src/main.c    ****                if(Isp_20msINTFlag)//20ms中断刷新屏幕
+ 308              		.loc 1 117 19
+ 309 00f4 1F4B     		ldr	r3, .L6+56
+ 310 00f6 93F90030 		ldrsb	r3, [r3]
+ 311              		.loc 1 117 18
+ 312 00fa 002B     		cmp	r3, #0
+ 313 00fc 13D0     		beq	.L2
+ 118:src/main.c    ****                {
+ 119:src/main.c    ****                    SwitchKey_State();
+ 314              		.loc 1 119 20
+ 315 00fe FFF7FEFF 		bl	SwitchKey_State
+ 120:src/main.c    ****                    if(switch_stateb!=SWITCH_State)
+ 316              		.loc 1 120 36
+ 317 0102 1D4B     		ldr	r3, .L6+60
+ 318 0104 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 319 0106 1D4B     		ldr	r3, .L6+64
+ 320 0108 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 321              		.loc 1 120 22
+ 322 010a 9A42     		cmp	r2, r3
+ 323 010c 06D0     		beq	.L3
+ 121:src/main.c    ****                    {
+ 122:src/main.c    ****                       ips200_clear();
+ 324              		.loc 1 122 23
+ 325 010e 1C48     		ldr	r0, .L6+68
+ 326 0110 FFF7FEFF 		bl	display_interface_clear
+ 123:src/main.c    ****                       switch_stateb=SWITCH_State;
+ 327              		.loc 1 123 36
+ 328 0114 194B     		ldr	r3, .L6+64
+ 329 0116 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 330 0118 174B     		ldr	r3, .L6+60
+ 331 011a 1A70     		strb	r2, [r3]
+ 332              	.L3:
+ 124:src/main.c    ****                    }
+ 125:src/main.c    ****             	   ips_displaymenu();
+ 333              		.loc 1 125 17
+ 334 011c FFF7FEFF 		bl	ips_displaymenu
+ 126:src/main.c    **** 
+ 127:src/main.c    ****                    Isp_20msINTFlag=0;
+ 335              		.loc 1 127 35
+ 336 0120 144B     		ldr	r3, .L6+56
+ 337 0122 0022     		movs	r2, #0
+ 338 0124 1A70     		strb	r2, [r3]
+ 339              	.L2:
+ 128:src/main.c    ****                }
+ 129:src/main.c    **** 
+ 130:src/main.c    ****                my_subs();//遥控器处理函数
+ 340              		.loc 1 130 16
+ 341 0126 FFF7FEFF 		bl	my_subs
+ 131:src/main.c    ****                if(BLTFlag_500ms)
+ 342              		.loc 1 131 19
+ 343 012a 164B     		ldr	r3, .L6+72
+ 344 012c 93F90030 		ldrsb	r3, [r3]
+ 345              		.loc 1 131 18
+ 346 0130 002B     		cmp	r3, #0
+ 347 0132 DFD0     		beq	.L5
+ 132:src/main.c    ****                {
+ 133:src/main.c    ****             	   BLTFlag_500ms=0;
+ 348              		.loc 1 133 30
+ 349 0134 134B     		ldr	r3, .L6+72
+ 350 0136 0022     		movs	r2, #0
+ 351 0138 1A70     		strb	r2, [r3]
+ 117:src/main.c    ****                {
+ 352              		.loc 1 117 18
+ 353 013a DBE7     		b	.L5
+ 354              	.L7:
+ 355              		.align	2
+ 356              	.L6:
+ 357 013c 00A3E111 		.word	300000000
+ 358 0140 00000000 		.word	fifo_buffer
+ 359 0144 00000000 		.word	uart_fifo
+ 360 0148 CE700200 		.word	159950
+ 361 014c CF700200 		.word	159951
+ 362 0150 00000000 		.word	uart_handler
+ 363 0154 84200400 		.word	270468
+ 364 0158 00410100 		.word	82176
+ 365 015c 03111300 		.word	1249539
+ 366 0160 01110300 		.word	200961
+ 367 0164 00000000 		.word	pit_flag
+ 368 0168 00000000 		.word	pit_handler1
+ 369 016c 00000000 		.word	pit_handler2
+ 370 0170 00000000 		.word	pit_handler3
+ 371 0174 00000000 		.word	Isp_20msINTFlag
+ 372 0178 00000000 		.word	switch_stateb
+ 373 017c 00000000 		.word	SWITCH_State
+ 374 0180 00000000 		.word	display_interface_default_obj
+ 375 0184 00000000 		.word	BLTFlag_500ms
+ 376              		.cfi_endproc
+ 377              	.LFE482:
+ 379              		.text
+ 380              	.Letext0:
+ 381              		.file 2 "libraries/zf_common/zf_common_typedef.h"
+ 382              		.file 3 "C:/StellarStudio-7.0/SDKS/StellarESDK-1.7.0/Modules/Platform/MCU/include/sr5e1/sr5e1xx.h"
+ 383              		.file 4 "libraries/zf_common/zf_common_fifo.h"
+ 384              		.file 5 "libraries/zf_driver/zf_driver_gpio.h"
+ 385              		.file 6 "libraries/zf_driver/zf_driver_adc.h"
+ 386              		.file 7 "libraries/zf_driver/zf_driver_can.h"
+ 387              		.file 8 "libraries/zf_driver/zf_driver_encoder.h"
+ 388              		.file 9 "libraries/zf_driver/zf_driver_exti.h"
+ 389              		.file 10 "libraries/zf_driver/zf_driver_hrtim.h"
+ 390              		.file 11 "libraries/zf_driver/zf_driver_pit.h"
+ 391              		.file 12 "libraries/zf_driver/zf_driver_pwm.h"
+ 392              		.file 13 "libraries/zf_driver/zf_driver_spi.h"
+ 393              		.file 14 "libraries/zf_driver/zf_driver_system.h"
+ 394              		.file 15 "libraries/zf_driver/zf_driver_uart.h"
+ 395              		.file 16 "libraries/zf_device/zf_device_imu_interface.h"
+ 396              		.file 17 "libraries/zf_device/zf_device_wireless_interface.h"
+ 397              		.file 18 "libraries/zf_device/zf_device_display_interface.h"
+ 398              		.file 19 "libraries/zf_device/zf_device_ips200.h"
+ 399              		.file 20 "libraries/zf_device/zf_device_gnss.h"
+ 400              		.file 21 "user_code/isr.h"
+ 401              		.file 22 "user_code/key.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:22     .bss.hall_now:00000000 hall_now
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:23     .bss.hall_now:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:28     .bss.pit_flag:00000000 pit_flag
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:29     .bss.pit_flag:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:34     .bss.hall_last:00000000 hall_last
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:35     .bss.hall_last:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:40     .bss.switch_stateb:00000000 switch_stateb
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:41     .bss.switch_stateb:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:47     .bss.VL53_dis_buff:00000000 VL53_dis_buff
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:44     .bss.VL53_dis_buff:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:54     .bss.subs_motor_ctrl:00000000 subs_motor_ctrl
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:51     .bss.subs_motor_ctrl:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:61     .bss.VL53_dis:00000000 VL53_dis
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:58     .bss.VL53_dis:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:68     .bss.text:00000000 text
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:65     .bss.text:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:75     .bss.gx_offset:00000000 gx_offset
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:72     .bss.gx_offset:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:82     .bss.gy_offset:00000000 gy_offset
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:79     .bss.gy_offset:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:89     .bss.gz_offset:00000000 gz_offset
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:86     .bss.gz_offset:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:96     .bss.error_sy_angle:00000000 error_sy_angle
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:93     .bss.error_sy_angle:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:103    .bss.dir:00000000 dir
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:100    .bss.dir:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:110    .bss.pwm_out:00000000 pwm_out
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:107    .bss.pwm_out:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:116    .bss.subs_ctrl:00000000 subs_ctrl
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:117    .bss.subs_ctrl:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:123    .bss.encoder2:00000000 encoder2
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:120    .bss.encoder2:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:130    .bss.encoder_dis:00000000 encoder_dis
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:127    .bss.encoder_dis:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:137    .bss.meter_out:00000000 meter_out
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:134    .bss.meter_out:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:144    .bss.sub_speed:00000000 sub_speed
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:141    .bss.sub_speed:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:151    .bss.fifo_buffer:00000000 fifo_buffer
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:148    .bss.fifo_buffer:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:157    .bss.esp_ctrl:00000000 esp_ctrl
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:158    .bss.esp_ctrl:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:163    .bss.esp_stop:00000000 esp_stop
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:164    .bss.esp_stop:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:170    .bss.uart_fifo:00000000 uart_fifo
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:167    .bss.uart_fifo:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:173    .text.main:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:180    .text.main:00000000 main
+C:\Users\EVERYO~1\AppData\Local\Temp\cc75jzN3.s:357    .text.main:0000013c $d
+                           .group:00000000 wm4.0.1ea29c7543256e0887205fa7f8c557c8
+                           .group:00000000 wm4._newlib_version.h.4.bfdf54b0af045d4a71376ae00f63a22c
+                           .group:00000000 wm4.newlib.h.18.1c9fedb6b3cd797cff253cc0fd593ef2
+                           .group:00000000 wm4.ieeefp.h.77.2bc94c1d1ed8b02df437510a04ac1e45
+                           .group:00000000 wm4.features.h.22.026edb2397769f4ae13f35900dbdb560
+                           .group:00000000 wm4.config.h.224.c701144a7b0518c6ee9b9b5465b79f81
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.a54b2d5c07711bc7320a3fea9f12cb56
+                           .group:00000000 wm4.stddef.h.39.c161261b198ee3a963897077fd6fa59f
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4._types.h.20.dd0d04dca3800a0d2a6129b87f3adbb2
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.127.34941de1b2539d59d5cac00e0dd27a45
+                           .group:00000000 wm4.reent.h.17.e292bf8b0bec6c96e131a54347145a30
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4.reent.h.77.dcd6129ff07fe81bd5636db29abe53b2
+                           .group:00000000 wm4.types.h.40.8b6acba56cefbb11746718204edc8f5e
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.32.bec3221fa7a9bb0bdde696c9c57e47d2
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.40cd3f2bfc456b193b790c2754690ebf
+                           .group:00000000 wm4.types.h.51.5571ec98f267d17d3c670b7a3ba33afa
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4._intsup.h.10.48bafbb683905c4daa4565a85aeeb264
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.sr5e1xx.h.22.e5c808533cc52ed19fb0830cd7d98924
+                           .group:00000000 wm4.cmsis_version.h.32.0f826810625204eca22a19868bdc7586
+                           .group:00000000 wm4.core_cm7.h.66.8ab2de36917d6fcae18019067fda13e0
+                           .group:00000000 wm4.cmsis_gcc.h.26.498d0ad17a45fc9ef20fdc01caf02259
+                           .group:00000000 wm4.core_cm7.h.174.43edb295ecdaadad738f48ba6011ffad
+                           .group:00000000 wm4.mpu_armv7.h.32.83326921a797fa9d6f70449916b4b839
+                           .group:00000000 wm4.cachel1_armv7.h.32.abd77761a989e008b0c60891114a33c7
+                           .group:00000000 wm4.SR5E1_ADC.h.14.21608e6aff125ba995dd767d6d8dc311
+                           .group:00000000 wm4.SR5E1_CEM.h.14.01fe5742c8f1ae35b1f3af05932f702e
+                           .group:00000000 wm4.SR5E1_CMU.h.14.2617b38b159abe38028862394531e06d
+                           .group:00000000 wm4.SR5E1_COMP.h.14.4b6fdfe4f5f7fd9bedf3a99b98bdf4cd
+                           .group:00000000 wm4.SR5E1_CORDIC.h.14.354fbf7c9eaf6963d38eaa25cf28ffe8
+                           .group:00000000 wm4.SR5E1_CRC.h.14.c64d0f7767671ddb92e9ead0a1162100
+                           .group:00000000 wm4.SR5E1_DAC.h.14.8c26a0ff04b0cfeb55306cc3f22187b8
+                           .group:00000000 wm4.SR5E1_DBGMCU.h.14.427df893d53a8044654f017ba01c25ed
+                           .group:00000000 wm4.SR5E1_DMA.h.14.a7f9a92f844b40a86965798c2e64240b
+                           .group:00000000 wm4.SR5E1_DMAMUX.h.14.471b3b4dfd4d41515f1df49493698866
+                           .group:00000000 wm4.SR5E1_EXTI.h.14.a325ea3fe89cd84894660551c33241ea
+                           .group:00000000 wm4.SR5E1_FCCU.h.14.0ebf0f0f36e079d28613ad2c80e17e23
+                           .group:00000000 wm4.SR5E1_FDCAN.h.14.ac57101fad5dbc798bfb93f34c899de7
+                           .group:00000000 wm4.SR5E1_FLASH_REG_ITF.h.14.d23d1d44923f9b20b8c8fdb51d66aefd
+                           .group:00000000 wm4.SR5E1_GPIO.h.14.1c84071e130d7c64b62470ab0e18a1f1
+                           .group:00000000 wm4.SR5E1_HRTIM.h.24.03932387d2522e6bd5c772a4edaf2f5d
+                           .group:00000000 wm4.SR5E1_HSEM.h.14.cbe70eee519f01b16452c3f8c99d8df1
+                           .group:00000000 wm4.SR5E1_I2C.h.14.350ba3e0f4fd57828457efa80135c36c
+                           .group:00000000 wm4.SR5E1_IMA.h.14.62b7088985ab2b7ce9b030a02daa1f7d
+                           .group:00000000 wm4.SR5E1_IWDG.h.14.20b7c5f05cf7ae94464c360d7af3660d
+                           .group:00000000 wm4.SR5E1_MEMU.h.14.04bad7ae4c52ce334a4fc900aad2ae5b
+                           .group:00000000 wm4.SR5E1_NVM_CTRL.h.14.5f442617f0628d4f16258f211c614ef9
+                           .group:00000000 wm4.SR5E1_PLLDIG.h.14.bd87a8e6917eee17dae2f312c8e5fa53
+                           .group:00000000 wm4.SR5E1_PMC_DIG.h.14.54173b566c6656344766ec4ef46c9281
+                           .group:00000000 wm4.SR5E1_RCC.h.14.56734803c71534de286e793a53649740
+                           .group:00000000 wm4.SR5E1_RTC.h.14.47037cbc7d8175dbf2be1dc0bb955e3f
+                           .group:00000000 wm4.SR5E1_SD_ADC.h.14.552b97d0b8f3c1fd4df6d8964b2f1a80
+                           .group:00000000 wm4.SR5E1_SMPU.h.14.8ce5bb6d5d7c579cd725f492f46e9085
+                           .group:00000000 wm4.SR5E1_SPI.h.14.42d52112e540f85ade4d9135f8b87d72
+                           .group:00000000 wm4.SR5E1_SSCM.h.14.8e6a2ad0ce5fca422fc3d69939b6125b
+                           .group:00000000 wm4.SR5E1_SYSCFG.h.14.02b969490118ce4069914b5e94f7ca65
+                           .group:00000000 wm4.SR5E1_TDM.h.14.a40ed7928cad243a57fd233fccf01ad2
+                           .group:00000000 wm4.SR5E1_TIM.h.14.f17572f4c16f3f152b8164ad25c34f5b
+                           .group:00000000 wm4.SR5E1_UART.h.14.eec3ab82b02b3bdb3de500483675b83f
+                           .group:00000000 wm4.SR5E1_WWDG.h.14.59b45efc70e442cc6ef03702aad4ad88
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.typedefs.h.36.07fe3956b4e751037cfee70edcd0b397
+                           .group:00000000 wm4.irq_numbers.h.38.6294b95aed1bf7b3a2cda0eed8ce8f57
+                           .group:00000000 wm4.regs.h.23.2ac145b4f57126d16daed5fbd86d99c6
+                           .group:00000000 wm4.stdarg.h.31.3fa7b8f6daaa31edd1696c08c77f2a73
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.f4862cfbf4363a1db01842d5bdf72c18
+                           .group:00000000 wm4.zf_common_typedef.h.47.8c368673885c9d07221c267e15ab1069
+                           .group:00000000 wm4.zf_common_debug.h.33.727e0094f4d79012e3b7f7400deabb35
+                           .group:00000000 wm4.zf_common_fifo.h.33.e14e643902e26e4e65437b5b20e82793
+                           .group:00000000 wm4.zf_common_function.h.33.02bbfb055e8ee322bc4f8b14ea195da2
+                           .group:00000000 wm4.zf_common_memory.h.33.d43647290a4d62164ff2ec77cadb89d8
+                           .group:00000000 wm4.saradc.h.25.e5a70aef9ec4fddf35f2b7cc0c9cf1bc
+                           .group:00000000 wm4.gpio.h.25.d41a0c19fda8c2de42e666afb48ec15a
+                           .group:00000000 wm4.zf_driver_gpio.h.65.5a4d2084c62fed7c22fdca02e748c198
+                           .group:00000000 wm4.zf_driver_adc.h.64.349fb433626b42172b0e0fee038428ca
+                           .group:00000000 wm4.can.h.25.3cfccb6c630ada4f656cab597e231e58
+                           .group:00000000 wm4.dmamux.h.25.337aea179f6dbcc87c52aae26d38f76e
+                           .group:00000000 wm4.clock_cfg.h.24.0aed3cee9ecce947225a304181294191
+                           .group:00000000 wm4.clock.h.37.80236c5607fdd9eb9275e5111a4191c3
+                           .group:00000000 wm4.irq.h.37.78714f25754c8b09d1428599101f6cc7
+                           .group:00000000 wm4.dma.h.40.f77dd217a06ceba13a3cfdd4102a73c1
+                           .group:00000000 wm4.zf_driver_can.h.67.fd10d2fa867eb54a54d4b57027d73a60
+                           .group:00000000 wm4.tim.h.25.6e7ad96569e77a70a68b9b4cc59f54f2
+                           .group:00000000 wm4.zf_driver_timer.h.33.8df253b6990d9861816977209fb11e90
+                           .group:00000000 wm4.zf_driver_encoder.h.57.7e32999f25354fac086ca226b0c630d4
+                           .group:00000000 wm4.exti.h.25.21597c35d9630b0985ce88d2c41f4ea4
+                           .group:00000000 wm4.zf_driver_exti.h.59.1b02b8083e5295ef5baaf83905d59395
+                           .group:00000000 wm4.ssd_types.h.29.b861f4e6d39d333f931bfc05b964cb1c
+                           .group:00000000 wm4.ssd_C55.h.37.dad650468a97d71aff4dd65ca085590f
+                           .group:00000000 wm4.zf_driver_flash.h.59.db93fe574c35ea9e79030063fbb35a13
+                           .group:00000000 wm4.hrtim.h.25.1601aea9d4a0da1de8252dc444355251
+                           .group:00000000 wm4.zf_driver_hrtim.h.64.cd8d2bf3bf1c471ea59d9c61e4a721d7
+                           .group:00000000 wm4.zf_driver_interrupt.h.33.2c3660dcc36cb090bd75b8f180c14f27
+                           .group:00000000 wm4.zf_driver_pit.h.33.834ac720a62e09d5603a9557331e9049
+                           .group:00000000 wm4.zf_driver_pwm.h.33.7d80487064ca712231a453396685a551
+                           .group:00000000 wm4.zf_driver_rcc.h.33.4c228cf40a79e1b974b30d5a9a3a77a7
+                           .group:00000000 wm4.zf_driver_soft_iic.h.33.9067bd298084134f63c61c075f95fa2b
+                           .group:00000000 wm4.zf_driver_soft_spi.h.33.a938287c023905d97cafe56e4be63674
+                           .group:00000000 wm4.zf_driver_spi.h.62.950b1f52ed365034df2907601137b455
+                           .group:00000000 wm4.zf_driver_system.h.33.370922a9681b47d575d2c83d302a180b
+                           .group:00000000 wm4.zf_driver_uart.h.70.ffcf3694337ad0b4066179f1abd5d668
+                           .group:00000000 wm4.zf_device_imu_interface.h.40.344a2c93b973b58cee305ff406fc3e84
+                           .group:00000000 wm4.zf_device_imu660rb.h.37.b47c39afb47c89c2c82bd28e76457042
+                           .group:00000000 wm4.zf_device_imu963ra.h.37.e773f164af6f72dd1b0b6c1242bf99b4
+                           .group:00000000 wm4.zf_device_wireless_interface.h.40.da0a07f107014cb0888a26f281971a5b
+                           .group:00000000 wm4.zf_device_display_interface.h.79.d8df25e52245efbd97fd6415c8db0a72
+                           .group:00000000 wm4.zf_device_ips200.h.37.957fc5e8b291701a6f6b47207b045b77
+                           .group:00000000 wm4.math.h.13.b6595ad277a643a6127e1a4515a98f91
+                           .group:00000000 wm4.zf_device_gnss.h.66.39fe53860d2d190725612db126de8287
+                           .group:00000000 wm4.zf_device_key.h.45.b12f9096d8cc68f085b8fe9fe5b730db
+                           .group:00000000 wm4.zf_device_uart_receiver.h.43.9ac9496dcaa4780ef86d21fa439379b4
+                           .group:00000000 wm4.imu963.h.9.0357a407ee5eca150c2da77b8ad374e8
+                           .group:00000000 wm4.Defined.h.8.ba118efb82db5b67af1e2437e5b3cf85
+                           .group:00000000 wm4.gps.h.16.e415e513692cd3052ed0c0f0fe95f318
+                           .group:00000000 wm4.PID1.h.9.1cc3485a8cc0a8a64a4519addeb351e8
+                           .group:00000000 wm4.my_flash.h.9.82a1ad4360117b2f54268b11aa8680a3
+
+UNDEFINED SYMBOLS
+zf_system_clock_init
+zf_fifo_init
+zf_uart_init
+zf_uart_set_interrupt_callback
+zf_uart_set_interrupt_config
+imu660rb_init
+zf_delay_ms
+zf_gpio_init
+ips200_init
+zf_pwm_module_init
+zf_pwm_channel_init
+zf_encoder_init
+uart_receiver_init
+gnss_init
+zero
+zf_pit_ms_init
+SwitchKey_State
+display_interface_clear
+ips_displaymenu
+my_subs
+uart_handler
+pit_handler1
+pit_handler2
+pit_handler3
+Isp_20msINTFlag
+SWITCH_State
+display_interface_default_obj
+BLTFlag_500ms

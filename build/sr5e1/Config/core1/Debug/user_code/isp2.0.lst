@@ -1,0 +1,1459 @@
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"isp2.0.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	Motor_PWM_Adjust
+  19              		.section	.data.Motor_PWM_Adjust,"aw"
+  20              		.align	2
+  23              	Motor_PWM_Adjust:
+  24 0000 70170000 		.word	6000
+  25              		.global	Read_Flash_index
+  26              		.section	.bss.Read_Flash_index,"aw",%nobits
+  29              	Read_Flash_index:
+  30 0000 00       		.space	1
+  31              		.global	draw_point_x
+  32              		.section	.bss.draw_point_x,"aw",%nobits
+  33              		.align	2
+  36              	draw_point_x:
+  37 0000 00000000 		.space	4
+  38              		.global	draw_point_y
+  39              		.section	.bss.draw_point_y,"aw",%nobits
+  40              		.align	2
+  43              	draw_point_y:
+  44 0000 00000000 		.space	4
+  45              		.section	.text.ips_displaymenu,"ax",%progbits
+  46              		.align	1
+  47              		.p2align 4,,15
+  48              		.global	ips_displaymenu
+  49              		.syntax unified
+  50              		.thumb
+  51              		.thumb_func
+  53              	ips_displaymenu:
+  54              	.LFB482:
+  55              		.file 1 "user_code/isp2.0.c"
+   1:user_code/isp2.0.c **** /*
+   2:user_code/isp2.0.c ****  * isp2.0.c
+   3:user_code/isp2.0.c ****  *
+   4:user_code/isp2.0.c **** 
+   5:user_code/isp2.0.c ****  *      Author: ever.youthful
+   6:user_code/isp2.0.c ****  */
+   7:user_code/isp2.0.c **** #include "zf_libraries_headfile.h"
+   8:user_code/isp2.0.c **** 
+   9:user_code/isp2.0.c **** 
+  10:user_code/isp2.0.c **** 
+  11:user_code/isp2.0.c **** 
+  12:user_code/isp2.0.c **** #define IPS200_TYPE     (IPS200_TYPE_SPI)
+  13:user_code/isp2.0.c **** 
+  14:user_code/isp2.0.c **** //  motor  servo
+  15:user_code/isp2.0.c **** //extern PID_TypeDef ServoPID_polish;
+  16:user_code/isp2.0.c **** int Motor_PWM_Adjust = 6000;
+  17:user_code/isp2.0.c **** unsigned char Read_Flash_index = 0;
+  18:user_code/isp2.0.c **** 
+  19:user_code/isp2.0.c **** float draw_point_x,draw_point_y;
+  20:user_code/isp2.0.c **** void ips_displaymenu(void)
+  21:user_code/isp2.0.c **** {
+  56              		.loc 1 21 1
+  57              		.cfi_startproc
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  60 0000 08B5     		push	{r3, lr}
+  61              		.cfi_def_cfa_offset 8
+  62              		.cfi_offset 3, -8
+  63              		.cfi_offset 14, -4
+  22:user_code/isp2.0.c ****   switch (SWITCH_State)
+  64              		.loc 1 22 3
+  65 0002 074B     		ldr	r3, .L6
+  66 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  67 0006 002B     		cmp	r3, #0
+  68 0008 02D0     		beq	.L2
+  69 000a 012B     		cmp	r3, #1
+  70 000c 03D0     		beq	.L3
+  23:user_code/isp2.0.c ****   {
+  24:user_code/isp2.0.c ****     case 0:
+  25:user_code/isp2.0.c ****       {
+  26:user_code/isp2.0.c ****          manu1();
+  27:user_code/isp2.0.c ****       }break;
+  28:user_code/isp2.0.c ****        case 1:
+  29:user_code/isp2.0.c ****       {
+  30:user_code/isp2.0.c ****         manu2();
+  31:user_code/isp2.0.c ****       }break;
+  32:user_code/isp2.0.c ****       default:break;
+  71              		.loc 1 32 7
+  72 000e 05E0     		b	.L5
+  73              	.L2:
+  26:user_code/isp2.0.c ****       }break;
+  74              		.loc 1 26 10
+  75 0010 FFF7FEFF 		bl	manu1
+  27:user_code/isp2.0.c ****        case 1:
+  76              		.loc 1 27 7
+  77 0014 02E0     		b	.L5
+  78              	.L3:
+  30:user_code/isp2.0.c ****       }break;
+  79              		.loc 1 30 9
+  80 0016 FFF7FEFF 		bl	manu2
+  31:user_code/isp2.0.c ****       default:break;
+  81              		.loc 1 31 7
+  82 001a 00BF     		nop
+  83              	.L5:
+  33:user_code/isp2.0.c ****   }
+  34:user_code/isp2.0.c **** }
+  84              		.loc 1 34 1
+  85 001c 00BF     		nop
+  86 001e 08BD     		pop	{r3, pc}
+  87              	.L7:
+  88              		.align	2
+  89              	.L6:
+  90 0020 00000000 		.word	SWITCH_State
+  91              		.cfi_endproc
+  92              	.LFE482:
+  94              		.section	.rodata
+  95              		.align	2
+  96              	.LC0:
+  97 0000 6D61785F 		.ascii	"max_s<-\000"
+  97      733C2D00 
+  98              		.align	2
+  99              	.LC1:
+ 100 0008 6D696E5F 		.ascii	"min_s  \000"
+ 100      73202000 
+ 101              		.align	2
+ 102              	.LC2:
+ 103 0010 6D61785F 		.ascii	"max_s  \000"
+ 103      73202000 
+ 104              		.align	2
+ 105              	.LC3:
+ 106 0018 6D696E5F 		.ascii	"min_s<-\000"
+ 106      733C2D00 
+ 107              		.align	2
+ 108              	.LC4:
+ 109 0020 7000     		.ascii	"p\000"
+ 110 0022 0000     		.align	2
+ 111              	.LC5:
+ 112 0024 6900     		.ascii	"i\000"
+ 113 0026 0000     		.align	2
+ 114              	.LC6:
+ 115 0028 6400     		.ascii	"d\000"
+ 116              		.section	.text.manu2,"ax",%progbits
+ 117              		.align	1
+ 118              		.p2align 4,,15
+ 119              		.global	manu2
+ 120              		.syntax unified
+ 121              		.thumb
+ 122              		.thumb_func
+ 124              	manu2:
+ 125              	.LFB483:
+  35:user_code/isp2.0.c **** 
+  36:user_code/isp2.0.c **** void manu2(void)//按键调速菜单
+  37:user_code/isp2.0.c **** {
+ 126              		.loc 1 37 1
+ 127              		.cfi_startproc
+ 128              		@ args = 0, pretend = 0, frame = 0
+ 129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130 0000 00B5     		push	{lr}
+ 131              		.cfi_def_cfa_offset 4
+ 132              		.cfi_offset 14, -4
+ 133 0002 83B0     		sub	sp, sp, #12
+ 134              		.cfi_def_cfa_offset 16
+  38:user_code/isp2.0.c **** 	switch (key_options2)
+ 135              		.loc 1 38 2
+ 136 0004 404B     		ldr	r3, .L12
+ 137 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 138 0008 012B     		cmp	r3, #1
+ 139 000a 02D0     		beq	.L9
+ 140 000c 022B     		cmp	r3, #2
+ 141 000e 0DD0     		beq	.L10
+ 142 0010 19E0     		b	.L11
+ 143              	.L9:
+  39:user_code/isp2.0.c **** 	      {
+  40:user_code/isp2.0.c **** 	          case 1:
+  41:user_code/isp2.0.c **** 	          {
+  42:user_code/isp2.0.c **** 	              ips200_show_string(0, 0,  "max_s<-");
+ 144              		.loc 1 42 16
+ 145 0012 3E4B     		ldr	r3, .L12+4
+ 146 0014 0022     		movs	r2, #0
+ 147 0016 0021     		movs	r1, #0
+ 148 0018 3D48     		ldr	r0, .L12+8
+ 149 001a FFF7FEFF 		bl	display_interface_show_string
+  43:user_code/isp2.0.c **** 	              ips200_show_string(0, 20, "min_s  ");
+ 150              		.loc 1 43 16
+ 151 001e 3D4B     		ldr	r3, .L12+12
+ 152 0020 1422     		movs	r2, #20
+ 153 0022 0021     		movs	r1, #0
+ 154 0024 3A48     		ldr	r0, .L12+8
+ 155 0026 FFF7FEFF 		bl	display_interface_show_string
+  44:user_code/isp2.0.c **** 
+  45:user_code/isp2.0.c **** 	              //ips200_show_string(0,140, "ramp3  ");
+  46:user_code/isp2.0.c **** 	          }break;
+ 156              		.loc 1 46 12
+ 157 002a 0CE0     		b	.L11
+ 158              	.L10:
+  47:user_code/isp2.0.c **** 	          case 2:
+  48:user_code/isp2.0.c **** 	          {
+  49:user_code/isp2.0.c **** 	              ips200_show_string(0, 0,  "max_s  ");
+ 159              		.loc 1 49 16
+ 160 002c 3A4B     		ldr	r3, .L12+16
+ 161 002e 0022     		movs	r2, #0
+ 162 0030 0021     		movs	r1, #0
+ 163 0032 3748     		ldr	r0, .L12+8
+ 164 0034 FFF7FEFF 		bl	display_interface_show_string
+  50:user_code/isp2.0.c **** 	              ips200_show_string(0, 20, "min_s<-");
+ 165              		.loc 1 50 16
+ 166 0038 384B     		ldr	r3, .L12+20
+ 167 003a 1422     		movs	r2, #20
+ 168 003c 0021     		movs	r1, #0
+ 169 003e 3448     		ldr	r0, .L12+8
+ 170 0040 FFF7FEFF 		bl	display_interface_show_string
+  51:user_code/isp2.0.c **** 
+  52:user_code/isp2.0.c **** 	          }break;
+ 171              		.loc 1 52 12
+ 172 0044 00BF     		nop
+ 173              	.L11:
+  53:user_code/isp2.0.c **** 
+  54:user_code/isp2.0.c **** 	      }
+  55:user_code/isp2.0.c ****     ips200_show_float(100,0, max_speed,2,1);
+ 174              		.loc 1 55 5
+ 175 0046 364B     		ldr	r3, .L12+24
+ 176 0048 D3ED007A 		vldr.32	s15, [r3]
+ 177 004c B7EEE77A 		vcvt.f64.f32	d7, s15
+ 178 0050 0123     		movs	r3, #1
+ 179 0052 0093     		str	r3, [sp]
+ 180 0054 0223     		movs	r3, #2
+ 181 0056 B0EE470B 		vmov.f64	d0, d7
+ 182 005a 0022     		movs	r2, #0
+ 183 005c 6421     		movs	r1, #100
+ 184 005e 2C48     		ldr	r0, .L12+8
+ 185 0060 FFF7FEFF 		bl	display_interface_show_float
+  56:user_code/isp2.0.c ****     ips200_show_float(100,20,min_speed,2,1);
+ 186              		.loc 1 56 5
+ 187 0064 2F4B     		ldr	r3, .L12+28
+ 188 0066 D3ED007A 		vldr.32	s15, [r3]
+ 189 006a B7EEE77A 		vcvt.f64.f32	d7, s15
+ 190 006e 0123     		movs	r3, #1
+ 191 0070 0093     		str	r3, [sp]
+ 192 0072 0223     		movs	r3, #2
+ 193 0074 B0EE470B 		vmov.f64	d0, d7
+ 194 0078 1422     		movs	r2, #20
+ 195 007a 6421     		movs	r1, #100
+ 196 007c 2448     		ldr	r0, .L12+8
+ 197 007e FFF7FEFF 		bl	display_interface_show_float
+  57:user_code/isp2.0.c **** 
+  58:user_code/isp2.0.c ****     ips200_show_string(0, 40, "p");
+ 198              		.loc 1 58 5
+ 199 0082 294B     		ldr	r3, .L12+32
+ 200 0084 2822     		movs	r2, #40
+ 201 0086 0021     		movs	r1, #0
+ 202 0088 2148     		ldr	r0, .L12+8
+ 203 008a FFF7FEFF 		bl	display_interface_show_string
+  59:user_code/isp2.0.c ****     ips200_show_string(0, 60, "i");
+ 204              		.loc 1 59 5
+ 205 008e 274B     		ldr	r3, .L12+36
+ 206 0090 3C22     		movs	r2, #60
+ 207 0092 0021     		movs	r1, #0
+ 208 0094 1E48     		ldr	r0, .L12+8
+ 209 0096 FFF7FEFF 		bl	display_interface_show_string
+  60:user_code/isp2.0.c ****     ips200_show_string(0, 80, "d");
+ 210              		.loc 1 60 5
+ 211 009a 254B     		ldr	r3, .L12+40
+ 212 009c 5022     		movs	r2, #80
+ 213 009e 0021     		movs	r1, #0
+ 214 00a0 1B48     		ldr	r0, .L12+8
+ 215 00a2 FFF7FEFF 		bl	display_interface_show_string
+  61:user_code/isp2.0.c **** 
+  62:user_code/isp2.0.c ****     ips200_show_float(100,40, Kp_SPEED,2,1);
+ 216              		.loc 1 62 5
+ 217 00a6 234B     		ldr	r3, .L12+44
+ 218 00a8 D3ED007A 		vldr.32	s15, [r3]
+ 219 00ac B7EEE77A 		vcvt.f64.f32	d7, s15
+ 220 00b0 0123     		movs	r3, #1
+ 221 00b2 0093     		str	r3, [sp]
+ 222 00b4 0223     		movs	r3, #2
+ 223 00b6 B0EE470B 		vmov.f64	d0, d7
+ 224 00ba 2822     		movs	r2, #40
+ 225 00bc 6421     		movs	r1, #100
+ 226 00be 1448     		ldr	r0, .L12+8
+ 227 00c0 FFF7FEFF 		bl	display_interface_show_float
+  63:user_code/isp2.0.c ****     ips200_show_float(100,60,Ki_SPEED,2,1);
+ 228              		.loc 1 63 5
+ 229 00c4 1C4B     		ldr	r3, .L12+48
+ 230 00c6 D3ED007A 		vldr.32	s15, [r3]
+ 231 00ca B7EEE77A 		vcvt.f64.f32	d7, s15
+ 232 00ce 0123     		movs	r3, #1
+ 233 00d0 0093     		str	r3, [sp]
+ 234 00d2 0223     		movs	r3, #2
+ 235 00d4 B0EE470B 		vmov.f64	d0, d7
+ 236 00d8 3C22     		movs	r2, #60
+ 237 00da 6421     		movs	r1, #100
+ 238 00dc 0C48     		ldr	r0, .L12+8
+ 239 00de FFF7FEFF 		bl	display_interface_show_float
+  64:user_code/isp2.0.c ****     ips200_show_float(100,80,Kd_SPEED,2,1);
+ 240              		.loc 1 64 5
+ 241 00e2 164B     		ldr	r3, .L12+52
+ 242 00e4 D3ED007A 		vldr.32	s15, [r3]
+ 243 00e8 B7EEE77A 		vcvt.f64.f32	d7, s15
+ 244 00ec 0123     		movs	r3, #1
+ 245 00ee 0093     		str	r3, [sp]
+ 246 00f0 0223     		movs	r3, #2
+ 247 00f2 B0EE470B 		vmov.f64	d0, d7
+ 248 00f6 5022     		movs	r2, #80
+ 249 00f8 6421     		movs	r1, #100
+ 250 00fa 0548     		ldr	r0, .L12+8
+ 251 00fc FFF7FEFF 		bl	display_interface_show_float
+  65:user_code/isp2.0.c **** }
+ 252              		.loc 1 65 1
+ 253 0100 00BF     		nop
+ 254 0102 03B0     		add	sp, sp, #12
+ 255              		.cfi_def_cfa_offset 4
+ 256              		@ sp needed
+ 257 0104 5DF804FB 		ldr	pc, [sp], #4
+ 258              	.L13:
+ 259              		.align	2
+ 260              	.L12:
+ 261 0108 00000000 		.word	key_options2
+ 262 010c 00000000 		.word	.LC0
+ 263 0110 00000000 		.word	display_interface_default_obj
+ 264 0114 08000000 		.word	.LC1
+ 265 0118 10000000 		.word	.LC2
+ 266 011c 18000000 		.word	.LC3
+ 267 0120 00000000 		.word	max_speed
+ 268 0124 00000000 		.word	min_speed
+ 269 0128 20000000 		.word	.LC4
+ 270 012c 24000000 		.word	.LC5
+ 271 0130 28000000 		.word	.LC6
+ 272 0134 00000000 		.word	Kp_SPEED
+ 273 0138 00000000 		.word	Ki_SPEED
+ 274 013c 00000000 		.word	Kd_SPEED
+ 275              		.cfi_endproc
+ 276              	.LFE483:
+ 278              		.section	.rodata
+ 279 002a 0000     		.align	2
+ 280              	.LC7:
+ 281 002c 52656164 		.ascii	"Read<-\000"
+ 281      3C2D00
+ 282 0033 00       		.align	2
+ 283              	.LC8:
+ 284 0034 53617665 		.ascii	"Save  \000"
+ 284      202000
+ 285 003b 00       		.align	2
+ 286              	.LC9:
+ 287 003c 54616B65 		.ascii	"Take  \000"
+ 287      202000
+ 288 0043 00       		.align	2
+ 289              	.LC10:
+ 290 0044 506F696E 		.ascii	"Point  \000"
+ 290      74202000 
+ 291              		.align	2
+ 292              	.LC11:
+ 293 004c 72616D70 		.ascii	"ramp1  \000"
+ 293      31202000 
+ 294              		.align	2
+ 295              	.LC12:
+ 296 0054 72616D70 		.ascii	"ramp2  \000"
+ 296      32202000 
+ 297              		.align	2
+ 298              	.LC13:
+ 299 005c 474F2020 		.ascii	"GO  \000"
+ 299      00
+ 300 0061 000000   		.align	2
+ 301              	.LC14:
+ 302 0064 52656164 		.ascii	"Read  \000"
+ 302      202000
+ 303 006b 00       		.align	2
+ 304              	.LC15:
+ 305 006c 53617665 		.ascii	"Save<-\000"
+ 305      3C2D00
+ 306 0073 00       		.align	2
+ 307              	.LC16:
+ 308 0074 54616B65 		.ascii	"Take<-\000"
+ 308      3C2D00
+ 309 007b 00       		.align	2
+ 310              	.LC17:
+ 311 007c 506F696E 		.ascii	"Point<-\000"
+ 311      743C2D00 
+ 312              		.align	2
+ 313              	.LC18:
+ 314 0084 72616D70 		.ascii	"ramp1<-\000"
+ 314      313C2D00 
+ 315              		.align	2
+ 316              	.LC19:
+ 317 008c 72616D70 		.ascii	"ramp2<-\000"
+ 317      323C2D00 
+ 318              		.align	2
+ 319              	.LC20:
+ 320 0094 474F3C2D 		.ascii	"GO<-\000"
+ 320      00
+ 321 0099 000000   		.align	2
+ 322              	.LC21:
+ 323 009c 725F643A 		.ascii	"r_d:\000"
+ 323      00
+ 324 00a1 000000   		.align	2
+ 325              	.LC22:
+ 326 00a4 74696D65 		.ascii	"time\000"
+ 326      00
+ 327 00a9 000000   		.align	2
+ 328              	.LC23:
+ 329 00ac 68616C6C 		.ascii	"hall\000"
+ 329      00
+ 330 00b1 000000   		.align	2
+ 331              	.LC24:
+ 332 00b4 74617200 		.ascii	"tar\000"
+ 333              		.align	2
+ 334              	.LC25:
+ 335 00b8 7900     		.ascii	"y\000"
+ 336 00ba 0000     		.align	2
+ 337              	.LC26:
+ 338 00bc 73617465 		.ascii	"sate:\000"
+ 338      3A00
+ 339              		.section	.text.manu1,"ax",%progbits
+ 340              		.align	1
+ 341              		.p2align 4,,15
+ 342              		.global	manu1
+ 343              		.syntax unified
+ 344              		.thumb
+ 345              		.thumb_func
+ 347              	manu1:
+ 348              	.LFB484:
+  66:user_code/isp2.0.c **** void manu1(void)//菜单
+  67:user_code/isp2.0.c **** {
+ 349              		.loc 1 67 1
+ 350              		.cfi_startproc
+ 351              		@ args = 0, pretend = 0, frame = 0
+ 352              		@ frame_needed = 0, uses_anonymous_args = 0
+ 353 0000 00B5     		push	{lr}
+ 354              		.cfi_def_cfa_offset 4
+ 355              		.cfi_offset 14, -4
+ 356 0002 83B0     		sub	sp, sp, #12
+ 357              		.cfi_def_cfa_offset 16
+  68:user_code/isp2.0.c ****     switch (key_options1)
+ 358              		.loc 1 68 5
+ 359 0004 B84B     		ldr	r3, .L27
+ 360 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 361 0008 013B     		subs	r3, r3, #1
+ 362 000a 072B     		cmp	r3, #7
+ 363 000c 00F28C81 		bhi	.L26
+ 364 0010 01A2     		adr	r2, .L17
+ 365 0012 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 366 0016 00BF     		.p2align 2
+ 367              	.L17:
+ 368 0018 39000000 		.word	.L24+1
+ 369 001c 8F000000 		.word	.L23+1
+ 370 0020 E5000000 		.word	.L22+1
+ 371 0024 3B010000 		.word	.L21+1
+ 372 0028 91010000 		.word	.L20+1
+ 373 002c E7010000 		.word	.L19+1
+ 374 0030 3D020000 		.word	.L18+1
+ 375 0034 93020000 		.word	.L16+1
+ 376              		.p2align 1
+ 377              	.L24:
+  69:user_code/isp2.0.c ****       {
+  70:user_code/isp2.0.c ****           case 1:
+  71:user_code/isp2.0.c ****           {
+  72:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read<-");
+ 378              		.loc 1 72 15
+ 379 0038 AC4B     		ldr	r3, .L27+4
+ 380 003a 0022     		movs	r2, #0
+ 381 003c 0021     		movs	r1, #0
+ 382 003e AC48     		ldr	r0, .L27+8
+ 383 0040 FFF7FEFF 		bl	display_interface_show_string
+  73:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save  ");
+ 384              		.loc 1 73 15
+ 385 0044 AB4B     		ldr	r3, .L27+12
+ 386 0046 1422     		movs	r2, #20
+ 387 0048 0021     		movs	r1, #0
+ 388 004a A948     		ldr	r0, .L27+8
+ 389 004c FFF7FEFF 		bl	display_interface_show_string
+  74:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take  ");
+ 390              		.loc 1 74 15
+ 391 0050 A94B     		ldr	r3, .L27+16
+ 392 0052 2822     		movs	r2, #40
+ 393 0054 0021     		movs	r1, #0
+ 394 0056 A648     		ldr	r0, .L27+8
+ 395 0058 FFF7FEFF 		bl	display_interface_show_string
+  75:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point  ");
+ 396              		.loc 1 75 15
+ 397 005c A74B     		ldr	r3, .L27+20
+ 398 005e 3C22     		movs	r2, #60
+ 399 0060 0021     		movs	r1, #0
+ 400 0062 A348     		ldr	r0, .L27+8
+ 401 0064 FFF7FEFF 		bl	display_interface_show_string
+  76:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1  ");
+ 402              		.loc 1 76 15
+ 403 0068 A54B     		ldr	r3, .L27+24
+ 404 006a 6422     		movs	r2, #100
+ 405 006c 0021     		movs	r1, #0
+ 406 006e A048     		ldr	r0, .L27+8
+ 407 0070 FFF7FEFF 		bl	display_interface_show_string
+  77:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2  ");
+ 408              		.loc 1 77 15
+ 409 0074 A34B     		ldr	r3, .L27+28
+ 410 0076 7822     		movs	r2, #120
+ 411 0078 0021     		movs	r1, #0
+ 412 007a 9D48     		ldr	r0, .L27+8
+ 413 007c FFF7FEFF 		bl	display_interface_show_string
+  78:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO  ");
+ 414              		.loc 1 78 15
+ 415 0080 A14B     		ldr	r3, .L27+32
+ 416 0082 8C22     		movs	r2, #140
+ 417 0084 0021     		movs	r1, #0
+ 418 0086 9A48     		ldr	r0, .L27+8
+ 419 0088 FFF7FEFF 		bl	display_interface_show_string
+  79:user_code/isp2.0.c ****               //ips200_show_string(0,140, "ramp3  ");
+  80:user_code/isp2.0.c ****           }break;
+ 420              		.loc 1 80 11
+ 421 008c 4DE1     		b	.L25
+ 422              	.L23:
+  81:user_code/isp2.0.c ****           case 2:
+  82:user_code/isp2.0.c ****           {
+  83:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read  ");
+ 423              		.loc 1 83 15
+ 424 008e 9F4B     		ldr	r3, .L27+36
+ 425 0090 0022     		movs	r2, #0
+ 426 0092 0021     		movs	r1, #0
+ 427 0094 9648     		ldr	r0, .L27+8
+ 428 0096 FFF7FEFF 		bl	display_interface_show_string
+  84:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save<-");
+ 429              		.loc 1 84 15
+ 430 009a 9D4B     		ldr	r3, .L27+40
+ 431 009c 1422     		movs	r2, #20
+ 432 009e 0021     		movs	r1, #0
+ 433 00a0 9348     		ldr	r0, .L27+8
+ 434 00a2 FFF7FEFF 		bl	display_interface_show_string
+  85:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take  ");
+ 435              		.loc 1 85 15
+ 436 00a6 944B     		ldr	r3, .L27+16
+ 437 00a8 2822     		movs	r2, #40
+ 438 00aa 0021     		movs	r1, #0
+ 439 00ac 9048     		ldr	r0, .L27+8
+ 440 00ae FFF7FEFF 		bl	display_interface_show_string
+  86:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point  ");
+ 441              		.loc 1 86 15
+ 442 00b2 924B     		ldr	r3, .L27+20
+ 443 00b4 3C22     		movs	r2, #60
+ 444 00b6 0021     		movs	r1, #0
+ 445 00b8 8D48     		ldr	r0, .L27+8
+ 446 00ba FFF7FEFF 		bl	display_interface_show_string
+  87:user_code/isp2.0.c **** 
+  88:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1  ");
+ 447              		.loc 1 88 15
+ 448 00be 904B     		ldr	r3, .L27+24
+ 449 00c0 6422     		movs	r2, #100
+ 450 00c2 0021     		movs	r1, #0
+ 451 00c4 8A48     		ldr	r0, .L27+8
+ 452 00c6 FFF7FEFF 		bl	display_interface_show_string
+  89:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2  ");
+ 453              		.loc 1 89 15
+ 454 00ca 8E4B     		ldr	r3, .L27+28
+ 455 00cc 7822     		movs	r2, #120
+ 456 00ce 0021     		movs	r1, #0
+ 457 00d0 8748     		ldr	r0, .L27+8
+ 458 00d2 FFF7FEFF 		bl	display_interface_show_string
+  90:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO  ");
+ 459              		.loc 1 90 15
+ 460 00d6 8C4B     		ldr	r3, .L27+32
+ 461 00d8 8C22     		movs	r2, #140
+ 462 00da 0021     		movs	r1, #0
+ 463 00dc 8448     		ldr	r0, .L27+8
+ 464 00de FFF7FEFF 		bl	display_interface_show_string
+  91:user_code/isp2.0.c ****           }break;
+ 465              		.loc 1 91 11
+ 466 00e2 22E1     		b	.L25
+ 467              	.L22:
+  92:user_code/isp2.0.c ****           case 3:
+  93:user_code/isp2.0.c ****           {
+  94:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read  ");
+ 468              		.loc 1 94 15
+ 469 00e4 894B     		ldr	r3, .L27+36
+ 470 00e6 0022     		movs	r2, #0
+ 471 00e8 0021     		movs	r1, #0
+ 472 00ea 8148     		ldr	r0, .L27+8
+ 473 00ec FFF7FEFF 		bl	display_interface_show_string
+  95:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save  ");
+ 474              		.loc 1 95 15
+ 475 00f0 804B     		ldr	r3, .L27+12
+ 476 00f2 1422     		movs	r2, #20
+ 477 00f4 0021     		movs	r1, #0
+ 478 00f6 7E48     		ldr	r0, .L27+8
+ 479 00f8 FFF7FEFF 		bl	display_interface_show_string
+  96:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take<-");
+ 480              		.loc 1 96 15
+ 481 00fc 854B     		ldr	r3, .L27+44
+ 482 00fe 2822     		movs	r2, #40
+ 483 0100 0021     		movs	r1, #0
+ 484 0102 7B48     		ldr	r0, .L27+8
+ 485 0104 FFF7FEFF 		bl	display_interface_show_string
+  97:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point  ");
+ 486              		.loc 1 97 15
+ 487 0108 7C4B     		ldr	r3, .L27+20
+ 488 010a 3C22     		movs	r2, #60
+ 489 010c 0021     		movs	r1, #0
+ 490 010e 7848     		ldr	r0, .L27+8
+ 491 0110 FFF7FEFF 		bl	display_interface_show_string
+  98:user_code/isp2.0.c **** 
+  99:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1  ");
+ 492              		.loc 1 99 15
+ 493 0114 7A4B     		ldr	r3, .L27+24
+ 494 0116 6422     		movs	r2, #100
+ 495 0118 0021     		movs	r1, #0
+ 496 011a 7548     		ldr	r0, .L27+8
+ 497 011c FFF7FEFF 		bl	display_interface_show_string
+ 100:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2  ");
+ 498              		.loc 1 100 15
+ 499 0120 784B     		ldr	r3, .L27+28
+ 500 0122 7822     		movs	r2, #120
+ 501 0124 0021     		movs	r1, #0
+ 502 0126 7248     		ldr	r0, .L27+8
+ 503 0128 FFF7FEFF 		bl	display_interface_show_string
+ 101:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO  ");
+ 504              		.loc 1 101 15
+ 505 012c 764B     		ldr	r3, .L27+32
+ 506 012e 8C22     		movs	r2, #140
+ 507 0130 0021     		movs	r1, #0
+ 508 0132 6F48     		ldr	r0, .L27+8
+ 509 0134 FFF7FEFF 		bl	display_interface_show_string
+ 102:user_code/isp2.0.c ****           }break;
+ 510              		.loc 1 102 11
+ 511 0138 F7E0     		b	.L25
+ 512              	.L21:
+ 103:user_code/isp2.0.c ****           case 4:
+ 104:user_code/isp2.0.c ****           {
+ 105:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read  ");
+ 513              		.loc 1 105 15
+ 514 013a 744B     		ldr	r3, .L27+36
+ 515 013c 0022     		movs	r2, #0
+ 516 013e 0021     		movs	r1, #0
+ 517 0140 6B48     		ldr	r0, .L27+8
+ 518 0142 FFF7FEFF 		bl	display_interface_show_string
+ 106:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save  ");
+ 519              		.loc 1 106 15
+ 520 0146 6B4B     		ldr	r3, .L27+12
+ 521 0148 1422     		movs	r2, #20
+ 522 014a 0021     		movs	r1, #0
+ 523 014c 6848     		ldr	r0, .L27+8
+ 524 014e FFF7FEFF 		bl	display_interface_show_string
+ 107:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take  ");
+ 525              		.loc 1 107 15
+ 526 0152 694B     		ldr	r3, .L27+16
+ 527 0154 2822     		movs	r2, #40
+ 528 0156 0021     		movs	r1, #0
+ 529 0158 6548     		ldr	r0, .L27+8
+ 530 015a FFF7FEFF 		bl	display_interface_show_string
+ 108:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point<-");
+ 531              		.loc 1 108 15
+ 532 015e 6E4B     		ldr	r3, .L27+48
+ 533 0160 3C22     		movs	r2, #60
+ 534 0162 0021     		movs	r1, #0
+ 535 0164 6248     		ldr	r0, .L27+8
+ 536 0166 FFF7FEFF 		bl	display_interface_show_string
+ 109:user_code/isp2.0.c **** 
+ 110:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1  ");
+ 537              		.loc 1 110 15
+ 538 016a 654B     		ldr	r3, .L27+24
+ 539 016c 6422     		movs	r2, #100
+ 540 016e 0021     		movs	r1, #0
+ 541 0170 5F48     		ldr	r0, .L27+8
+ 542 0172 FFF7FEFF 		bl	display_interface_show_string
+ 111:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2  ");
+ 543              		.loc 1 111 15
+ 544 0176 634B     		ldr	r3, .L27+28
+ 545 0178 7822     		movs	r2, #120
+ 546 017a 0021     		movs	r1, #0
+ 547 017c 5C48     		ldr	r0, .L27+8
+ 548 017e FFF7FEFF 		bl	display_interface_show_string
+ 112:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO  ");
+ 549              		.loc 1 112 15
+ 550 0182 614B     		ldr	r3, .L27+32
+ 551 0184 8C22     		movs	r2, #140
+ 552 0186 0021     		movs	r1, #0
+ 553 0188 5948     		ldr	r0, .L27+8
+ 554 018a FFF7FEFF 		bl	display_interface_show_string
+ 113:user_code/isp2.0.c ****           }break;
+ 555              		.loc 1 113 11
+ 556 018e CCE0     		b	.L25
+ 557              	.L20:
+ 114:user_code/isp2.0.c ****           case 5:
+ 115:user_code/isp2.0.c ****           {
+ 116:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read  ");
+ 558              		.loc 1 116 15
+ 559 0190 5E4B     		ldr	r3, .L27+36
+ 560 0192 0022     		movs	r2, #0
+ 561 0194 0021     		movs	r1, #0
+ 562 0196 5648     		ldr	r0, .L27+8
+ 563 0198 FFF7FEFF 		bl	display_interface_show_string
+ 117:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save  ");
+ 564              		.loc 1 117 15
+ 565 019c 554B     		ldr	r3, .L27+12
+ 566 019e 1422     		movs	r2, #20
+ 567 01a0 0021     		movs	r1, #0
+ 568 01a2 5348     		ldr	r0, .L27+8
+ 569 01a4 FFF7FEFF 		bl	display_interface_show_string
+ 118:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take  ");
+ 570              		.loc 1 118 15
+ 571 01a8 534B     		ldr	r3, .L27+16
+ 572 01aa 2822     		movs	r2, #40
+ 573 01ac 0021     		movs	r1, #0
+ 574 01ae 5048     		ldr	r0, .L27+8
+ 575 01b0 FFF7FEFF 		bl	display_interface_show_string
+ 119:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point  ");
+ 576              		.loc 1 119 15
+ 577 01b4 514B     		ldr	r3, .L27+20
+ 578 01b6 3C22     		movs	r2, #60
+ 579 01b8 0021     		movs	r1, #0
+ 580 01ba 4D48     		ldr	r0, .L27+8
+ 581 01bc FFF7FEFF 		bl	display_interface_show_string
+ 120:user_code/isp2.0.c **** 
+ 121:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1  ");
+ 582              		.loc 1 121 15
+ 583 01c0 4F4B     		ldr	r3, .L27+24
+ 584 01c2 6422     		movs	r2, #100
+ 585 01c4 0021     		movs	r1, #0
+ 586 01c6 4A48     		ldr	r0, .L27+8
+ 587 01c8 FFF7FEFF 		bl	display_interface_show_string
+ 122:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2  ");
+ 588              		.loc 1 122 15
+ 589 01cc 4D4B     		ldr	r3, .L27+28
+ 590 01ce 7822     		movs	r2, #120
+ 591 01d0 0021     		movs	r1, #0
+ 592 01d2 4748     		ldr	r0, .L27+8
+ 593 01d4 FFF7FEFF 		bl	display_interface_show_string
+ 123:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO  ");
+ 594              		.loc 1 123 15
+ 595 01d8 4B4B     		ldr	r3, .L27+32
+ 596 01da 8C22     		movs	r2, #140
+ 597 01dc 0021     		movs	r1, #0
+ 598 01de 4448     		ldr	r0, .L27+8
+ 599 01e0 FFF7FEFF 		bl	display_interface_show_string
+ 124:user_code/isp2.0.c ****           }break;
+ 600              		.loc 1 124 11
+ 601 01e4 A1E0     		b	.L25
+ 602              	.L19:
+ 125:user_code/isp2.0.c ****           case 6:
+ 126:user_code/isp2.0.c ****           {
+ 127:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read  ");
+ 603              		.loc 1 127 15
+ 604 01e6 494B     		ldr	r3, .L27+36
+ 605 01e8 0022     		movs	r2, #0
+ 606 01ea 0021     		movs	r1, #0
+ 607 01ec 4048     		ldr	r0, .L27+8
+ 608 01ee FFF7FEFF 		bl	display_interface_show_string
+ 128:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save  ");
+ 609              		.loc 1 128 15
+ 610 01f2 404B     		ldr	r3, .L27+12
+ 611 01f4 1422     		movs	r2, #20
+ 612 01f6 0021     		movs	r1, #0
+ 613 01f8 3D48     		ldr	r0, .L27+8
+ 614 01fa FFF7FEFF 		bl	display_interface_show_string
+ 129:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take  ");
+ 615              		.loc 1 129 15
+ 616 01fe 3E4B     		ldr	r3, .L27+16
+ 617 0200 2822     		movs	r2, #40
+ 618 0202 0021     		movs	r1, #0
+ 619 0204 3A48     		ldr	r0, .L27+8
+ 620 0206 FFF7FEFF 		bl	display_interface_show_string
+ 130:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point  ");
+ 621              		.loc 1 130 15
+ 622 020a 3C4B     		ldr	r3, .L27+20
+ 623 020c 3C22     		movs	r2, #60
+ 624 020e 0021     		movs	r1, #0
+ 625 0210 3748     		ldr	r0, .L27+8
+ 626 0212 FFF7FEFF 		bl	display_interface_show_string
+ 131:user_code/isp2.0.c **** 
+ 132:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1<-");
+ 627              		.loc 1 132 15
+ 628 0216 414B     		ldr	r3, .L27+52
+ 629 0218 6422     		movs	r2, #100
+ 630 021a 0021     		movs	r1, #0
+ 631 021c 3448     		ldr	r0, .L27+8
+ 632 021e FFF7FEFF 		bl	display_interface_show_string
+ 133:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2  ");
+ 633              		.loc 1 133 15
+ 634 0222 384B     		ldr	r3, .L27+28
+ 635 0224 7822     		movs	r2, #120
+ 636 0226 0021     		movs	r1, #0
+ 637 0228 3148     		ldr	r0, .L27+8
+ 638 022a FFF7FEFF 		bl	display_interface_show_string
+ 134:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO  ");
+ 639              		.loc 1 134 15
+ 640 022e 364B     		ldr	r3, .L27+32
+ 641 0230 8C22     		movs	r2, #140
+ 642 0232 0021     		movs	r1, #0
+ 643 0234 2E48     		ldr	r0, .L27+8
+ 644 0236 FFF7FEFF 		bl	display_interface_show_string
+ 135:user_code/isp2.0.c ****           }break;
+ 645              		.loc 1 135 11
+ 646 023a 76E0     		b	.L25
+ 647              	.L18:
+ 136:user_code/isp2.0.c ****           case 7:
+ 137:user_code/isp2.0.c ****           {
+ 138:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read  ");
+ 648              		.loc 1 138 15
+ 649 023c 334B     		ldr	r3, .L27+36
+ 650 023e 0022     		movs	r2, #0
+ 651 0240 0021     		movs	r1, #0
+ 652 0242 2B48     		ldr	r0, .L27+8
+ 653 0244 FFF7FEFF 		bl	display_interface_show_string
+ 139:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save  ");
+ 654              		.loc 1 139 15
+ 655 0248 2A4B     		ldr	r3, .L27+12
+ 656 024a 1422     		movs	r2, #20
+ 657 024c 0021     		movs	r1, #0
+ 658 024e 2848     		ldr	r0, .L27+8
+ 659 0250 FFF7FEFF 		bl	display_interface_show_string
+ 140:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take  ");
+ 660              		.loc 1 140 15
+ 661 0254 284B     		ldr	r3, .L27+16
+ 662 0256 2822     		movs	r2, #40
+ 663 0258 0021     		movs	r1, #0
+ 664 025a 2548     		ldr	r0, .L27+8
+ 665 025c FFF7FEFF 		bl	display_interface_show_string
+ 141:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point  ");
+ 666              		.loc 1 141 15
+ 667 0260 264B     		ldr	r3, .L27+20
+ 668 0262 3C22     		movs	r2, #60
+ 669 0264 0021     		movs	r1, #0
+ 670 0266 2248     		ldr	r0, .L27+8
+ 671 0268 FFF7FEFF 		bl	display_interface_show_string
+ 142:user_code/isp2.0.c **** 
+ 143:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1  ");
+ 672              		.loc 1 143 15
+ 673 026c 244B     		ldr	r3, .L27+24
+ 674 026e 6422     		movs	r2, #100
+ 675 0270 0021     		movs	r1, #0
+ 676 0272 1F48     		ldr	r0, .L27+8
+ 677 0274 FFF7FEFF 		bl	display_interface_show_string
+ 144:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2<-");
+ 678              		.loc 1 144 15
+ 679 0278 294B     		ldr	r3, .L27+56
+ 680 027a 7822     		movs	r2, #120
+ 681 027c 0021     		movs	r1, #0
+ 682 027e 1C48     		ldr	r0, .L27+8
+ 683 0280 FFF7FEFF 		bl	display_interface_show_string
+ 145:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO  ");
+ 684              		.loc 1 145 15
+ 685 0284 204B     		ldr	r3, .L27+32
+ 686 0286 8C22     		movs	r2, #140
+ 687 0288 0021     		movs	r1, #0
+ 688 028a 1948     		ldr	r0, .L27+8
+ 689 028c FFF7FEFF 		bl	display_interface_show_string
+ 146:user_code/isp2.0.c ****           }break;
+ 690              		.loc 1 146 11
+ 691 0290 4BE0     		b	.L25
+ 692              	.L16:
+ 147:user_code/isp2.0.c ****           case 8:
+ 148:user_code/isp2.0.c ****           {
+ 149:user_code/isp2.0.c ****               ips200_show_string(0, 0,  "Read  ");
+ 693              		.loc 1 149 15
+ 694 0292 1E4B     		ldr	r3, .L27+36
+ 695 0294 0022     		movs	r2, #0
+ 696 0296 0021     		movs	r1, #0
+ 697 0298 1548     		ldr	r0, .L27+8
+ 698 029a FFF7FEFF 		bl	display_interface_show_string
+ 150:user_code/isp2.0.c ****               ips200_show_string(0, 20, "Save  ");
+ 699              		.loc 1 150 15
+ 700 029e 154B     		ldr	r3, .L27+12
+ 701 02a0 1422     		movs	r2, #20
+ 702 02a2 0021     		movs	r1, #0
+ 703 02a4 1248     		ldr	r0, .L27+8
+ 704 02a6 FFF7FEFF 		bl	display_interface_show_string
+ 151:user_code/isp2.0.c ****               ips200_show_string(0, 40, "Take  ");
+ 705              		.loc 1 151 15
+ 706 02aa 134B     		ldr	r3, .L27+16
+ 707 02ac 2822     		movs	r2, #40
+ 708 02ae 0021     		movs	r1, #0
+ 709 02b0 0F48     		ldr	r0, .L27+8
+ 710 02b2 FFF7FEFF 		bl	display_interface_show_string
+ 152:user_code/isp2.0.c ****               ips200_show_string(0, 60, "Point  ");
+ 711              		.loc 1 152 15
+ 712 02b6 114B     		ldr	r3, .L27+20
+ 713 02b8 3C22     		movs	r2, #60
+ 714 02ba 0021     		movs	r1, #0
+ 715 02bc 0C48     		ldr	r0, .L27+8
+ 716 02be FFF7FEFF 		bl	display_interface_show_string
+ 153:user_code/isp2.0.c **** 
+ 154:user_code/isp2.0.c ****               ips200_show_string(0, 100, "ramp1  ");
+ 717              		.loc 1 154 15
+ 718 02c2 0F4B     		ldr	r3, .L27+24
+ 719 02c4 6422     		movs	r2, #100
+ 720 02c6 0021     		movs	r1, #0
+ 721 02c8 0948     		ldr	r0, .L27+8
+ 722 02ca FFF7FEFF 		bl	display_interface_show_string
+ 155:user_code/isp2.0.c ****               ips200_show_string(0,120, "ramp2  ");
+ 723              		.loc 1 155 15
+ 724 02ce 0D4B     		ldr	r3, .L27+28
+ 725 02d0 7822     		movs	r2, #120
+ 726 02d2 0021     		movs	r1, #0
+ 727 02d4 0648     		ldr	r0, .L27+8
+ 728 02d6 FFF7FEFF 		bl	display_interface_show_string
+ 156:user_code/isp2.0.c ****               ips200_show_string(0,140, "GO<-");
+ 729              		.loc 1 156 15
+ 730 02da 124B     		ldr	r3, .L27+60
+ 731 02dc 8C22     		movs	r2, #140
+ 732 02de 0021     		movs	r1, #0
+ 733 02e0 0348     		ldr	r0, .L27+8
+ 734 02e2 FFF7FEFF 		bl	display_interface_show_string
+ 157:user_code/isp2.0.c ****           }break;
+ 735              		.loc 1 157 11
+ 736 02e6 20E0     		b	.L25
+ 737              	.L28:
+ 738              		.align	2
+ 739              	.L27:
+ 740 02e8 00000000 		.word	key_options1
+ 741 02ec 2C000000 		.word	.LC7
+ 742 02f0 00000000 		.word	display_interface_default_obj
+ 743 02f4 34000000 		.word	.LC8
+ 744 02f8 3C000000 		.word	.LC9
+ 745 02fc 44000000 		.word	.LC10
+ 746 0300 4C000000 		.word	.LC11
+ 747 0304 54000000 		.word	.LC12
+ 748 0308 5C000000 		.word	.LC13
+ 749 030c 64000000 		.word	.LC14
+ 750 0310 6C000000 		.word	.LC15
+ 751 0314 74000000 		.word	.LC16
+ 752 0318 7C000000 		.word	.LC17
+ 753 031c 84000000 		.word	.LC18
+ 754 0320 8C000000 		.word	.LC19
+ 755 0324 94000000 		.word	.LC20
+ 756              	.L26:
+ 158:user_code/isp2.0.c ****           default:break;
+ 757              		.loc 1 158 11
+ 758 0328 00BF     		nop
+ 759              	.L25:
+ 159:user_code/isp2.0.c ****       }
+ 160:user_code/isp2.0.c **** 
+ 161:user_code/isp2.0.c ****     ips200_show_uint(120, 60, gps_index1, 3);
+ 760              		.loc 1 161 5
+ 761 032a 6E4B     		ldr	r3, .L29
+ 762 032c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 763 032e 1A46     		mov	r2, r3
+ 764 0330 0323     		movs	r3, #3
+ 765 0332 0093     		str	r3, [sp]
+ 766 0334 1346     		mov	r3, r2
+ 767 0336 3C22     		movs	r2, #60
+ 768 0338 7821     		movs	r1, #120
+ 769 033a 6B48     		ldr	r0, .L29+4
+ 770 033c FFF7FEFF 		bl	display_interface_show_uint
+ 162:user_code/isp2.0.c ****     ips200_show_uint(120, 100,  gps_index_save[2], 3);
+ 771              		.loc 1 162 5
+ 772 0340 6A4B     		ldr	r3, .L29+8
+ 773 0342 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 774 0344 1A46     		mov	r2, r3
+ 775 0346 0323     		movs	r3, #3
+ 776 0348 0093     		str	r3, [sp]
+ 777 034a 1346     		mov	r3, r2
+ 778 034c 6422     		movs	r2, #100
+ 779 034e 7821     		movs	r1, #120
+ 780 0350 6548     		ldr	r0, .L29+4
+ 781 0352 FFF7FEFF 		bl	display_interface_show_uint
+ 163:user_code/isp2.0.c ****     ips200_show_uint(120, 120, gps_index_save[3], 3);
+ 782              		.loc 1 163 5
+ 783 0356 654B     		ldr	r3, .L29+8
+ 784 0358 DB78     		ldrb	r3, [r3, #3]	@ zero_extendqisi2
+ 785 035a 1A46     		mov	r2, r3
+ 786 035c 0323     		movs	r3, #3
+ 787 035e 0093     		str	r3, [sp]
+ 788 0360 1346     		mov	r3, r2
+ 789 0362 7822     		movs	r2, #120
+ 790 0364 7821     		movs	r1, #120
+ 791 0366 6048     		ldr	r0, .L29+4
+ 792 0368 FFF7FEFF 		bl	display_interface_show_uint
+ 164:user_code/isp2.0.c ****     ips200_show_uint(120, 140, motor_go, 1);
+ 793              		.loc 1 164 5
+ 794 036c 604B     		ldr	r3, .L29+12
+ 795 036e 93F90030 		ldrsb	r3, [r3]
+ 796 0372 1A46     		mov	r2, r3
+ 797 0374 0123     		movs	r3, #1
+ 798 0376 0093     		str	r3, [sp]
+ 799 0378 1346     		mov	r3, r2
+ 800 037a 8C22     		movs	r2, #140
+ 801 037c 7821     		movs	r1, #120
+ 802 037e 5A48     		ldr	r0, .L29+4
+ 803 0380 FFF7FEFF 		bl	display_interface_show_uint
+ 165:user_code/isp2.0.c ****     ips200_show_string(0,180,"r_d:");   ips200_show_float(40,180,encoder_rpm,2,1);
+ 804              		.loc 1 165 5
+ 805 0384 5B4B     		ldr	r3, .L29+16
+ 806 0386 B422     		movs	r2, #180
+ 807 0388 0021     		movs	r1, #0
+ 808 038a 5748     		ldr	r0, .L29+4
+ 809 038c FFF7FEFF 		bl	display_interface_show_string
+ 810              		.loc 1 165 41
+ 811 0390 594B     		ldr	r3, .L29+20
+ 812 0392 D3ED007A 		vldr.32	s15, [r3]
+ 813 0396 B7EEE77A 		vcvt.f64.f32	d7, s15
+ 814 039a 0123     		movs	r3, #1
+ 815 039c 0093     		str	r3, [sp]
+ 816 039e 0223     		movs	r3, #2
+ 817 03a0 B0EE470B 		vmov.f64	d0, d7
+ 818 03a4 B422     		movs	r2, #180
+ 819 03a6 2821     		movs	r1, #40
+ 820 03a8 4F48     		ldr	r0, .L29+4
+ 821 03aa FFF7FEFF 		bl	display_interface_show_float
+ 166:user_code/isp2.0.c **** 
+ 167:user_code/isp2.0.c ****     ips200_show_float(40,200, point1[0],3,6);ips200_show_float(140,200,point1[1],3,6);
+ 822              		.loc 1 167 5
+ 823 03ae 534B     		ldr	r3, .L29+24
+ 824 03b0 93ED007B 		vldr.64	d7, [r3]
+ 825 03b4 0623     		movs	r3, #6
+ 826 03b6 0093     		str	r3, [sp]
+ 827 03b8 0323     		movs	r3, #3
+ 828 03ba B0EE470B 		vmov.f64	d0, d7
+ 829 03be C822     		movs	r2, #200
+ 830 03c0 2821     		movs	r1, #40
+ 831 03c2 4948     		ldr	r0, .L29+4
+ 832 03c4 FFF7FEFF 		bl	display_interface_show_float
+ 833              		.loc 1 167 46
+ 834 03c8 4C4B     		ldr	r3, .L29+24
+ 835 03ca 93ED027B 		vldr.64	d7, [r3, #8]
+ 836 03ce 0623     		movs	r3, #6
+ 837 03d0 0093     		str	r3, [sp]
+ 838 03d2 0323     		movs	r3, #3
+ 839 03d4 B0EE470B 		vmov.f64	d0, d7
+ 840 03d8 C822     		movs	r2, #200
+ 841 03da 8C21     		movs	r1, #140
+ 842 03dc 4248     		ldr	r0, .L29+4
+ 843 03de FFF7FEFF 		bl	display_interface_show_float
+ 168:user_code/isp2.0.c ****     //ips200_show_float(40,220, point1[2],3,6);ips200_show_float(140,220,point1[3],3,6);
+ 169:user_code/isp2.0.c **** 
+ 170:user_code/isp2.0.c **** 
+ 171:user_code/isp2.0.c ****     ips200_show_string(0,260,"time"); ips200_show_float(40,260,(float )time_flag/100,3,2);
+ 844              		.loc 1 171 5
+ 845 03e2 474B     		ldr	r3, .L29+28
+ 846 03e4 4FF48272 		mov	r2, #260
+ 847 03e8 0021     		movs	r1, #0
+ 848 03ea 3F48     		ldr	r0, .L29+4
+ 849 03ec FFF7FEFF 		bl	display_interface_show_string
+ 850              		.loc 1 171 39
+ 851 03f0 444B     		ldr	r3, .L29+32
+ 852 03f2 1B68     		ldr	r3, [r3]
+ 853 03f4 07EE903A 		vmov	s15, r3	@ int
+ 854 03f8 B8EE677A 		vcvt.f32.u32	s14, s15
+ 855 03fc DFED426A 		vldr.32	s13, .L29+36
+ 856 0400 C7EE267A 		vdiv.f32	s15, s14, s13
+ 857 0404 B7EEE77A 		vcvt.f64.f32	d7, s15
+ 858 0408 0223     		movs	r3, #2
+ 859 040a 0093     		str	r3, [sp]
+ 860 040c 0323     		movs	r3, #3
+ 861 040e B0EE470B 		vmov.f64	d0, d7
+ 862 0412 4FF48272 		mov	r2, #260
+ 863 0416 2821     		movs	r1, #40
+ 864 0418 3348     		ldr	r0, .L29+4
+ 865 041a FFF7FEFF 		bl	display_interface_show_float
+ 172:user_code/isp2.0.c ****     ips200_show_string(80,260,"hall"); ips200_show_uint(140,260,hall_now,2);
+ 866              		.loc 1 172 5
+ 867 041e 3B4B     		ldr	r3, .L29+40
+ 868 0420 4FF48272 		mov	r2, #260
+ 869 0424 5021     		movs	r1, #80
+ 870 0426 3048     		ldr	r0, .L29+4
+ 871 0428 FFF7FEFF 		bl	display_interface_show_string
+ 872              		.loc 1 172 40
+ 873 042c 384B     		ldr	r3, .L29+44
+ 874 042e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 875 0430 1A46     		mov	r2, r3
+ 876 0432 0223     		movs	r3, #2
+ 877 0434 0093     		str	r3, [sp]
+ 878 0436 1346     		mov	r3, r2
+ 879 0438 4FF48272 		mov	r2, #260
+ 880 043c 8C21     		movs	r1, #140
+ 881 043e 2A48     		ldr	r0, .L29+4
+ 882 0440 FFF7FEFF 		bl	display_interface_show_uint
+ 173:user_code/isp2.0.c ****     ips200_show_string(0,280,"tar");  ips200_show_uint(60, 280, target_point1, 3);
+ 883              		.loc 1 173 5
+ 884 0444 334B     		ldr	r3, .L29+48
+ 885 0446 4FF48C72 		mov	r2, #280
+ 886 044a 0021     		movs	r1, #0
+ 887 044c 2648     		ldr	r0, .L29+4
+ 888 044e FFF7FEFF 		bl	display_interface_show_string
+ 889              		.loc 1 173 39
+ 890 0452 314B     		ldr	r3, .L29+52
+ 891 0454 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 892 0456 1A46     		mov	r2, r3
+ 893 0458 0323     		movs	r3, #3
+ 894 045a 0093     		str	r3, [sp]
+ 895 045c 1346     		mov	r3, r2
+ 896 045e 4FF48C72 		mov	r2, #280
+ 897 0462 3C21     		movs	r1, #60
+ 898 0464 2048     		ldr	r0, .L29+4
+ 899 0466 FFF7FEFF 		bl	display_interface_show_uint
+ 174:user_code/isp2.0.c ****     ips200_show_string(80,280,"y");    ips200_show_float(115,280,yaw,3,2);
+ 900              		.loc 1 174 5
+ 901 046a 2C4B     		ldr	r3, .L29+56
+ 902 046c 4FF48C72 		mov	r2, #280
+ 903 0470 5021     		movs	r1, #80
+ 904 0472 1D48     		ldr	r0, .L29+4
+ 905 0474 FFF7FEFF 		bl	display_interface_show_string
+ 906              		.loc 1 174 40
+ 907 0478 294B     		ldr	r3, .L29+60
+ 908 047a D3ED007A 		vldr.32	s15, [r3]
+ 909 047e B7EEE77A 		vcvt.f64.f32	d7, s15
+ 910 0482 0223     		movs	r3, #2
+ 911 0484 0093     		str	r3, [sp]
+ 912 0486 0323     		movs	r3, #3
+ 913 0488 B0EE470B 		vmov.f64	d0, d7
+ 914 048c 4FF48C72 		mov	r2, #280
+ 915 0490 7321     		movs	r1, #115
+ 916 0492 1548     		ldr	r0, .L29+4
+ 917 0494 FFF7FEFF 		bl	display_interface_show_float
+ 175:user_code/isp2.0.c **** 
+ 176:user_code/isp2.0.c ****     ips200_show_float(0,300,distance,3,1);
+ 918              		.loc 1 176 5
+ 919 0498 224B     		ldr	r3, .L29+64
+ 920 049a 93ED007B 		vldr.64	d7, [r3]
+ 921 049e 0123     		movs	r3, #1
+ 922 04a0 0093     		str	r3, [sp]
+ 923 04a2 0323     		movs	r3, #3
+ 924 04a4 B0EE470B 		vmov.f64	d0, d7
+ 925 04a8 4FF49672 		mov	r2, #300
+ 926 04ac 0021     		movs	r1, #0
+ 927 04ae 0E48     		ldr	r0, .L29+4
+ 928 04b0 FFF7FEFF 		bl	display_interface_show_float
+ 177:user_code/isp2.0.c ****     ips200_show_string(110,300,"sate:");    ips200_show_uint(150,300,gnss_info.satellite_used,3);
+ 929              		.loc 1 177 5
+ 930 04b4 1C4B     		ldr	r3, .L29+68
+ 931 04b6 4FF49672 		mov	r2, #300
+ 932 04ba 6E21     		movs	r1, #110
+ 933 04bc 0A48     		ldr	r0, .L29+4
+ 934 04be FFF7FEFF 		bl	display_interface_show_string
+ 935              		.loc 1 177 45
+ 936 04c2 1A4B     		ldr	r3, .L29+72
+ 937 04c4 93F83C30 		ldrb	r3, [r3, #60]	@ zero_extendqisi2
+ 938 04c8 1A46     		mov	r2, r3
+ 939 04ca 0323     		movs	r3, #3
+ 940 04cc 0093     		str	r3, [sp]
+ 941 04ce 1346     		mov	r3, r2
+ 942 04d0 4FF49672 		mov	r2, #300
+ 943 04d4 9621     		movs	r1, #150
+ 944 04d6 0448     		ldr	r0, .L29+4
+ 945 04d8 FFF7FEFF 		bl	display_interface_show_uint
+ 178:user_code/isp2.0.c **** }
+ 946              		.loc 1 178 1
+ 947 04dc 00BF     		nop
+ 948 04de 03B0     		add	sp, sp, #12
+ 949              		.cfi_def_cfa_offset 4
+ 950              		@ sp needed
+ 951 04e0 5DF804FB 		ldr	pc, [sp], #4
+ 952              	.L30:
+ 953              		.align	2
+ 954              	.L29:
+ 955 04e4 00000000 		.word	gps_index1
+ 956 04e8 00000000 		.word	display_interface_default_obj
+ 957 04ec 00000000 		.word	gps_index_save
+ 958 04f0 00000000 		.word	motor_go
+ 959 04f4 9C000000 		.word	.LC21
+ 960 04f8 00000000 		.word	encoder_rpm
+ 961 04fc 00000000 		.word	point1
+ 962 0500 A4000000 		.word	.LC22
+ 963 0504 00000000 		.word	time_flag
+ 964 0508 0000C842 		.word	1120403456
+ 965 050c AC000000 		.word	.LC23
+ 966 0510 00000000 		.word	hall_now
+ 967 0514 B4000000 		.word	.LC24
+ 968 0518 00000000 		.word	target_point1
+ 969 051c B8000000 		.word	.LC25
+ 970 0520 00000000 		.word	yaw
+ 971 0524 00000000 		.word	distance
+ 972 0528 BC000000 		.word	.LC26
+ 973 052c 00000000 		.word	gnss_info
+ 974              		.cfi_endproc
+ 975              	.LFE484:
+ 977              		.section	.text.draw_point,"ax",%progbits
+ 978              		.align	1
+ 979              		.p2align 4,,15
+ 980              		.global	draw_point
+ 981              		.syntax unified
+ 982              		.thumb
+ 983              		.thumb_func
+ 985              	draw_point:
+ 986              	.LFB485:
+ 179:user_code/isp2.0.c **** 
+ 180:user_code/isp2.0.c **** 
+ 181:user_code/isp2.0.c **** 
+ 182:user_code/isp2.0.c **** 
+ 183:user_code/isp2.0.c **** 
+ 184:user_code/isp2.0.c **** 
+ 185:user_code/isp2.0.c **** 
+ 186:user_code/isp2.0.c **** void draw_point(uint16 x, uint16 y, const uint16 color)
+ 187:user_code/isp2.0.c **** {
+ 987              		.loc 1 187 1
+ 988              		.cfi_startproc
+ 989              		@ args = 0, pretend = 0, frame = 8
+ 990              		@ frame_needed = 0, uses_anonymous_args = 0
+ 991 0000 00B5     		push	{lr}
+ 992              		.cfi_def_cfa_offset 4
+ 993              		.cfi_offset 14, -4
+ 994 0002 83B0     		sub	sp, sp, #12
+ 995              		.cfi_def_cfa_offset 16
+ 996 0004 0346     		mov	r3, r0
+ 997 0006 ADF80630 		strh	r3, [sp, #6]	@ movhi
+ 998 000a 0B46     		mov	r3, r1	@ movhi
+ 999 000c ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 1000 0010 1346     		mov	r3, r2	@ movhi
+ 1001 0012 ADF80230 		strh	r3, [sp, #2]	@ movhi
+ 188:user_code/isp2.0.c ****     ips200_draw_point(x, y, color);
+ 1002              		.loc 1 188 5
+ 1003 0016 BDF80230 		ldrh	r3, [sp, #2]
+ 1004 001a BDF80420 		ldrh	r2, [sp, #4]
+ 1005 001e BDF80610 		ldrh	r1, [sp, #6]
+ 1006 0022 1548     		ldr	r0, .L32
+ 1007 0024 FFF7FEFF 		bl	display_interface_draw_point
+ 189:user_code/isp2.0.c ****     ips200_draw_point(x-1, y-1, color);
+ 1008              		.loc 1 189 5
+ 1009 0028 BDF80630 		ldrh	r3, [sp, #6]	@ movhi
+ 1010 002c 013B     		subs	r3, r3, #1
+ 1011 002e 99B2     		uxth	r1, r3
+ 1012 0030 BDF80430 		ldrh	r3, [sp, #4]	@ movhi
+ 1013 0034 013B     		subs	r3, r3, #1
+ 1014 0036 9AB2     		uxth	r2, r3
+ 1015 0038 BDF80230 		ldrh	r3, [sp, #2]
+ 1016 003c 0E48     		ldr	r0, .L32
+ 1017 003e FFF7FEFF 		bl	display_interface_draw_point
+ 190:user_code/isp2.0.c ****     ips200_draw_point(x-1, y, color);
+ 1018              		.loc 1 190 5
+ 1019 0042 BDF80630 		ldrh	r3, [sp, #6]	@ movhi
+ 1020 0046 013B     		subs	r3, r3, #1
+ 1021 0048 99B2     		uxth	r1, r3
+ 1022 004a BDF80230 		ldrh	r3, [sp, #2]
+ 1023 004e BDF80420 		ldrh	r2, [sp, #4]
+ 1024 0052 0948     		ldr	r0, .L32
+ 1025 0054 FFF7FEFF 		bl	display_interface_draw_point
+ 191:user_code/isp2.0.c ****     ips200_draw_point(x, y-1, color);
+ 1026              		.loc 1 191 5
+ 1027 0058 BDF80430 		ldrh	r3, [sp, #4]	@ movhi
+ 1028 005c 013B     		subs	r3, r3, #1
+ 1029 005e 9AB2     		uxth	r2, r3
+ 1030 0060 BDF80230 		ldrh	r3, [sp, #2]
+ 1031 0064 BDF80610 		ldrh	r1, [sp, #6]
+ 1032 0068 0348     		ldr	r0, .L32
+ 1033 006a FFF7FEFF 		bl	display_interface_draw_point
+ 192:user_code/isp2.0.c **** }
+ 1034              		.loc 1 192 1
+ 1035 006e 00BF     		nop
+ 1036 0070 03B0     		add	sp, sp, #12
+ 1037              		.cfi_def_cfa_offset 4
+ 1038              		@ sp needed
+ 1039 0072 5DF804FB 		ldr	pc, [sp], #4
+ 1040              	.L33:
+ 1041 0076 00BF     		.align	2
+ 1042              	.L32:
+ 1043 0078 00000000 		.word	display_interface_default_obj
+ 1044              		.cfi_endproc
+ 1045              	.LFE485:
+ 1047              		.text
+ 1048              	.Letext0:
+ 1049              		.file 2 "libraries/zf_common/zf_common_typedef.h"
+ 1050              		.file 3 "C:/StellarStudio-7.0/SDKS/StellarESDK-1.7.0/Modules/Platform/MCU/include/sr5e1/sr5e1xx.h"
+ 1051              		.file 4 "libraries/zf_driver/zf_driver_gpio.h"
+ 1052              		.file 5 "libraries/zf_driver/zf_driver_adc.h"
+ 1053              		.file 6 "libraries/zf_driver/zf_driver_can.h"
+ 1054              		.file 7 "libraries/zf_driver/zf_driver_encoder.h"
+ 1055              		.file 8 "libraries/zf_driver/zf_driver_exti.h"
+ 1056              		.file 9 "libraries/zf_driver/zf_driver_hrtim.h"
+ 1057              		.file 10 "libraries/zf_driver/zf_driver_pwm.h"
+ 1058              		.file 11 "libraries/zf_driver/zf_driver_spi.h"
+ 1059              		.file 12 "libraries/zf_driver/zf_driver_uart.h"
+ 1060              		.file 13 "libraries/zf_device/zf_device_imu_interface.h"
+ 1061              		.file 14 "libraries/zf_device/zf_device_wireless_interface.h"
+ 1062              		.file 15 "libraries/zf_device/zf_device_display_interface.h"
+ 1063              		.file 16 "libraries/zf_device/zf_device_gnss.h"
+ 1064              		.file 17 "user_code/isr.h"
+ 1065              		.file 18 "user_code/key.h"
+ 1066              		.file 19 "user_code/isp2.0.h"
+ 1067              		.file 20 "user_code/PID1.h"
+ 1068              		.file 21 "user_code/my_flash.h"
+ 1069              		.file 22 "user_code/imu963.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 isp2.0.c
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:23     .data.Motor_PWM_Adjust:00000000 Motor_PWM_Adjust
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:20     .data.Motor_PWM_Adjust:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:29     .bss.Read_Flash_index:00000000 Read_Flash_index
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:30     .bss.Read_Flash_index:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:36     .bss.draw_point_x:00000000 draw_point_x
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:33     .bss.draw_point_x:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:43     .bss.draw_point_y:00000000 draw_point_y
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:40     .bss.draw_point_y:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:46     .text.ips_displaymenu:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:53     .text.ips_displaymenu:00000000 ips_displaymenu
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:347    .text.manu1:00000000 manu1
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:124    .text.manu2:00000000 manu2
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:90     .text.ips_displaymenu:00000020 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:95     .rodata:00000000 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:117    .text.manu2:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:261    .text.manu2:00000108 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:340    .text.manu1:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:368    .text.manu1:00000018 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:376    .text.manu1:00000038 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:740    .text.manu1:000002e8 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:758    .text.manu1:00000328 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:955    .text.manu1:000004e4 $d
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:978    .text.draw_point:00000000 $t
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:985    .text.draw_point:00000000 draw_point
+C:\Users\EVERYO~1\AppData\Local\Temp\ccRnsbh5.s:1043   .text.draw_point:00000078 $d
+                           .group:00000000 wm4.0.1ea29c7543256e0887205fa7f8c557c8
+                           .group:00000000 wm4._newlib_version.h.4.bfdf54b0af045d4a71376ae00f63a22c
+                           .group:00000000 wm4.newlib.h.18.1c9fedb6b3cd797cff253cc0fd593ef2
+                           .group:00000000 wm4.ieeefp.h.77.2bc94c1d1ed8b02df437510a04ac1e45
+                           .group:00000000 wm4.features.h.22.026edb2397769f4ae13f35900dbdb560
+                           .group:00000000 wm4.config.h.224.c701144a7b0518c6ee9b9b5465b79f81
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.a54b2d5c07711bc7320a3fea9f12cb56
+                           .group:00000000 wm4.stddef.h.39.c161261b198ee3a963897077fd6fa59f
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4._types.h.20.dd0d04dca3800a0d2a6129b87f3adbb2
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.127.34941de1b2539d59d5cac00e0dd27a45
+                           .group:00000000 wm4.reent.h.17.e292bf8b0bec6c96e131a54347145a30
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4.reent.h.77.dcd6129ff07fe81bd5636db29abe53b2
+                           .group:00000000 wm4.types.h.40.8b6acba56cefbb11746718204edc8f5e
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.32.bec3221fa7a9bb0bdde696c9c57e47d2
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.40cd3f2bfc456b193b790c2754690ebf
+                           .group:00000000 wm4.types.h.51.5571ec98f267d17d3c670b7a3ba33afa
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4._intsup.h.10.48bafbb683905c4daa4565a85aeeb264
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.sr5e1xx.h.22.e5c808533cc52ed19fb0830cd7d98924
+                           .group:00000000 wm4.cmsis_version.h.32.0f826810625204eca22a19868bdc7586
+                           .group:00000000 wm4.core_cm7.h.66.8ab2de36917d6fcae18019067fda13e0
+                           .group:00000000 wm4.cmsis_gcc.h.26.498d0ad17a45fc9ef20fdc01caf02259
+                           .group:00000000 wm4.core_cm7.h.174.43edb295ecdaadad738f48ba6011ffad
+                           .group:00000000 wm4.mpu_armv7.h.32.83326921a797fa9d6f70449916b4b839
+                           .group:00000000 wm4.cachel1_armv7.h.32.abd77761a989e008b0c60891114a33c7
+                           .group:00000000 wm4.SR5E1_ADC.h.14.21608e6aff125ba995dd767d6d8dc311
+                           .group:00000000 wm4.SR5E1_CEM.h.14.01fe5742c8f1ae35b1f3af05932f702e
+                           .group:00000000 wm4.SR5E1_CMU.h.14.2617b38b159abe38028862394531e06d
+                           .group:00000000 wm4.SR5E1_COMP.h.14.4b6fdfe4f5f7fd9bedf3a99b98bdf4cd
+                           .group:00000000 wm4.SR5E1_CORDIC.h.14.354fbf7c9eaf6963d38eaa25cf28ffe8
+                           .group:00000000 wm4.SR5E1_CRC.h.14.c64d0f7767671ddb92e9ead0a1162100
+                           .group:00000000 wm4.SR5E1_DAC.h.14.8c26a0ff04b0cfeb55306cc3f22187b8
+                           .group:00000000 wm4.SR5E1_DBGMCU.h.14.427df893d53a8044654f017ba01c25ed
+                           .group:00000000 wm4.SR5E1_DMA.h.14.a7f9a92f844b40a86965798c2e64240b
+                           .group:00000000 wm4.SR5E1_DMAMUX.h.14.471b3b4dfd4d41515f1df49493698866
+                           .group:00000000 wm4.SR5E1_EXTI.h.14.a325ea3fe89cd84894660551c33241ea
+                           .group:00000000 wm4.SR5E1_FCCU.h.14.0ebf0f0f36e079d28613ad2c80e17e23
+                           .group:00000000 wm4.SR5E1_FDCAN.h.14.ac57101fad5dbc798bfb93f34c899de7
+                           .group:00000000 wm4.SR5E1_FLASH_REG_ITF.h.14.d23d1d44923f9b20b8c8fdb51d66aefd
+                           .group:00000000 wm4.SR5E1_GPIO.h.14.1c84071e130d7c64b62470ab0e18a1f1
+                           .group:00000000 wm4.SR5E1_HRTIM.h.24.03932387d2522e6bd5c772a4edaf2f5d
+                           .group:00000000 wm4.SR5E1_HSEM.h.14.cbe70eee519f01b16452c3f8c99d8df1
+                           .group:00000000 wm4.SR5E1_I2C.h.14.350ba3e0f4fd57828457efa80135c36c
+                           .group:00000000 wm4.SR5E1_IMA.h.14.62b7088985ab2b7ce9b030a02daa1f7d
+                           .group:00000000 wm4.SR5E1_IWDG.h.14.20b7c5f05cf7ae94464c360d7af3660d
+                           .group:00000000 wm4.SR5E1_MEMU.h.14.04bad7ae4c52ce334a4fc900aad2ae5b
+                           .group:00000000 wm4.SR5E1_NVM_CTRL.h.14.5f442617f0628d4f16258f211c614ef9
+                           .group:00000000 wm4.SR5E1_PLLDIG.h.14.bd87a8e6917eee17dae2f312c8e5fa53
+                           .group:00000000 wm4.SR5E1_PMC_DIG.h.14.54173b566c6656344766ec4ef46c9281
+                           .group:00000000 wm4.SR5E1_RCC.h.14.56734803c71534de286e793a53649740
+                           .group:00000000 wm4.SR5E1_RTC.h.14.47037cbc7d8175dbf2be1dc0bb955e3f
+                           .group:00000000 wm4.SR5E1_SD_ADC.h.14.552b97d0b8f3c1fd4df6d8964b2f1a80
+                           .group:00000000 wm4.SR5E1_SMPU.h.14.8ce5bb6d5d7c579cd725f492f46e9085
+                           .group:00000000 wm4.SR5E1_SPI.h.14.42d52112e540f85ade4d9135f8b87d72
+                           .group:00000000 wm4.SR5E1_SSCM.h.14.8e6a2ad0ce5fca422fc3d69939b6125b
+                           .group:00000000 wm4.SR5E1_SYSCFG.h.14.02b969490118ce4069914b5e94f7ca65
+                           .group:00000000 wm4.SR5E1_TDM.h.14.a40ed7928cad243a57fd233fccf01ad2
+                           .group:00000000 wm4.SR5E1_TIM.h.14.f17572f4c16f3f152b8164ad25c34f5b
+                           .group:00000000 wm4.SR5E1_UART.h.14.eec3ab82b02b3bdb3de500483675b83f
+                           .group:00000000 wm4.SR5E1_WWDG.h.14.59b45efc70e442cc6ef03702aad4ad88
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.typedefs.h.36.07fe3956b4e751037cfee70edcd0b397
+                           .group:00000000 wm4.irq_numbers.h.38.6294b95aed1bf7b3a2cda0eed8ce8f57
+                           .group:00000000 wm4.regs.h.23.2ac145b4f57126d16daed5fbd86d99c6
+                           .group:00000000 wm4.stdarg.h.31.3fa7b8f6daaa31edd1696c08c77f2a73
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.f4862cfbf4363a1db01842d5bdf72c18
+                           .group:00000000 wm4.zf_common_typedef.h.47.8c368673885c9d07221c267e15ab1069
+                           .group:00000000 wm4.zf_common_debug.h.33.727e0094f4d79012e3b7f7400deabb35
+                           .group:00000000 wm4.zf_common_fifo.h.33.e14e643902e26e4e65437b5b20e82793
+                           .group:00000000 wm4.zf_common_function.h.33.02bbfb055e8ee322bc4f8b14ea195da2
+                           .group:00000000 wm4.zf_common_memory.h.33.d43647290a4d62164ff2ec77cadb89d8
+                           .group:00000000 wm4.saradc.h.25.e5a70aef9ec4fddf35f2b7cc0c9cf1bc
+                           .group:00000000 wm4.gpio.h.25.d41a0c19fda8c2de42e666afb48ec15a
+                           .group:00000000 wm4.zf_driver_gpio.h.65.5a4d2084c62fed7c22fdca02e748c198
+                           .group:00000000 wm4.zf_driver_adc.h.64.349fb433626b42172b0e0fee038428ca
+                           .group:00000000 wm4.can.h.25.3cfccb6c630ada4f656cab597e231e58
+                           .group:00000000 wm4.dmamux.h.25.337aea179f6dbcc87c52aae26d38f76e
+                           .group:00000000 wm4.clock_cfg.h.24.0aed3cee9ecce947225a304181294191
+                           .group:00000000 wm4.clock.h.37.80236c5607fdd9eb9275e5111a4191c3
+                           .group:00000000 wm4.irq.h.37.78714f25754c8b09d1428599101f6cc7
+                           .group:00000000 wm4.dma.h.40.f77dd217a06ceba13a3cfdd4102a73c1
+                           .group:00000000 wm4.zf_driver_can.h.67.fd10d2fa867eb54a54d4b57027d73a60
+                           .group:00000000 wm4.tim.h.25.6e7ad96569e77a70a68b9b4cc59f54f2
+                           .group:00000000 wm4.zf_driver_timer.h.33.8df253b6990d9861816977209fb11e90
+                           .group:00000000 wm4.zf_driver_encoder.h.57.7e32999f25354fac086ca226b0c630d4
+                           .group:00000000 wm4.exti.h.25.21597c35d9630b0985ce88d2c41f4ea4
+                           .group:00000000 wm4.zf_driver_exti.h.59.1b02b8083e5295ef5baaf83905d59395
+                           .group:00000000 wm4.ssd_types.h.29.b861f4e6d39d333f931bfc05b964cb1c
+                           .group:00000000 wm4.ssd_C55.h.37.dad650468a97d71aff4dd65ca085590f
+                           .group:00000000 wm4.zf_driver_flash.h.59.db93fe574c35ea9e79030063fbb35a13
+                           .group:00000000 wm4.hrtim.h.25.1601aea9d4a0da1de8252dc444355251
+                           .group:00000000 wm4.zf_driver_hrtim.h.64.cd8d2bf3bf1c471ea59d9c61e4a721d7
+                           .group:00000000 wm4.zf_driver_interrupt.h.33.2c3660dcc36cb090bd75b8f180c14f27
+                           .group:00000000 wm4.zf_driver_pit.h.33.834ac720a62e09d5603a9557331e9049
+                           .group:00000000 wm4.zf_driver_pwm.h.33.7d80487064ca712231a453396685a551
+                           .group:00000000 wm4.zf_driver_rcc.h.33.4c228cf40a79e1b974b30d5a9a3a77a7
+                           .group:00000000 wm4.zf_driver_soft_iic.h.33.9067bd298084134f63c61c075f95fa2b
+                           .group:00000000 wm4.zf_driver_soft_spi.h.33.a938287c023905d97cafe56e4be63674
+                           .group:00000000 wm4.zf_driver_spi.h.62.950b1f52ed365034df2907601137b455
+                           .group:00000000 wm4.zf_driver_system.h.33.370922a9681b47d575d2c83d302a180b
+                           .group:00000000 wm4.zf_driver_uart.h.70.ffcf3694337ad0b4066179f1abd5d668
+                           .group:00000000 wm4.zf_device_imu_interface.h.40.344a2c93b973b58cee305ff406fc3e84
+                           .group:00000000 wm4.zf_device_imu660rb.h.37.b47c39afb47c89c2c82bd28e76457042
+                           .group:00000000 wm4.zf_device_imu963ra.h.37.e773f164af6f72dd1b0b6c1242bf99b4
+                           .group:00000000 wm4.zf_device_wireless_interface.h.40.da0a07f107014cb0888a26f281971a5b
+                           .group:00000000 wm4.zf_device_display_interface.h.79.d8df25e52245efbd97fd6415c8db0a72
+                           .group:00000000 wm4.zf_device_ips200.h.37.957fc5e8b291701a6f6b47207b045b77
+                           .group:00000000 wm4.math.h.13.b6595ad277a643a6127e1a4515a98f91
+                           .group:00000000 wm4.zf_device_gnss.h.66.39fe53860d2d190725612db126de8287
+                           .group:00000000 wm4.zf_device_key.h.45.b12f9096d8cc68f085b8fe9fe5b730db
+                           .group:00000000 wm4.zf_device_uart_receiver.h.43.9ac9496dcaa4780ef86d21fa439379b4
+                           .group:00000000 wm4.imu963.h.9.0357a407ee5eca150c2da77b8ad374e8
+                           .group:00000000 wm4.Defined.h.8.ba118efb82db5b67af1e2437e5b3cf85
+                           .group:00000000 wm4.gps.h.16.e415e513692cd3052ed0c0f0fe95f318
+                           .group:00000000 wm4.PID1.h.9.1cc3485a8cc0a8a64a4519addeb351e8
+                           .group:00000000 wm4.my_flash.h.9.82a1ad4360117b2f54268b11aa8680a3
+
+UNDEFINED SYMBOLS
+SWITCH_State
+display_interface_show_string
+display_interface_show_float
+key_options2
+display_interface_default_obj
+max_speed
+min_speed
+Kp_SPEED
+Ki_SPEED
+Kd_SPEED
+key_options1
+display_interface_show_uint
+gps_index1
+gps_index_save
+motor_go
+encoder_rpm
+point1
+time_flag
+hall_now
+target_point1
+yaw
+distance
+gnss_info
+display_interface_draw_point
